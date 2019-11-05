@@ -68,6 +68,14 @@ module.exports = class User {
 		//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
 	}
 
+	/**
+	 * Takes username and password and checks that both match a record in the database
+	 * @param {string} username - The username of a specific username
+	 * @param {string} password - The password associated a specific username
+	 * @throws {Error} - Throws error message "username <username> not found" if username does not already exist
+	 * @throws {Error} - Throws error message "invalid password for account <username>"
+	 * @returns {boolean} - Returns true if username and password match a specific user record
+	 */
 	async login(username, password) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
