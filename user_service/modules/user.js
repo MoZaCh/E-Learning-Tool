@@ -20,6 +20,11 @@ module.exports = class User {
 		})()
 	}
 
+	/**
+	 * Checks that username, password, firstname and surname are not blank
+	 * @param {Object} regObj - The object contains username, password, firstname and surname of a specific user
+	 * @throws {Error} - Throws error message "Missubg <parameter>" depending on is left blank
+	 */
 	async checkCredentials(regObj) {
 		for (const each in regObj) {
 			if (regObj[each] === '' | typeof regObj[each] === 'undefined') throw new Error(`Missing ${each}`)
