@@ -40,6 +40,7 @@ const dbName = 'user.db'
  */
 router.get('/', async ctx => {
 	try {
+		console.log(ctx.session)
 		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
 		const data = {}
 		if(ctx.query.msg) data.msg = ctx.query.msg
