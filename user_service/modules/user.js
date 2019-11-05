@@ -31,6 +31,15 @@ module.exports = class User {
 		}
 	}
 
+	/**
+	 * Takes user, pass, firstName and surname and then registers user by storing it into the database
+	 * @param {string} user - The username of a specific user as a string
+	 * @param {string} pass - The password of a specific user as a string
+	 * @param {string} firstName - The firstname of a specific user as a string
+	 * @param {string} surname - The surname of a specific user as a string
+	 * @throws {Error} - Throws error message "username <user> already in use" if username is already in use
+	 * @returns {boolean} - Returns true once user has successfully been created
+	 */
 	async register(user, pass, firstName, surname) {
 		try {
 			const regObj = {
