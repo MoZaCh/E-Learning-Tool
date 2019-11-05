@@ -5,7 +5,7 @@
 'use strict'
 
 /* MODULE IMPORTS */
-const Koa = require('koa');
+const Koa = require('koa')
 const Router = require('koa-router')
 const views = require('koa-views')
 const staticDir = require('koa-static')
@@ -16,8 +16,6 @@ const session = require('koa-session')
 
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
-
-
 
 const app = new Koa()
 const router = new Router()
@@ -30,8 +28,8 @@ app.use(session(app))
 app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handlebars: 'handlebars' }}))
 
 const defaultPort = 8080
-const port = process.env.PORT || defaultPort 
-const dbName = 'website.db'	
+const port = process.env.PORT || defaultPort
+const dbName = 'user.db'
 
 /**
  * The secure home page.
@@ -72,7 +70,7 @@ router.post('/register', koaBody, async ctx => {
 		console.log(body)
 		// call the functions in the module
 		const user = await new User(dbName)
-		await user.register(body.user, body.pass)
+		await user.register(body.user, body.pass, body.firstName, body.surname)
 		// await user.uploadPicture(path, type)
 		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
