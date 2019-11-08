@@ -38,9 +38,16 @@ const dbName = 'user.db'
  * @route {GET} /
  * @authentication This route requires cookie-based authentication.
  */
-router.get('/', async ctx => {
+router.get('/', checkHeaders, async (ctx, next) => {
 	try {
-		console.log(ctx.session)
+		//console.log(ctx.session)
+		console.log(ctx.cookies.get('authorization'))
+		ctx.cookies.set('authorization', 'Egg')
+		//console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		//console.log(ctx.cookies)
+		if(!ctx.cookies.get('authorization')) {
+			return ctx.redirect('/login?msg=you need to log in')
+		}
 		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
 		const data = {}
 		if(ctx.query.msg) data.msg = ctx.query.msg
@@ -67,6 +74,7 @@ router.get('/register', async ctx => await ctx.render('register'))
 router.post('/register', koaBody, async ctx => {
 	try {
 		// extract the data from the request
+		//console.log(ctx.cookies.get('name'))
 		const body = ctx.request.body
 		console.log(body)
 		// call the functions in the module
@@ -92,6 +100,10 @@ router.post('/login', async ctx => {
 		const body = ctx.request.body
 		const user = await new User(dbName)
 		await user.login(body.user, body.pass)
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		ctx.cookies.set('Authorisation',`${body.user}`,{httpOnly: false})
+		console.log(ctx.cookies.get('name'))
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		ctx.session.authorised = true
 		return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
