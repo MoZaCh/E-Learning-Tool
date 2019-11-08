@@ -16,6 +16,7 @@ const session = require('koa-session')
 
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
+const auth = require('./modules/auth')
 
 const app = new Koa()
 const router = new Router()
@@ -38,11 +39,11 @@ const dbName = 'user.db'
  * @route {GET} /
  * @authentication This route requires cookie-based authentication.
  */
-router.get('/', async ctx => {
+router.get('/', auth, async ctx => {
 	try {
-		//console.log(ctx.session)sd
-		console.log(ctx.cookies.get('authorization'))
-		ctx.cookies.set('authorization', 'Egg')
+		//console.log(ctx.session)
+		//console.log(ctx.cookies.get('authorization'))
+		//ctx.cookies.set('authorization', 'Egg')
 		//console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		//console.log(ctx.cookies)
 		if(!ctx.cookies.get('authorization')) {
