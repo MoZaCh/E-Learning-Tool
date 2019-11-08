@@ -74,7 +74,7 @@ module.exports = class User {
 	 * @param {string} password - The password associated a specific username
 	 * @throws {Error} - Throws error message "username <username> not found" if username does not already exist
 	 * @throws {Error} - Throws error message "invalid password for account <username>"
-	 * @returns {boolean} - Returns true if username and password match a specific user record
+	 * @returns {boolean} - Returns true if username and password match a specific user record.
 	 */
 	async login(username, password) {
 		try {
