@@ -38,9 +38,9 @@ const dbName = 'user.db'
  * @route {GET} /
  * @authentication This route requires cookie-based authentication.
  */
-router.get('/', checkHeaders, async (ctx, next) => {
+router.get('/', async ctx => {
 	try {
-		//console.log(ctx.session)
+		//console.log(ctx.session)sd
 		console.log(ctx.cookies.get('authorization'))
 		ctx.cookies.set('authorization', 'Egg')
 		//console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
