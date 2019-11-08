@@ -29,7 +29,7 @@ module.exports = class User {
 		for (const each in regObj) {
 			if (regObj[each] === '' | typeof regObj[each] === 'undefined') throw new Error(`Missing ${each}`)
 		}
-	}
+	} 
 
 	/**
 	 * Takes user, pass, firstName and surname and then registers user by storing it into the database
