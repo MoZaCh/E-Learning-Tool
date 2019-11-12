@@ -46,13 +46,12 @@ router.get('/', auth, async ctx => {
 		//ctx.cookies.set('authorization', 'Egg')
 		//console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 		//console.log(ctx.cookies)
-		if(!ctx.cookies.get('authorization')) {
-			return ctx.redirect('/login?msg=you need to log in')
-		}
-		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
+		//if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
 		const data = {}
 		if(ctx.query.msg) data.msg = ctx.query.msg
+		console.log('1')
 		await ctx.render('index')
+		console.log('2')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -96,15 +95,14 @@ router.get('/login', async ctx => {
 	await ctx.render('login', data)
 })
 
-router.post('/login', async ctx => {
+router.post('/login', auth, async ctx => {
 	try {
-		const body = ctx.request.body
-		const user = await new User(dbName)
-		await user.login(body.user, body.pass)
-		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		ctx.cookies.set('Authorisation',`${body.user}`,{httpOnly: false})
-		console.log(ctx.cookies.get('name'))
-		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		console.log('here')
+		console.log(ctx.status)
+		if (ctx.status === 401) {
+			console.log(ctx.status)
+			return ctx.redirect('/login?msg=you need to log in')
+		}
 		ctx.session.authorised = true
 		return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
