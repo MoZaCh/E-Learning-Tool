@@ -28,4 +28,17 @@ module.exports = class Quiz {
 			if (quizObj[each] === '' | typeof quizObj[each] === 'undefined') throw new Error(`Missing ${each}`)
 		}
 	}
+
+	async getRandomInt(max, cycle) {
+		const num = []
+		const i = 0
+		while (i < cycle) {
+			const ranNum = Math.floor(Math.random() * Math.floor(max))
+			if (!num.includes(ranNum)) {
+				num.push(ranNum)
+				i++
+			}
+		}
+		return num
+	}
 }
