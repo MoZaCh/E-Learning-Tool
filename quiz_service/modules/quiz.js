@@ -25,7 +25,8 @@ module.exports = class Quiz {
 	async checkParameters(quizObj) {
 		if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Empty Object')
 		for (const each in quizObj) {
-			if (quizObj[each] === '' | typeof quizObj[each] === 'undefined') throw new Error(`Missing ${each}`)
+			if (quizObj[each] === '') throw new Error('Missing Value')
+			if (typeof quizObj[each] === 'undefined') throw new Error('Missing Value')
 		}
 	}
 

@@ -14,6 +14,24 @@ describe('checkParameters()', () => {
 		done()
 	})
 
+	test('If object contains an empty value', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		const obj = {i: ''}
+		await expect( quiz.checkParameters(obj) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If object contains an undefined value', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		const obj = {first: 'Heelo', key: undefined}
+		await expect( quiz.checkParameters(obj) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
 	test('if object is undefined it should throw an error', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
@@ -30,6 +48,14 @@ describe('getRandomInt()', () => {
 		const quiz = await new Quiz()
 		const data = await quiz.getRandomInt(10, 5)
 		expect(data.length).toEqual(5)
+		done()
+	})
+
+	test('Should return a set number of unique integers matching cycle 6', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		const data = await quiz.getRandomInt(10, 6)
+		expect(data.length).toEqual(6)
 		done()
 	})
 
