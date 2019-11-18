@@ -16,7 +16,12 @@ module.exports = class Quiz {
 		})()
 	}
 
-
+	/**
+	 * Checks that parameters are not blank
+	 * @param {Object} quizObj - The object contains paramaters that need to checked if left blank
+	 * @throws {Error} - Throws error if the object passed is left blank
+	 * @throws {Error} - Throws error message "Missing <parameter> depending on which is left blank"
+	 */
 	async checkParameters(quizObj) {
 		if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Empty Object')
 		for (const each in quizObj) {
