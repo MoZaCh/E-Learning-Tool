@@ -107,3 +107,62 @@ describe('getRandomInt()', () => {
 		done()
 	})
 })
+
+describe('addQuizQuestion()', () => {
+
+	test('Add a quiz question successfully', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		const addQuestion = await quiz.addQuizQuestions('git', 'What is git?', 'github')
+		expect(addQuestion).toBe(true)
+		done()
+	})
+
+	test('if paremeter topic is missing should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.addQuizQuestions('', 'What is git?', 'github') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('if parameter question is missing should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.addQuizQuestions('git', '', 'github') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter answer is missing should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.addQuizQuestions('git', 'What is git?', '') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('if paremeter topic is undefined should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.addQuizQuestions(undefined, 'What is git?', 'github') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('if parameter question is undefined should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.addQuizQuestions('git', undefined, 'github') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter answer is undefined should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.addQuizQuestions('git', 'What is git?', undefined) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+})
