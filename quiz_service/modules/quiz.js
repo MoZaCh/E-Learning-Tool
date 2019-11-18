@@ -36,8 +36,10 @@ module.exports = class Quiz {
 	 * @returns {list} - Returns a list 'num' with unique numbers
 	 */
 	async getRandomInt(max, cycle) {
+		if (isNaN(max) | typeof max === 'undefined') throw new Error('Missing max')
+		if (isNaN(cycle) | typeof cycle === 'undefined') throw new Error('Missing cycle')
 		const num = []
-		const i = 0
+		let i = 0
 		while (i < cycle) {
 			const ranNum = Math.floor(Math.random() * Math.floor(max))
 			if (!num.includes(ranNum)) {
