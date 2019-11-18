@@ -50,4 +50,32 @@ module.exports = class Quiz {
 		}
 		return num
 	}
+
+	async addQuizQuestions(topic, question, answer) {
+		try {
+			const quizObj = {
+				Topic: topic,
+				Question: question,
+				Answer: answer}
+			await this.checkParameters(quizObj)
+			const sql = `INSERT INTO ${topic}(question, answer) 
+			VALUES("${question}", "${answer}");`
+			await this.db.run(sql)
+			return true
+		} catch(err) {
+			throw err
+		}
+	}
+
+	async viewQuiz(topic) {
+		try {
+			let sql = 'SELECT COUNT(*) FROM git;'
+			let record = await this.db.get(sql)
+			sql = 'SELECT question, answer FROM git'
+			record = await this.db.all(sql)
+			return record
+		} catch(err) {
+			throw err
+		}
+	}
 }
