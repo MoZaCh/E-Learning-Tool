@@ -29,6 +29,12 @@ module.exports = class Quiz {
 		}
 	}
 
+	/**
+	 * Generates a list of unique random numbers
+	 * @param {integer} max - Max specifies a maximum range the numbers should be in
+	 * @param {integer} cycle - It provides the number of times a number should be generated
+	 * @returns {list} - Returns a list 'num' with unique numbers
+	 */
 	async getRandomInt(max, cycle) {
 		const num = []
 		const i = 0
