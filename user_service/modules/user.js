@@ -14,7 +14,7 @@ module.exports = class User {
 			this.db = await sqlite.open(dbName)
 			// we need this table to store the user accounts
 			const sql = `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,
-				user TEXT, pass TEXT, firstName TEXT, surname TEXT);`
+				user TEXT, pass TEXT, firstName TEXT, surname TEXT, type TEXT);`
 			await this.db.run(sql)
 			return this
 		})()
@@ -23,9 +23,10 @@ module.exports = class User {
 	/**
 	 * Checks that username, password, firstname and surname are not blank
 	 * @param {Object} regObj - The object contains username, password, firstname and surname of a specific user
-	 * @throws {Error} - Throws error message "Missubg <parameter>" depending on is left blank
+	 * @throws {Error} - Throws error message "Missing <parameter>" depending on which is left blank
 	 */
 	async checkCredentials(regObj) {
+		if (Object.getOwnPropertyNames(regObj).length === 0) throw new Error('Empty Object')
 		for (const each in regObj) {
 			if (regObj[each] === '' | typeof regObj[each] === 'undefined') throw new Error(`Missing ${each}`)
 		}
@@ -52,8 +53,8 @@ module.exports = class User {
 			const data = await this.db.get(sql)
 			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
 			pass = await bcrypt.hash(pass, saltRounds)
-			sql = `INSERT INTO users(user, pass, firstName, surname) 
-			VALUES("${user}", "${pass}", "${firstName}", "${surname}");`
+			sql = `INSERT INTO users(user, pass, firstName, surname, type) 
+			VALUES("${user}", "${pass}", "${firstName}", "${surname}", "user");`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
@@ -61,12 +62,12 @@ module.exports = class User {
 		}
 	}
 
-	async uploadPicture(path, mimeType) {
-		const extension = mime.extension(mimeType)
-		console.log(`path: ${path}`)
-		console.log(`extension: ${extension}`)
-		//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
-	}
+	// async uploadPicture(path, mimeType) {
+	// 	const extension = mime.extension(mimeType)
+	// 	console.log(`path: ${path}`)
+	// 	console.log(`extension: ${extension}`)
+	// 	//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
+	// }
 
 	/**
 	 * Takes username and password and checks that both match a record in the database
@@ -111,8 +112,20 @@ module.exports = class User {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
 			const records = await this.db.get(sql)
 			if(!records.count) throw new Error(`"${username}" does not exist`)
-
 			sql = `UPDATE users SET firstName = "${firstName}", surname = "${surname}" WHERE user="${username}";`
+			await this.db.run(sql)
+			return true
+		} catch (err) {
+			throw err
+		}
+	}
+
+	async deleteUser(username) {
+		try {
+			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
+			const records = await this.db.get(sql)
+			if(!records.count) throw new Error(`"${username}" does not exist`)
+			sql = `DELETE FROM users WHERE user="${username}";`
 			await this.db.run(sql)
 			return true
 		} catch (err) {

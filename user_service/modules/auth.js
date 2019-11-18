@@ -15,9 +15,9 @@ module.exports = async(ctx, next) => {
 		await user.login(userPass[0], userPass[1])
 		await next()
 	} catch(err) {
-		ctx.status = 401
-		ctx.redirect('/login?msg=you need to log in')
-		//throw err
+		//ctx.status = 401
+		//ctx.redirect('/login?msg=you need to log in')
+		throw err
 	}
 
 }

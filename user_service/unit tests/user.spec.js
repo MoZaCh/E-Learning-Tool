@@ -3,6 +3,26 @@
 
 const Accounts = require('../modules/user.js')
 
+describe('checkCredentials()', () => {
+
+	test('If empty object is passed it should throw an error', async done => {
+		expect.assertions(1)
+		const account = await new Accounts()
+		const obj = {}
+		await expect( account.checkCredentials(obj) )
+			.rejects.toEqual( Error('Empty Object') )
+		done()
+	})
+
+	test('if object is undefined it should throw an error', async done => {
+		expect.assertions(1)
+		const account = await new Accounts()
+		await expect( account.checkCredentials() )
+			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
+		done()
+	})
+})
+
 describe('register()', () => {
 
 	test('register a valid account', async done => {
@@ -96,11 +116,28 @@ describe('login()', () => {
 		done()
 	})
 
-	test('Should throw an error if username is left blank', async done => {
+	test('Should throw an error if username is left empty', async done => {
+		expect.assertions(1)
+		const account = await new Accounts()
+		await expect( account.login('','pass') )
+			.rejects.toEqual( Error('username "" not found') )
+		done()
+	})
+
+	test('Should throw an error if username and passwrod are left blank', async done => {
 		expect.assertions(1)
 		const account = await new Accounts()
 		await expect( account.login() )
 			.rejects.toEqual( Error('username "undefined" not found') )
+		done()
+	})
+
+	test('Should throw an error if password is left empty', async done => {
+		expect.assertions(1)
+		const account = await new Accounts()
+		await account.register('doej', 'password', 'firstname', 'surname')
+		await expect( account.login('doej','') )
+			.rejects.toEqual( Error('invalid password for account "doej"') )
 		done()
 	})
 
@@ -189,5 +226,25 @@ describe('updateDetails()', () => {
 		expect(user.firstName).toEqual('newfirstname')
 		expect(user.surname).toEqual('newsurname')
 		done()
+	})
+
+	describe('deleteUser()', () => {
+		test('Should return true if user has been succesfully deleted', async done => {
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
+			const user = await account.deleteUser('Zahed96')
+			expect(user).toBe(true)
+			done()
+		})
+
+		test('Should throw an error if user does not exist', async done => {
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
+			await expect(account.deleteUser('Zahed968'))
+				.rejects.toEqual( Error('"Zahed968" does not exist') )
+			done()
+		})
 	})
 })
