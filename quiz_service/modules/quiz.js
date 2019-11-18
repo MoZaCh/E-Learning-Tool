@@ -25,7 +25,29 @@ module.exports = class Quiz {
 	async checkParameters(quizObj) {
 		if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Empty Object')
 		for (const each in quizObj) {
-			if (quizObj[each] === '' | typeof quizObj[each] === 'undefined') throw new Error(`Missing ${each}`)
+			if (quizObj[each] === '') throw new Error('Missing Value')
+			if (typeof quizObj[each] === 'undefined') throw new Error('Missing Value')
 		}
+	}
+
+	/**
+	 * Generates a list of unique random numbers
+	 * @param {integer} max - Max specifies a maximum range the numbers should be in
+	 * @param {integer} cycle - It provides the number of times a number should be generated
+	 * @returns {list} - Returns a list 'num' with unique numbers
+	 */
+	async getRandomInt(max, cycle) {
+		if (isNaN(max) | typeof max === 'undefined') throw new Error('Missing max')
+		if (isNaN(cycle) | typeof cycle === 'undefined') throw new Error('Missing cycle')
+		const num = []
+		let i = 0
+		while (i < cycle) {
+			const ranNum = Math.floor(Math.random() * Math.floor(max))
+			if (!num.includes(ranNum)) {
+				num.push(ranNum)
+				i++
+			}
+		}
+		return num
 	}
 }
