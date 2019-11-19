@@ -50,7 +50,7 @@ module.exports = class Quiz {
 		}
 		return num
 	}
-
+	//Error Handling when table is empty??
 	async viewQuiz(topic) {
 		try {
 			let sql = 'SELECT COUNT(*) FROM git;'
