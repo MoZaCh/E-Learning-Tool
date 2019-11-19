@@ -34,7 +34,7 @@ module.exports = class Quiz {
 	 * Generates a list of unique random numbers
 	 * @param {integer} max - Max specifies a maximum range the numbers should be in
 	 * @param {integer} cycle - It provides the number of times a number should be generated
-	 * @returns {list} - Returns a list 'num' with unique numbers
+	 * @returns {Array} - Returns an array 'num' with unique numbers
 	 */
 	async getRandomInt(max, cycle) {
 		if (isNaN(max) | typeof max === 'undefined') throw new Error('Missing max')
@@ -43,7 +43,7 @@ module.exports = class Quiz {
 		let i = 0
 		while (i < cycle) {
 			const ranNum = Math.floor(Math.random() * Math.floor(max))
-			if (!num.includes(ranNum)) {
+			if (!num.includes(ranNum) & ranNum !== 0) {
 				num.push(ranNum)
 				i++
 			}
@@ -51,8 +51,8 @@ module.exports = class Quiz {
 		return num
 	}
 	/**
-	 * Return all the records from the database
-	 * @param {string} topic - String specifies the table to get the data from
+	 * Gets all the records from the database
+	 * @param {string} topic - Takes a string specifies the table to get the data from
 	 * @returns {Array} -  Returns an array of objects
 	 */
 	async viewQuiz(topic) {
@@ -67,6 +67,11 @@ module.exports = class Quiz {
 		}
 	}
 
+	/**
+	 * Generates a list of 10 random questions
+	 * @param {string} topic - Takes a string which specifies the table name
+	 * @returns {Array} - Returns an array of 10 objects each with question and answer
+	 */
 	async randomQuiz(topic) {
 		try {
 			const max = 10
@@ -80,15 +85,6 @@ module.exports = class Quiz {
 				record.push(eachRow)
 			}
 			return record
-		} catch(err) {
-			throw err
-		}
-	}
-
-	async checkScore(quizObj) {
-		try {
-			await this.checkParameters(quizObj)
-
 		} catch(err) {
 			throw err
 		}
