@@ -79,8 +79,10 @@ module.exports = class Quiz {
 		} catch(err) {
 			throw err
 		}
-
-
+	}
+	
+	async checkScore(quizObj) {
+		
 	}
 
 	async addQuizQuestion(topic, question, answer) {
