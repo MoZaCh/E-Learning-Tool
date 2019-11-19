@@ -90,6 +90,12 @@ module.exports = class Quiz {
 		}
 	}
 
+	/**
+	 * Adds a new question and answer to the topic table
+	 * @param {string} topic - Takes a string which specifies the table
+	 * @param {string} question - Takes a string which contains the question to be added
+	 * @param {string} answer - Takes a string which contains the answer
+	 */
 	async addQuizQuestion(topic, question, answer) {
 		try {
 			const quizObj = {
