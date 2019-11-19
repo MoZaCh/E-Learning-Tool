@@ -133,4 +133,13 @@ module.exports = class Quiz {
 		}
 
 	}
+
+	async checkScore(quizObj) {
+		try {
+		  await this.checkParameters(quizObj)
+
+		} catch(err) {
+		  throw err
+		}
+	  }
 }
