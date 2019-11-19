@@ -80,9 +80,14 @@ module.exports = class Quiz {
 			throw err
 		}
 	}
-	
+
 	async checkScore(quizObj) {
-		
+		try {
+			await this.checkParameters(quizObj)
+
+		} catch(err) {
+			throw err
+		}
 	}
 
 	async addQuizQuestion(topic, question, answer) {
