@@ -44,7 +44,7 @@ router.post('/topic', koaBody, async ctx => {
 		console.log(body)
 		const quiz = await new Quiz(dbName)
 		//await quiz.addQuizQuestions('git')
-		const data = await quiz.viewQuiz('git')
+		const data = await quiz.randomQuiz('git')
 		//const data = {
 		//	name: 'zahed'
 		//}

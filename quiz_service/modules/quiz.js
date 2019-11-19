@@ -63,6 +63,26 @@ module.exports = class Quiz {
 		}
 	}
 
+	async randomQuiz(topic) {
+		try {
+			const max = 10
+			const cycle = 5
+			const randomList = await this.getRandomInt(max,cycle)
+			const record = []
+			for(const i in randomList) {
+				console.log(randomList[i])
+				const sql = `SELECT question, answer FROM ${topic} WHERE id=${randomList[i]}`
+				const eachRow = await this.db.get(sql)
+				record.push(eachRow)
+			}
+			return record
+		} catch(err) {
+			throw err
+		}
+
+
+	}
+
 	async addQuizQuestion(topic, question, answer) {
 		try {
 			const quizObj = {
