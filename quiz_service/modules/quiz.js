@@ -112,6 +112,12 @@ module.exports = class Quiz {
 		}
 	}
 
+	/**
+	 * 
+	 * @param {string} topic - Takes a string which specifies the table name
+	 * @param {string} question - Takes a string question which contains the question to be deleted
+	 * @param {string} answer - Takes a string answer which contains the answer to be deleted
+	 */
 	async deleteQuizQuestion(topic, question, answer) {
 		try {
 			const quizObj = {
