@@ -51,7 +51,19 @@ module.exports = class Quiz {
 		return num
 	}
 
-	async addQuizQuestions(topic, question, answer) {
+	async viewQuiz(topic) {
+		try {
+			let sql = 'SELECT COUNT(*) FROM git;'
+			let record = await this.db.get(sql)
+			sql = 'SELECT question, answer FROM git'
+			record = await this.db.all(sql)
+			return record
+		} catch(err) {
+			throw err
+		}
+	}
+
+	async addQuizQuestion(topic, question, answer) {
 		try {
 			const quizObj = {
 				Topic: topic,
@@ -67,15 +79,19 @@ module.exports = class Quiz {
 		}
 	}
 
-	async viewQuiz(topic) {
+	async deleteQuizQuestion(topic, question, answer) {
 		try {
-			let sql = 'SELECT COUNT(*) FROM git;'
-			let record = await this.db.get(sql)
-			sql = 'SELECT question, answer FROM git'
-			record = await this.db.all(sql)
-			return record
+			const quizObj = {
+				Topic: topic,
+				Question: question,
+				Answer: answer}
+			await this.checkParameters(quizObj)
+			const sql = `DELETE FROM ${topic} WHERE question="${question}";`
+			await this.db.run(sql)
+			return true
 		} catch(err) {
 			throw err
 		}
+
 	}
 }
