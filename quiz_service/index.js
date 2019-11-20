@@ -45,14 +45,6 @@ router.post('/topic', koaBody, async ctx => {
 		const quiz = await new Quiz(dbName)
 		//await quiz.addQuizQuestions('git')
 		const data = await quiz.getRandomQuiz('git')
-		//const data = {
-		//	name: 'zahed'
-		//}
-		// for (const key in data) {
-		// 	if(data.hasOwnProperty(key)) {
-		// 	  console.log(`${key} : ${data[key]}`)
-		// 	}
-		//  }
 		await ctx.render('index', data)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
