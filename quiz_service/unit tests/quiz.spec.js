@@ -2,6 +2,7 @@
 'use strict'
 
 const Quiz = require('../modules/quiz.js')
+const Accounts = require('../../user_service/modules/user.js')
 
 describe('checkParameters()', () => {
 
@@ -278,26 +279,28 @@ describe('deleteQuizQuestion()', () => {
 	test('Delete a quiz question successfully', async done => {
 		expect.assertions(2)
 		const quiz = await new Quiz()
-		const setQuestion = await quiz.setQuizQuestion('git', 'What is git?', 'github')
-		expect(setQuestion).toBe(true)
-		const deleteQuestion = await quiz.deleteQuizQuestion('git', 'What is git?', 'github')
-		expect(deleteQuestion).toBe(true)
+		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github') )
+			.resolves.toBeTruthy()
+		await expect(quiz.deleteQuizQuestion('git', 'What is git?', 'github'))
+			.resolves.toBeTruthy()
 		done()
 	})
 
 	test('If question is not found', async done => {
-		expect.assertions(1)
+		expect.assertions(2)
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git?', 'github')
+		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github') )
+			.resolves.toBeTruthy()
 		await expect( quiz.deleteQuizQuestion('git', 'Not known', 'github') )
 			.rejects.toEqual( Error('"Not known" no match found') )
 		done()
 	})
 
 	test('If answer is not found', async done => {
-		expect.assertions(1)
+		expect.assertions(2)
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git?', 'github')
+		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github') )
+			.resolves.toBeTruthy()
 		await expect( quiz.deleteQuizQuestion('git', 'What is git?', 'Not Known') )
 			.rejects.toEqual( Error('"What is git?" no match found') )
 		done()
@@ -408,10 +411,11 @@ describe('getScore()', () => {
 	})
 
 	test('Should return 10% and fail', async done => {
-		expect.assertions(2)
+		expect.assertions(3)
 		const quiz = await new Quiz()
 		const obj = {'How do you stage files for a commit?': 'git add'}
-		await quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add')
+		await expect(quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add') )
+			.resolves.toBeTruthy()
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('10%')
 		expect(result.outcome).toBe('Fail')
@@ -429,6 +433,63 @@ describe('getScore()', () => {
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('40%')
 		expect(result.outcome).toEqual('Pass')
+		done()
+	})
+})
+
+describe('setQuizResults()', () => {
+
+	test('If user does exist it should return true', async done => {
+		expect.assertions(2)
+		const accounts = await new Accounts()
+		const quiz = await new Quiz()
+		await expect(accounts.register('admin', 'admin', 'admin', 'admin') )
+			.resolves.toBeTruthy()
+		await expect(quiz.setQuizResult('admin','git','50%', 'Pass'))
+			.resolves.toBeTruthy()
+		done()
+	})
+
+	test('If user does not exist it should throw an error', async done => {
+		expect.assertions(2)
+		const accounts = await new Accounts()
+		const quiz = await new Quiz()
+		await expect(accounts.register('admin', 'admin', 'admin', 'admin') )
+			.resolves.toBeTruthy()
+		await expect(quiz.setQuizResult('hello','git','50%', 'Pass'))
+			.rejects.toEqual( Error('username "hello" not found') )
+		done()
+	})
+})
+
+describe('getQuizResults()', () => {
+
+	test('Unknown username should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizResult('Hello') )
+			.rejects.toEqual( Error('username "Hello" not found') )
+		done()
+	})
+
+	test('If a parameter is not passed', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.getQuizResult() )
+			.rejects.toEqual( Error('username "undefined" not found') )
+		done()
+	})
+
+	test('If user does exist it should return users past results', async done => {
+		expect.assertions(3)
+		const accounts = await new Accounts()
+		const quiz = await new Quiz()
+		await expect(accounts.register('admin', 'admin', 'admin', 'admin') )
+			.resolves.toBeTruthy()
+		await expect(quiz.setQuizResult('admin','git','50%', 'Pass'))
+			.resolves.toBeTruthy()
+		await expect( quiz.getQuizResult('admin') )
+			.resolves.toEqual([{'id': 1, 'outcome': 'Pass', 'score': '50%', 'topic': 'git', 'user': 'admin'}])
 		done()
 	})
 })
