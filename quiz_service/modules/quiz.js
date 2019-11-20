@@ -159,7 +159,11 @@ module.exports = class Quiz {
 		return scoreObj
 	}
 
-	//New feature
+	/**
+	 * 
+	 * @param {*} quizObj 
+	 * @param {*} topic 
+	 */
 	async getScore(quizObj, topic) {
 		try {
 			if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Invalid data provided')
