@@ -14,10 +14,10 @@ module.exports = class Quiz {
 			//We need this table to store the quiz
 			let sql='CREATE TABLE IF NOT EXISTS git (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT);'
 			await this.db.run(sql)
-			sql = 'CREATE TABLE IF NOT EXISTS randomAnswers (id INTEGER PRIMARY KEY AUTOINCREMENT, ranswer TEXT)'
-			await this.db.run(sql)
 			sql = `CREATE TABLE IF NOT EXISTS quizResults (id INTEGER PRIMARY KEY AUTOINCREMENT,
 				user TEXT, topic TEXT, score TEXT, outcome TEXT);`
+			await this.db.run(sql)
+			sql = 'CREATE TABLE IF NOT EXISTS randomGit (id INTEGER PRIMARY KEY AUTOINCREMENT, ranswer TEXT)'
 			await this.db.run(sql)
 			return this
 		})()
@@ -181,7 +181,6 @@ module.exports = class Quiz {
 		const accounts = await new Accounts(accountsDB)
 		const sql = `SELECT count(*) AS count FROM users WHERE user="${user}";`
 		const records = await accounts.db.get(sql)
-		console.log(records)
 		if(!records.count) throw new Error(`username "${user}" not found`)
 	}
 

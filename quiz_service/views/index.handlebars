@@ -88,17 +88,23 @@ button:hover {
   <!-- One "tab" for each step in the form: -->
   <div class="tab"><h2>{{[0].question}}</h2>
   	<input type="radio" name="{{[0].question}}" id="red" value="{{[0].answer}}"> {{[0].answer}}<br>
-  	<input type="radio" name="{{[0].question}}" id="blue" value="git2">Blue
+  	<input type="radio" name="{{[0].question}}" id="blue" value="false">git.push
+    <input type="radio" name="{{[0].question}}" id="blue" value="false">git addition
+    <input type="radio" name="{{[0].question}}" id="blue" value="false">git pull
   </div>
-  <div class="tab">{{[1].question}}
-  	<input type="radio" name="{{[1].question}}" id="red">{{[1].answer}}<br>
-  	<input type="radio" name="{{[1].question}}" id="blue">Blue
+  <div class="tab"><h2>{{[1].question}}</h2>
+  	<input type="radio" name="{{[1].question}}" id="blue" value="false">git.clone
+  	<input type="radio" name="{{[1].question}}" id="red" value="{{[1].answer}}">{{[1].answer}}<br>
+  	<input type="radio" name="{{[1].question}}" id="blue" value="false">git.add
+    <input type="radio" name="{{[1].question}}" id="blue" value="false">git pull --account
   </div>
-  <div class="tab">{{[2].question}}
-  	<input type="radio" name="{{[2].question}}" id="red">{{[2].answer}}<br>
-  	<input type="radio" name="{{[2].question}}" id="blue">Blue
+  <div class="tab"><h2>{{[2].question}}</h2>
+    <input type="radio" name="{{[2].question}}" id="blue" value="false">git duplicate
+    <input type="radio" name="{{[2].question}}" id="blue" value="false">git copy -- account
+    <input type="radio" name="{{[2].question}}" id="blue" value="false">push git
+  	<input type="radio" name="{{[2].question}}" id="red" value="{{[2].answer}}">{{[2].answer}}<br>
   </div>
-  <div class="tab">{{[3].question}}
+  <div class="tab"><h2>{{[3].question}}</h2>
   	<input type="radio" name="{{[3].question}}" id="red">{{[3].answer}}<br>
   	<input type="radio" name="{{[3].question}}" id="blue">Blue
   </div>
@@ -122,8 +128,8 @@ button:hover {
     <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
-	<span class="step"></span>
-	<span class="step"></span>
+	  <span class="step"></span>
+	  <span class="step"></span>
   </div>
 </form>
 
