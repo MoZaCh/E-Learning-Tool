@@ -368,33 +368,38 @@ describe('getScore()', () => {
 		done()
 	})
 
-	test('Should return 0 as incorrect answer to question', async done => {
-		expect.assertions(1)
+	test('Should return 0% and fail', async done => {
+		expect.assertions(2)
 		const quiz = await new Quiz()
 		const obj = {'What is git?': 'github'}
 		const result = await quiz.getScore(obj, 'git')
-		expect(result).toBe(0)
+		expect(result.score).toBe('0%')
+		expect(result.outcome).toEqual('Fail')
 		done()
 	})
 
-	test('Should return 1 as correct answer to question', async done => {
-		expect.assertions(1)
+	test('Should return 10% and fail', async done => {
+		expect.assertions(2)
 		const quiz = await new Quiz()
 		const obj = {'How do you stage files for a commit?': 'git add'}
 		await quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add')
 		const result = await quiz.getScore(obj, 'git')
-		expect(result).toBe(1)
+		expect(result.score).toBe('10%')
+		expect(result.outcome).toBe('Fail')
 		done()
 	})
 
-	test('Should return 2 as answers are correct', async done => {
-		expect.assertions(1)
+	test('Should return 40% and pass', async done => {
+		expect.assertions(2)
 		const quiz = await new Quiz()
-		const obj = {'How do you stage files for a commit?': 'git add', 'What is git?': 'github', 'Wrong': 'Wrong'}
-		await quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add')
+		const obj = {'Stage files for a commit?': 'git add', 'What is git?': 'github', 'C1': 'C1', 'C2': 'C2'}
+		await quiz.setQuizQuestion('git', 'Stage files for a commit?', 'git add')
 		await quiz.setQuizQuestion('git', 'What is git?', 'github')
+		await quiz.setQuizQuestion('git', 'C1', 'C1')
+		await quiz.setQuizQuestion('git', 'C2', 'C2')
 		const result = await quiz.getScore(obj, 'git')
-		expect(result).toBe(2)
+		expect(result.score).toBe('40%')
+		expect(result.outcome).toEqual('Pass')
 		done()
 	})
 })

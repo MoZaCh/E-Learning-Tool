@@ -137,14 +137,23 @@ module.exports = class Quiz {
 			throw err
 		}
 	}
-
+	/**
+	 * Takes an integer and returns object containg fail or pass depending on the score
+	 * @param {integer} score - Takes input integer
+	 * @returns {Object} - Returns Object which contains score and outcome
+	 */
 	async checkIfFail(score) {
 		const pass = 4
+		const ten = 10
 		const scoreObj = {}
 		if (score < pass) {
-			scoreObj[score]: 12
+			scoreObj.score = `${score * ten}%`
+			scoreObj.outcome = 'Fail'
+		} else {
+			scoreObj.score = `${score * ten}%`
+			scoreObj.outcome = 'Pass'
 		}
-		return score < pass
+		return scoreObj
 	}
 
 	//New feature
@@ -152,7 +161,6 @@ module.exports = class Quiz {
 		try {
 			if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Invalid data provided')
 			await this.checkParameters(quizObj)
-			const scoreObj = {}
 			let score = 0
 			for (const key in quizObj) {
 				const sql = `SELECT COUNT(*) AS count FROM ${topic} 
@@ -161,8 +169,8 @@ module.exports = class Quiz {
 				console.log(eachRow.count)
 				if (eachRow.count === 1) score++
 			}
-
-			return score
+			const result = this.checkIfFail(score)
+			return result
 		} catch(err) {
 			throw err
 		}
