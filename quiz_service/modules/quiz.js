@@ -50,16 +50,18 @@ module.exports = class Quiz {
 		}
 		return num
 	}
+
 	/**
 	 * Gets all the records from the database
 	 * @param {string} topic - Takes a string specifies the table to get the data from
 	 * @returns {Array} -  Returns an array of objects
 	 */
 	async viewQuiz(topic) {
+		if (!isNaN(topic) | topic === '' | typeof topic === 'undefined') throw new Error('Invalid input')
 		try {
-			let sql = 'SELECT COUNT(*) FROM git;'
+			let sql = `SELECT COUNT(*) FROM ${topic};`
 			let record = await this.db.get(sql)
-			sql = 'SELECT question, answer FROM git'
+			sql = `SELECT question, answer FROM ${topic}`
 			record = await this.db.all(sql)
 			return record
 		} catch(err) {
@@ -72,7 +74,7 @@ module.exports = class Quiz {
 	 * @param {string} topic - Takes a string which specifies the table name
 	 * @returns {Array} - Returns an array of 10 objects each with question and answer
 	 */
-	async randomQuiz(topic) {
+	async getRandomQuiz(topic) {
 		try {
 			const max = 10
 			const cycle = 5
@@ -93,10 +95,10 @@ module.exports = class Quiz {
 	/**
 	 * Adds a new question and answer to the topic table
 	 * @param {string} topic - Takes a string which specifies the table
-	 * @param {string} question - Takes a string which contains the question to be added
+	 * @param {string} question - Takes a string which contains the question to be seted
 	 * @param {string} answer - Takes a string which contains the answer
 	 */
-	async addQuizQuestion(topic, question, answer) {
+	async setQuizQuestion(topic, question, answer) {
 		try {
 			const quizObj = {
 				Topic: topic,
@@ -125,19 +127,32 @@ module.exports = class Quiz {
 				Question: question,
 				Answer: answer}
 			await this.checkParameters(quizObj)
-			const sql = `DELETE FROM ${topic} WHERE question="${question}";`
+			let sql = `SELECT count(*) AS count FROM ${topic} WHERE question="${question}" AND answer="${answer}";`
+			const records = await this.db.get(sql)
+			if(!records.count) throw new Error(`"${question}" no match found`)
+			sql = `DELETE FROM ${topic} WHERE question="${question}";`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
 			throw err
 		}
-
 	}
 
-	async checkScore(quizObj) {
+	//New feature
+	async getScore(quizObj, topic) {
 		try {
-		  await this.checkParameters(quizObj)
-
+			if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Invalid data provided')
+ 		  await this.checkParameters(quizObj)
+		  let score = 0
+		  for (const key in quizObj) {
+			  const sql = `SELECT COUNT(*) AS count FROM ${topic} 
+			  Where question="${key}" AND answer="${quizObj[key]}";`
+			  const eachRow = await this.db.get(sql)
+			  console.log(eachRow.count)
+			  if (eachRow.count === 1) score++
+			}
+		  console.log(score)
+		  return score
 		} catch(err) {
 		  throw err
 		}

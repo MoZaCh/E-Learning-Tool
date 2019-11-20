@@ -44,7 +44,7 @@ router.post('/topic', koaBody, async ctx => {
 		console.log(body)
 		const quiz = await new Quiz(dbName)
 		//await quiz.addQuizQuestions('git')
-		const data = await quiz.randomQuiz('git')
+		const data = await quiz.getRandomQuiz('git')
 		//const data = {
 		//	name: 'zahed'
 		//}
@@ -63,6 +63,8 @@ router.post('/quizcomplete', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body
 		console.log(body)
+		const quiz = await new Quiz(dbName)
+		const result = await quiz.getScore(body, 'git')
 		//const quiz = await new Quiz(dbName)
 		//await quiz.addQuizQuestions('git')
 		//const data = await quiz.viewQuiz('git')
