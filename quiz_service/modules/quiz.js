@@ -160,9 +160,9 @@ module.exports = class Quiz {
 	}
 
 	/**
-	 * 
-	 * @param {*} quizObj 
-	 * @param {*} topic 
+	 * Takes input object and table name and returns the score
+	 * @param {Object} quizObj -
+	 * @param {string} topic -
 	 */
 	async getScore(quizObj, topic) {
 		try {
