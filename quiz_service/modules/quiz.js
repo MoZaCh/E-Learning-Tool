@@ -138,23 +138,35 @@ module.exports = class Quiz {
 		}
 	}
 
+	async checkIfFail(score) {
+		const pass = 4
+		const scoreObj = {}
+		if (score < pass) {
+			scoreObj[score]: 12
+		}
+		return score < pass
+	}
+
 	//New feature
 	async getScore(quizObj, topic) {
 		try {
 			if (Object.getOwnPropertyNames(quizObj).length === 0) throw new Error('Invalid data provided')
- 		  await this.checkParameters(quizObj)
-		  let score = 0
-		  for (const key in quizObj) {
-			  const sql = `SELECT COUNT(*) AS count FROM ${topic} 
-			  Where question="${key}" AND answer="${quizObj[key]}";`
-			  const eachRow = await this.db.get(sql)
-			  console.log(eachRow.count)
-			  if (eachRow.count === 1) score++
+			await this.checkParameters(quizObj)
+			const scoreObj = {}
+			let score = 0
+			for (const key in quizObj) {
+				const sql = `SELECT COUNT(*) AS count FROM ${topic} 
+				Where question="${key}" AND answer="${quizObj[key]}";`
+				const eachRow = await this.db.get(sql)
+				console.log(eachRow.count)
+				if (eachRow.count === 1) score++
 			}
-		  console.log(score)
-		  return score
+
+			return score
 		} catch(err) {
-		  throw err
+			throw err
 		}
 	  }
 }
+
+
