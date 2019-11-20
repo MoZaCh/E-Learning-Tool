@@ -43,16 +43,7 @@ router.post('/topic', koaBody, async ctx => {
 		const body = ctx.request.body
 		console.log(body)
 		const quiz = await new Quiz(dbName)
-		//await quiz.addQuizQuestions('git')
-		const data = await quiz.viewQuiz('git')
-		//const data = {
-		//	name: 'zahed'
-		//}
-		// for (const key in data) {
-		// 	if(data.hasOwnProperty(key)) {
-		// 	  console.log(`${key} : ${data[key]}`)
-		// 	}
-		//  }
+		const data = await quiz.getRandomQuiz('git')
 		await ctx.render('index', data)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -63,6 +54,8 @@ router.post('/quizcomplete', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body
 		console.log(body)
+		const quiz = await new Quiz(dbName)
+		const result = await quiz.getScore(body, 'git')
 		//const quiz = await new Quiz(dbName)
 		//await quiz.addQuizQuestions('git')
 		//const data = await quiz.viewQuiz('git')
