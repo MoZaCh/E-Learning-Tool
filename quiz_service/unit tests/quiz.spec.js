@@ -185,6 +185,88 @@ describe('viewQuiz()', () => {
 	})
 })
 
+describe('getRandomQuiz()', () => {
+
+	test('Should get a randomly generated quiz', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1')
+		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2')
+		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3')
+		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4')
+		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5')
+		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1')
+		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2')
+		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3')
+		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4')
+		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5')
+		const result = await quiz.getRandomQuiz('git')
+		expect(result.length).toEqual(5)
+		done()
+	})
+
+	test('If no paramter is passed it should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.getRandomQuiz() )
+			.rejects.toThrow( new Error('SQLITE_ERROR: no such table: undefined') )
+		done()
+	})
+
+	test('If object contains missing value', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		const obj = {first: ''}
+		await expect( quiz.getScore(obj, 'git') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('if object contians undefined value it should throw an error', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		const obj = {first: undefined}
+		await expect( quiz.getScore(obj, 'git') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('Should return 0% and fail', async done => {
+		expect.assertions(2)
+		const quiz = await new Quiz()
+		const obj = {'What is git?': 'github'}
+		const result = await quiz.getScore(obj, 'git')
+		expect(result.score).toBe('0%')
+		expect(result.outcome).toEqual('Fail')
+		done()
+	})
+
+	test('Should return 10% and fail', async done => {
+		expect.assertions(2)
+		const quiz = await new Quiz()
+		const obj = {'How do you stage files for a commit?': 'git add'}
+		await quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add')
+		const result = await quiz.getScore(obj, 'git')
+		expect(result.score).toBe('10%')
+		expect(result.outcome).toBe('Fail')
+		done()
+	})
+
+	test('Should return 40% and pass', async done => {
+		expect.assertions(2)
+		const quiz = await new Quiz()
+		const obj = {'Stage files for a commit?': 'git add', 'What is git?': 'github', 'C1': 'C1', 'C2': 'C2'}
+		await quiz.setQuizQuestion('git', 'Stage files for a commit?', 'git add')
+		await quiz.setQuizQuestion('git', 'What is git?', 'github')
+		await quiz.setQuizQuestion('git', 'C1', 'C1')
+		await quiz.setQuizQuestion('git', 'C2', 'C2')
+		const result = await quiz.getScore(obj, 'git')
+		expect(result.score).toBe('40%')
+		expect(result.outcome).toEqual('Pass')
+		done()
+	})
+})
+
 describe('setQuizQuestion()', () => {
 
 	test('Add a quiz question successfully', async done => {
