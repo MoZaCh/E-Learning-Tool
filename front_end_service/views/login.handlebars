@@ -10,6 +10,7 @@
 		<link href="style.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
+		<center>
 		<h1>Log In</h1>
 		{{#if msg}}
  			<p class="msg">{{msg}}</p>
@@ -19,6 +20,8 @@
 			<p>Password:<br /><input type="password" name="pass" placeholder="your password" value=""></p>
 			<p><input type="submit" value="Log in"></p>
 		</form>
+		<button name="register" type="button" onclick="location.href='/register';" value="register"> Register </button>
 		<p><a href="/register">register</a></p>
+		</center>
 	</body>
 </html>
