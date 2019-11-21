@@ -18,7 +18,8 @@ const session = require('koa-session')
 const Accounts = require('../user_service/modules/user.js')
 const accountsDB = '../user_service/user.db'
 const FrontEnd = require('./modules/front_end')
-const auth = require('./modules/auth')
+const auth = require('./modules/authentication')
+const authorization = require('./modules/authorization')
 
 const app = new Koa()
 const router = new Router()
@@ -49,7 +50,12 @@ router.get('/', async ctx => await ctx.render('index'))
  * @name Register Page
  * @route {GET} /register
  */
-router.get('/register', async ctx => await ctx.render('register'))
+router.get('/register', async ctx => {
+	const data = {}
+	if(ctx.query.msg) data.msg = ctx.query.msg
+	if(ctx.query.user) data.user = ctx.query.user
+	await ctx.render('register', data)
+})
 
 /**
  * The script to process new user registrations.
@@ -66,10 +72,10 @@ router.post('/register', koaBody, async ctx => {
 		await accounts.register(body.user, body.pass, body.firstName, body.surname)
 		// await user.uploadPicture(path, type)
 		// redirect to the home page
-		console.log(body.name)
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message, page: '/register'})
+		ctx.redirect(`/register?msg=${err.message}`)
 	}
 })
 
@@ -94,24 +100,30 @@ router.post('/login', async ctx => {
 			ctx.session.authorised = true
 		}
 		return ctx.redirect('/homepage?msg=logged in')
-		//ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
-		await ctx.render('error', {message: err.message})
+		ctx.redirect(`/login?msg=${err.message}`)
+		//await ctx.render('login', {message: err.message, page: '/login'})
 	}
 })
 
-router.get('/logout', async ctx => {
+router.get('/logout', auth, async ctx => {
 	ctx.session.authorised = null
 	ctx.cookies.set('authorization','')
-	console.log('Logout')
-	console.log(ctx.cookies.get('authorization'))
+	ctx.cookies.set('type', '')
 	ctx.redirect('/?msg=you are now logged out')
 })
 
 router.get('/homepage', auth, async ctx => {
-	console.log('Sucessfully Logged In')
-	//console.log(ctx.cookies.get('authorization'))
-	await ctx.render('homepage')
+	const frontController = await new FrontEnd()
+	const userPass = await frontController.convertToString(ctx.cookies.get('authorization'))
+	const accounts = await new Accounts(accountsDB)
+	const data = await accounts.userDetails(userPass[0], userPass[1])
+	await ctx.render('homepage', data)
+})
+
+router.get('/adminpanel', auth, authorization, async ctx => {
+	console.log('Authentication Successful')
+	await ctx.render('adminpanel')
 })
 
 app.use(router.routes())
