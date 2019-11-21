@@ -61,15 +61,15 @@ router.post('/register', koaBody, async ctx => {
 	try {
 		// extract the data from the request
 		const body = ctx.request.body
-		console.log(body)
 		// call the functions in the module
 		const accounts = await new Accounts(accountsDB)
 		await accounts.register(body.user, body.pass, body.firstName, body.surname)
 		// await user.uploadPicture(path, type)
 		// redirect to the home page
+		console.log(body.name)
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
 	} catch(err) {
-		await ctx.render('error', {message: err.message})
+		await ctx.render('error', {message: err.message, page: '/register'})
 	}
 })
 
@@ -86,16 +86,15 @@ router.post('/login', async ctx => {
 		const accounts = await new Accounts(accountsDB)
 		const result = await accounts.login(body.user, body.pass)
 		const role = await accounts.userDetails(body.user)
-		const frontCon = await new FrontEnd()
-		await frontCon.convertToBase(body.user, body.pass)
+		const frontController = await new FrontEnd()
+		const userBase64 = await frontController.convertToBase(body.user, body.pass)
 		if (result === true) {
-			//Setting the authorization cookie in base64 and the type of user
-			ctx.cookies.set('authorization', body.user)
-			ctx.cookies.set('type', role.type)
-			console.log(ctx.cookies.get('authorization'))
+			await ctx.cookies.set('authorization', userBase64)
+			await ctx.cookies.set('type', role.type)
+			ctx.session.authorised = true
 		}
-		ctx.session.authorised = true
-		return ctx.redirect('/?msg=you are now logged in...')
+		return ctx.redirect('/homepage?msg=logged in')
+		//ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -103,7 +102,16 @@ router.post('/login', async ctx => {
 
 router.get('/logout', async ctx => {
 	ctx.session.authorised = null
+	ctx.cookies.set('authorization','')
+	console.log('Logout')
+	console.log(ctx.cookies.get('authorization'))
 	ctx.redirect('/?msg=you are now logged out')
+})
+
+router.get('/homepage', auth, async ctx => {
+	console.log('Sucessfully Logged In')
+	//console.log(ctx.cookies.get('authorization'))
+	await ctx.render('homepage')
 })
 
 app.use(router.routes())

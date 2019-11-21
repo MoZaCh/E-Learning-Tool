@@ -10,10 +10,8 @@ const saltRounds = 10
 module.exports = class frontEnd {
 
 	async convertToBase(user, pass) {
-		const basicAuth = `basic= ${user}:${pass}`
-		console.log(basicAuth)
-		const authBase64 = basicAuth.toString('base64')
-		console.log(authBase64)
-
+		const basicAuth = `Basic ${user}:${pass}`
+		const authBase64 = Buffer.from(basicAuth).toString('base64')
+		return authBase64
 	}
 }
