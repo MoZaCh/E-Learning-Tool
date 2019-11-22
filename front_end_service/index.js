@@ -17,6 +17,8 @@ const session = require('koa-session')
 /* IMPORT CUSTOM MODULES */
 const Accounts = require('../user_service/modules/user.js')
 const accountsDB = '../user_service/user.db'
+const Quiz = require('../quiz_service/modules/quiz.js')
+const quizDB = '../quiz_service/quiz.db'
 const FrontEnd = require('./modules/front_end')
 const auth = require('./modules/authentication')
 const authorization = require('./modules/authorization')
@@ -124,6 +126,23 @@ router.get('/homepage', auth, async ctx => {
 router.get('/adminpanel', auth, authorization, async ctx => {
 	console.log('Authentication Successful')
 	await ctx.render('adminpanel')
+})
+
+router.get('/git-topic', async ctx => await ctx.render('git-topic'))
+
+router.get('/git-topic2', async ctx => await ctx.render('git-topic2'))
+
+router.post('/quiz', async ctx => {
+	try {
+		const body = ctx.request.body
+		console.log(body)
+		const quiz = await new Quiz(quizDB)
+		const data = await quiz.getRandomQuiz(body.topic)
+		data.push({topic: `${body.topic}`})
+		await ctx.render(`${body.topic}-quiz`, data)
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
 })
 
 app.use(router.routes())

@@ -4,7 +4,7 @@
 const sqlite = require('sqlite-async')
 
 const Accounts = require('../../user_service/modules/user.js')
-const accountsDB = './user_service/user.db'
+const accountsDB = '../../user_service/user.db'
 
 module.exports = class Quiz {
 
@@ -177,20 +177,20 @@ module.exports = class Quiz {
 		}
 	  }
 
-	  async checkUser(user) {
-		const accounts = await new Accounts(accountsDB)
-		const sql = `SELECT count(*) AS count FROM users WHERE user="${user}";`
-		const records = await accounts.db.get(sql)
-		if(!records.count) throw new Error(`username "${user}" not found`)
-	}
+
 
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {
-			  await this.checkUser(user)
-			  const sql = `INSERT INTO quizResults(user, topic, score, outcome) 
-			  VALUES("${user}", "${topic}", "${score}","${outcome}");`
-			  await this.db.run(sql)
-			  return true
+			const setQuizObj = {
+				Username: user,
+				Topic: topic,
+				Score: score,
+				Outcome: outcome}
+			await this.checkParameters(setQuizObj)
+			const sql = `INSERT INTO quizResults(user, topic, score, outcome) 
+			VALUES("${user}", "${topic}", "${score}","${outcome}");`
+			await this.db.run(sql)
+			return true
 		} catch(err) {
 			  throw err
 		  }
@@ -198,10 +198,12 @@ module.exports = class Quiz {
 
 	  async getQuizResult(user) {
 		  try {
-			  await this.checkUser(user)
-			  const sql = `SELECT * FROM quizResults WHERE user="${user}";`
-			  const records = await this.db.all(sql)
-			  return records
+			const getQuizObj = {
+				Username: user}
+			await this.checkParameters(getQuizObj)
+			const sql = `SELECT * FROM quizResults WHERE user="${user}";`
+			const records = await this.db.all(sql)
+			return records
 		} catch(err) {
 			  throw err
 

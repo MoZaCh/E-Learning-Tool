@@ -450,35 +450,16 @@ describe('setQuizResults()', () => {
 		done()
 	})
 
-	test('If user does not exist it should throw an error', async done => {
-		expect.assertions(2)
-		const accounts = await new Accounts()
-		const quiz = await new Quiz()
-		await expect(accounts.register('admin', 'admin', 'admin', 'admin') )
-			.resolves.toBeTruthy()
-		await expect(quiz.setQuizResult('hello','git','50%', 'Pass'))
-			.rejects.toEqual( Error('username "hello" not found') )
-		done()
-	})
-})
-
-describe('getQuizResults()', () => {
-
-	test('Unknown username should throw an error', async done => {
-		expect.assertions(1)
-		const quiz = await new Quiz()
-		await expect( quiz.setQuizResult('Hello') )
-			.rejects.toEqual( Error('username "Hello" not found') )
-		done()
-	})
-
 	test('If a parameter is not passed', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
-		await expect( quiz.getQuizResult() )
-			.rejects.toEqual( Error('username "undefined" not found') )
+		await expect( quiz.setQuizResult() )
+		  .rejects.toEqual( Error('Missing Value') )
 		done()
-	})
+	  })
+})
+
+describe('getQuizResults()', () => {
 
 	test('If user does exist it should return users past results', async done => {
 		expect.assertions(3)
@@ -492,4 +473,12 @@ describe('getQuizResults()', () => {
 			.resolves.toEqual([{'id': 1, 'outcome': 'Pass', 'score': '50%', 'topic': 'git', 'user': 'admin'}])
 		done()
 	})
+
+	test('If a parameter is not passed', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.getQuizResult() )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
 })

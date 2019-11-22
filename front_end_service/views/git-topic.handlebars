@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>GIT</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<style>
+
+.topicbox {
+  border-radius: 25px;
+  background-color: rgb(235,235,235);
+  border: 10px solid rgb(51,51,51);
+  padding: 50px;
+  margin: 20px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.notactive):not(.active) {
+  background-color: rgb(51,51,51);
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+.notactive {
+  background-color: rgb(203, 92, 85);
+}
+</style>
+
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>GIT</h1>
+  <p>Learn Git In Minutes</p>
+  <div>
+    <ul>
+      <li><a href="/homepage">Home</a></li>
+      <li><a class="active" href="#news">Topics</a></li>
+      <li><a href="#contact">Quiz</a></li>
+      <li style="float:right"><a class="notactive" href="/logout">Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="topicbox">
+    <div>
+      <h2>What’s a version control system?</h2>
+      <p>A version control system, or VCS, tracks the history of changes as people and teams collaborate on projects together. As the project evolves, teams can run tests, fix bugs, and contribute new code with the confidence that any version can be recovered at any time. Developers can review project history to find out:
+        Which changes were made?
+        Who made the changes?
+        When were the changes made?
+        Why were changes needed?</p>
+
+      <h2>What’s a distributed version control system?</h2>
+      <p>Git is an example of a distributed version control system (DVCS) commonly used for open source and commercial software development. DVCSs allow full access to every file, branch, and iteration of a project, and allows every user access to a full and self-contained history of all changes. Unlike once popular centralized version control systems, DVCSs like Git don’t need a constant connection to a central repository. Developers can work anywhere and collaborate asynchronously from any time zone.</p>
+
+      <h2>How GitHub works?</h2>
+      <p>GitHub builds collaboration directly into the development process. Work is organized into repositories, where developers can outline requirements or direction and set expectations for team members. Then, using the GitHub flow, developers simply create a branch to work on updates, commit changes to save them, open a pull request to propose and discuss changes, and merge pull requests once everyone is on the same page.</p>
+      <br>
+      <p>Page 1</p>
+      <button type="button" class="btn btn-success" onclick="location.href='/git-topic2';" style="float: right;">Next</button>
+    </div>
+  </div><br>
+</div>
+
+</body>
+
+<footer>
+  <br>
+  <div class="jumbotron text-center">
+    <p>@E-Learning 2019</p>
+  </div>
+</footer>
+</html>

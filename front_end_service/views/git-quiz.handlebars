@@ -84,7 +84,7 @@ button:hover {
 <body>
 
 <form id="regForm" action="/quizcomplete" enctype="multipart/form-data" method="post">
-  <h1>Git Quiz:</h1>
+  <h1>{{[5].topic}} Quiz</h1>
   <!-- One "tab" for each step in the form: -->
   <div class="tab"><h2>{{[0].question}}</h2>
   	<input type="radio" name="{{[0].question}}" id="red" value="{{[0].answer}}" checked="checked"> {{[0].answer}}<br>

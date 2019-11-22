@@ -132,4 +132,12 @@ module.exports = class User {
 			throw err
 		}
 	}
+
+	async checkUser(user) {
+		const sql = `SELECT count(*) AS count FROM users WHERE user="${user}";`
+		const records = await this.db.get(sql)
+		
+		if(!records.count) throw new Error(`username "${user}" not found`)
+		return true
+	}
 }
