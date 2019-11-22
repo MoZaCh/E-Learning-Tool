@@ -28,4 +28,9 @@ module.exports = class frontEnd {
 		// const userPass = b64array[1].split(':')
 		return utf8str
 	}
+
+	async decodeUri(message) {
+		const messageDecode = decodeURI(message)
+		return messageDecode
+	}
 }

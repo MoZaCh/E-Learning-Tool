@@ -145,5 +145,27 @@ router.post('/quiz', async ctx => {
 	}
 })
 
+router.post('/quizcomplete', async ctx => {
+	try {
+		const body = ctx.request.body
+		console.log(body)
+		const quiz = await new Quiz(quizDB)
+		const result = await quiz.getScore(body, 'git')
+		console.log(result)
+		await ctx
+		return ctx.redirect(`/quiz-result?msg=${result.score} You have ${result.outcome}`)
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+router.get('/quiz-result', async ctx => {
+	const data = {}
+	console.log(ctx.request.url)
+	if(ctx.query.msg) data.msg = ctx.query.msg
+	if(ctx.query.user) data.user = ctx.query.user
+	await ctx.render('quiz-result', data)
+})
+
 app.use(router.routes())
 module.exports = app.listen(port, async() => console.log(`listening on port ${port}`))
