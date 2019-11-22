@@ -88,10 +88,11 @@ module.exports = class Quiz {
 			const randomList = await this.getRandomInt(max,cycle)
 			const record = []
 			for(const i in randomList) {
-				const sql = `SELECT question, answer FROM ${topic} WHERE id=${randomList[i]}`
+				const sql = `SELECT question, answer, random1, random2 FROM ${topic} WHERE id=${randomList[i]}`
 				const eachRow = await this.db.get(sql)
 				record.push(eachRow)
 			}
+
 			return record
 		} catch(err) {
 			throw err
@@ -176,8 +177,6 @@ module.exports = class Quiz {
 			throw err
 		}
 	  }
-
-
 
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {

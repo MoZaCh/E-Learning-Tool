@@ -120,6 +120,9 @@ router.get('/homepage', auth, async ctx => {
 	const userPass = await frontController.convertToString(ctx.cookies.get('authorization'))
 	const accounts = await new Accounts(accountsDB)
 	const data = await accounts.userDetails(userPass[0], userPass[1])
+	const quiz = await new Quiz(quizDB)
+	data.scores = await quiz.getQuizResult(userPass[0])
+	console.log(data)
 	await ctx.render('homepage', data)
 })
 
@@ -139,6 +142,7 @@ router.post('/quiz', async ctx => {
 		const quiz = await new Quiz(quizDB)
 		const data = await quiz.getRandomQuiz(body.topic)
 		data.push({topic: `${body.topic}`})
+		console.log(data)
 		await ctx.render(`${body.topic}-quiz`, data)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -148,10 +152,11 @@ router.post('/quiz', async ctx => {
 router.post('/quizcomplete', async ctx => {
 	try {
 		const body = ctx.request.body
-		console.log(body)
 		const quiz = await new Quiz(quizDB)
-		const result = await quiz.getScore(body, 'git')
-		console.log(result)
+		const result = await quiz.getScore(body, body.topic)
+		const frontController = await new FrontEnd()
+		const user = await frontController.convertToString(ctx.cookies.get('authorization'))
+		await quiz.setQuizResult(user[0], body.topic, result.score, result.outcome)
 		await ctx
 		return ctx.redirect(`/quiz-result?msg=${result.score} You have ${result.outcome}`)
 	} catch(err) {
