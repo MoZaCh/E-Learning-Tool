@@ -12,7 +12,8 @@ module.exports = class Quiz {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			//We need this table to store the quiz
-			let sql='CREATE TABLE IF NOT EXISTS git (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT, random1 TEXT, random2 TEXT);'
+			let sql=`CREATE TABLE IF NOT EXISTS git 
+			(id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT, random1 TEXT, random2 TEXT);`
 			await this.db.run(sql)
 			sql = `CREATE TABLE IF NOT EXISTS quizResults (id INTEGER PRIMARY KEY AUTOINCREMENT,
 				user TEXT, topic TEXT, score TEXT, outcome TEXT);`
