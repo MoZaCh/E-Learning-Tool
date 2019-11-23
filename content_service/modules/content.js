@@ -23,33 +23,35 @@ module.exports = class Content {
 	async validateInput(strObj) {
 		if (Object.getOwnPropertyNames(strObj).length === 0) throw new Error('Empty Object')
 		for (const each in strObj) {
-			if (strObj[each] === '' | typeof strObj[each] === 'undefined') throw new Error(`Missing ${each}`)
+			if (strObj[each] === '' | typeof strObj[each] === 'undefined') throw new Error('Missing parameters')
 		}
 	}
 
-	async getContent(topic, page) {
-		let sql = `SELECT COUNT(id) as records FROM content WHERE topic="${topic}";`
+	async getContent(ctn) {
+		let sql = `SELECT COUNT(id) as records FROM content WHERE topic="${ctn.topic}";`
 		let data = await this.db.get(sql)
 		if(data.records === 0) throw new Error('No Content Available')
-		sql = `SELECT * FROM content WHERE topic="${topic}" AND page="${page}";`
+		sql = `SELECT * FROM content WHERE topic="${ctn.topic}" AND page="${ctn.page}";`
 		data = await this.db.get(sql)
 		return data
 	}
 
 	async setContent(ctn) {
+		await this.validateInput(ctn)
 		const sql = `INSERT INTO content(topic, h1, para1, h2, para2, h3, para3, page) VALUES("${ctn.topic}", 
 		"${ctn.h1}", "${ctn.para1}", "${ctn.h2}", "${ctn.para2}", "${ctn.h3}", "${ctn.para3}", "${ctn.page}");`
-		console.log(ctn.topic)
 		await this.db.run(sql)
 		return true
 	}
 
-	async updateContent(topic, para1, para2, page) {
+	async updateContent(ctn) {
 		// let sql = `SELECT COUNT(id) as records FROM content WHERE topic="${topic}";`
 		// let data = await this.db.get(sql)
 		//if(data.records === 0) throw new Error('No Content Available')
-		const sql = `Update content SET para1="${para1}", para2="${para2}" WHERE topic="${topic}" AND page="${page}";`
-		const data = await this.db.run(sql)
+		await this.validateInput(ctn)
+		const sql = `Update content SET para1="${ctn.para1}", para2="${ctn.para2}" 
+		WHERE topic="${ctn.topic}" AND page="${ctn.page}";`
+		await this.db.run(sql)
 		return true
 	}
 }
