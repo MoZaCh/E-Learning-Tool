@@ -12,7 +12,7 @@ module.exports = class Quiz {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			//We need this table to store the quiz
-			let sql='CREATE TABLE IF NOT EXISTS git (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT);'
+			let sql='CREATE TABLE IF NOT EXISTS git (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT, random1 TEXT, random2 TEXT);'
 			await this.db.run(sql)
 			sql = `CREATE TABLE IF NOT EXISTS quizResults (id INTEGER PRIMARY KEY AUTOINCREMENT,
 				user TEXT, topic TEXT, score TEXT, outcome TEXT);`
@@ -105,11 +105,12 @@ module.exports = class Quiz {
 	 * @param {string} question - Takes a string which contains the question to be seted
 	 * @param {string} answer - Takes a string which contains the answer
 	 */
-	async setQuizQuestion(topic, question, answer) {
+	async setQuizQuestion(topic, question, answer, rand1, rand2) {
 		try {
-			const quizObj = {Topic: topic, Question: question, Answer: answer}
+			const quizObj = {Topic: topic, Question: question, Answer: answer, Rand1: rand1, Random2: rand2}
 			await this.checkParameters(quizObj)
-			const sql = `INSERT INTO ${topic}(question, answer) VALUES("${question}", "${answer}");`
+			const sql = `INSERT INTO ${topic}(question, answer, random1, random2) 
+			VALUES("${question}", "${answer}", "${rand1}", "${rand2}");`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
