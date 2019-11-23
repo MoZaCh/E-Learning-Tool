@@ -7,7 +7,7 @@
 //const sqlite = require('sqlite-async')
 //const saltRounds = 10
 
-module.exports = class frontEnd {
+module.exports = class FrontEnd {
 
 	async convertToBase(user, pass) {
 		let basicAuth = `${user}:${pass}`

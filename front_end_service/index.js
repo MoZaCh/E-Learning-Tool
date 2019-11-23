@@ -157,7 +157,6 @@ router.post('/quizcomplete', async ctx => {
 		const frontController = await new FrontEnd()
 		const user = await frontController.convertToString(ctx.cookies.get('authorization'))
 		await quiz.setQuizResult(user[0], body.topic, result.score, result.outcome)
-		await ctx
 		return ctx.redirect(`/quiz-result?msg=${result.score} You have ${result.outcome}`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
