@@ -28,6 +28,7 @@ module.exports = class Content {
 	}
 
 	async getContent(ctn) {
+		await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM content WHERE topic="${ctn.topic}";`
 		let data = await this.db.get(sql)
 		if(data.records === 0) throw new Error('No Content Available')
