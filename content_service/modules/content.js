@@ -36,9 +36,10 @@ module.exports = class Content {
 		return data
 	}
 
-	async setContent(topic, h1, para1, h2, para2, h3, para3, page) {
-		const sql = `INSERT INTO content(topic, h1, para1, h2, para2, h3, para3, page) 
-		VALUES("${topic}", "${h1}", "${para1}", "${h2}", "${para2}", "${h3}", "${para3}", "${page}");`
+	async setContent(ctn) {
+		const sql = `INSERT INTO content(topic, h1, para1, h2, para2, h3, para3, page) VALUES("${ctn.topic}", 
+		"${ctn.h1}", "${ctn.para1}", "${ctn.h2}", "${ctn.para2}", "${ctn.h3}", "${ctn.para3}", "${ctn.page}");`
+		console.log(ctn.topic)
 		await this.db.run(sql)
 		return true
 	}
