@@ -83,45 +83,28 @@ button:hover {
 </style>
 <body>
 
-<form id="regForm" action="/quizcomplete" enctype="multipart/form-data" method="post">
-  <h1>Git Quiz:</h1>
+<form id="regForm" action="/quizcomplete" method="post">
+  <h1>{{[5].topic}} Quiz</h1>
   <!-- One "tab" for each step in the form: -->
-  <div class="tab"><h2>{{[0].question}}</h2>
-  	<input type="radio" name="{{[0].question}}" id="red" value="{{[0].answer}}" checked="checked"> {{[0].answer}}<br>
-  	<input type="radio" name="{{[0].question}}" id="blue" value="false">git.push
-    <input type="radio" name="{{[0].question}}" id="blue" value="false">git addition
-    <input type="radio" name="{{[0].question}}" id="blue" value="false">git pull
+  {{#each this}}
+
+  <div class="tab"><h2>{{question}}</h2>
+    <input type="radio" name="topic" id="blue" value="{{topic}}" checked hidden>
+  	<input type="radio" name="{{question}}" id="blue" value="{{random1}}" checked>{{random1}}
+    <input type="radio" name="{{question}}" id="red" value="{{answer}}" > {{answer}}<br>
+    <input type="radio" name="{{question}}" id="blue" value="{{random2}}">{{random2}}
+    <input type="radio" name="{{question}}" id="blue" value="false">
   </div>
-  <div class="tab"><h2>{{[1].question}}</h2>
-  	<input type="radio" name="{{[1].question}}" id="blue" value="false">git.clone
-  	<input type="radio" name="{{[1].question}}" id="red" value="{{[1].answer}}">{{[1].answer}}<br>
-  	<input type="radio" name="{{[1].question}}" id="blue" value="false">git.add
-    <input type="radio" name="{{[1].question}}" id="blue" value="false">git pull --account
-  </div>
-  <div class="tab"><h2>{{[2].question}}</h2>
-    <input type="radio" name="{{[2].question}}" id="blue" value="false">git duplicate
-    <input type="radio" name="{{[2].question}}" id="blue" value="false">git copy -- account
-    <input type="radio" name="{{[2].question}}" id="blue" value="false">push git
-  	<input type="radio" name="{{[2].question}}" id="red" value="{{[2].answer}}">{{[2].answer}}<br>
-  </div>
-  <div class="tab"><h2>{{[3].question}}</h2>
-  	<input type="radio" name="{{[3].question}}" id="red">{{[3].answer}}<br>
-  	<input type="radio" name="{{[3].question}}" id="blue">Blue
-  </div>
-  <div class="tab">{{[4].question}}
-  	<input type="radio" name="{{[4].question}}" id="red">{{[4].answer}}<br>
-  	<input type="radio" name="{{[4].question}}" id="blue">Blue
-  </div>
-    <div class="tab">{{[5].question}}
-  	<input type="radio" name="{{[5].question}}" id="red">{{[5].answer}}<br>
-  	<input type="radio" name="{{[5].question}}" id="blue">Blue
-  </div>
-  <div style="overflow:auto;">
+
+  {{/each}}
+
+    <div style="overflow:auto;">
     <div style="float:right;">
-      <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-      <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+      <button type="button" id="prevBtn" onclick="nextPrev(-1)" value="false">Previous</button>
+      <button type="button" id="nextBtn" onclick="nextPrev(1)" value="false">Next</button>
     </div>
   </div>
+
   <!-- Circles which indicates the steps of the form: -->
   <div style="text-align:center;margin-top:40px;">
     <span class="step"></span>
@@ -187,7 +170,7 @@ function validateForm() {
       // add an "invalid" class to the field:
       y[i].className += " invalid";
       // and set the current valid status to false
-      valid = false;
+      valid = true;
     }
   }
   // If the valid status is true, mark the step as finished and valid:
@@ -196,6 +179,7 @@ function validateForm() {
   }
   return valid; // return the valid status
 }
+
 
 function fixStepIndicator(n) {
   // This function removes the "active" class of all steps...

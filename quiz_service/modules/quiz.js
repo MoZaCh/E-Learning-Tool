@@ -4,7 +4,7 @@
 const sqlite = require('sqlite-async')
 
 const Accounts = require('../../user_service/modules/user.js')
-const accountsDB = './user_service/user.db'
+const accountsDB = '../../user_service/user.db'
 
 module.exports = class Quiz {
 
@@ -12,7 +12,8 @@ module.exports = class Quiz {
 		return (async() => {
 			this.db = await sqlite.open(dbName)
 			//We need this table to store the quiz
-			let sql='CREATE TABLE IF NOT EXISTS git (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT);'
+			let sql=`CREATE TABLE IF NOT EXISTS git 
+			(id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT, answer TEXT, random1 TEXT, random2 TEXT);`
 			await this.db.run(sql)
 			sql = `CREATE TABLE IF NOT EXISTS quizResults (id INTEGER PRIMARY KEY AUTOINCREMENT,
 				user TEXT, topic TEXT, score TEXT, outcome TEXT);`
@@ -88,10 +89,11 @@ module.exports = class Quiz {
 			const randomList = await this.getRandomInt(max,cycle)
 			const record = []
 			for(const i in randomList) {
-				const sql = `SELECT question, answer FROM ${topic} WHERE id=${randomList[i]}`
+				const sql = `SELECT question, answer, random1, random2 FROM ${topic} WHERE id=${randomList[i]}`
 				const eachRow = await this.db.get(sql)
 				record.push(eachRow)
 			}
+
 			return record
 		} catch(err) {
 			throw err
@@ -104,11 +106,12 @@ module.exports = class Quiz {
 	 * @param {string} question - Takes a string which contains the question to be seted
 	 * @param {string} answer - Takes a string which contains the answer
 	 */
-	async setQuizQuestion(topic, question, answer) {
+	async setQuizQuestion(topic, question, answer, rand1, rand2) {
 		try {
-			const quizObj = {Topic: topic, Question: question, Answer: answer}
+			const quizObj = {Topic: topic, Question: question, Answer: answer, Rand1: rand1, Random2: rand2}
 			await this.checkParameters(quizObj)
-			const sql = `INSERT INTO ${topic}(question, answer) VALUES("${question}", "${answer}");`
+			const sql = `INSERT INTO ${topic}(question, answer, random1, random2) 
+			VALUES("${question}", "${answer}", "${rand1}", "${rand2}");`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
@@ -177,20 +180,18 @@ module.exports = class Quiz {
 		}
 	  }
 
-	  async checkUser(user) {
-		const accounts = await new Accounts(accountsDB)
-		const sql = `SELECT count(*) AS count FROM users WHERE user="${user}";`
-		const records = await accounts.db.get(sql)
-		if(!records.count) throw new Error(`username "${user}" not found`)
-	}
-
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {
-			  await this.checkUser(user)
-			  const sql = `INSERT INTO quizResults(user, topic, score, outcome) 
-			  VALUES("${user}", "${topic}", "${score}","${outcome}");`
-			  await this.db.run(sql)
-			  return true
+			const setQuizObj = {
+				Username: user,
+				Topic: topic,
+				Score: score,
+				Outcome: outcome}
+			await this.checkParameters(setQuizObj)
+			const sql = `INSERT INTO quizResults(user, topic, score, outcome) 
+			VALUES("${user}", "${topic}", "${score}","${outcome}");`
+			await this.db.run(sql)
+			return true
 		} catch(err) {
 			  throw err
 		  }
@@ -198,10 +199,12 @@ module.exports = class Quiz {
 
 	  async getQuizResult(user) {
 		  try {
-			  await this.checkUser(user)
-			  const sql = `SELECT * FROM quizResults WHERE user="${user}";`
-			  const records = await this.db.all(sql)
-			  return records
+			const getQuizObj = {
+				Username: user}
+			await this.checkParameters(getQuizObj)
+			const sql = `SELECT * FROM quizResults WHERE user="${user}";`
+			const records = await this.db.all(sql)
+			return records
 		} catch(err) {
 			  throw err
 

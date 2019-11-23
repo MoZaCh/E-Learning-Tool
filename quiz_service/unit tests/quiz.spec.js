@@ -165,7 +165,7 @@ describe('viewQuiz()', () => {
 		expect.assertions(1)
 		const topic = 'git'
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git?', 'github')
+		await quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2')
 		const result = await quiz.viewQuiz(topic)
 		expect(result.length).toEqual(1)
 		done()
@@ -175,11 +175,11 @@ describe('viewQuiz()', () => {
 		expect.assertions(1)
 		const topic = 'git'
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1')
-		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2')
-		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3')
-		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4')
-		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5')
+		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1', 'git1', 'git2')
+		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
 		const result = await quiz.viewQuiz(topic)
 		expect(result.length).toEqual(5)
 		done()
@@ -191,16 +191,16 @@ describe('getRandomQuiz()', () => {
 	test('Should get a randomly generated quiz', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1')
-		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2')
-		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3')
-		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4')
-		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5')
-		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1')
-		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2')
-		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3')
-		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4')
-		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5')
+		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
+		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
 		const result = await quiz.getRandomQuiz('git')
 		expect(result.length).toEqual(5)
 		done()
@@ -220,7 +220,7 @@ describe('setQuizQuestion()', () => {
 	test('Add a quiz question successfully', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
-		const setQuestion = await quiz.setQuizQuestion('git', 'What is git?', 'github')
+		const setQuestion = await quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2')
 		expect(setQuestion).toBe(true)
 		done()
 	})
@@ -279,7 +279,7 @@ describe('deleteQuizQuestion()', () => {
 	test('Delete a quiz question successfully', async done => {
 		expect.assertions(2)
 		const quiz = await new Quiz()
-		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github') )
+		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github', 'random1', 'random2') )
 			.resolves.toBeTruthy()
 		await expect(quiz.deleteQuizQuestion('git', 'What is git?', 'github'))
 			.resolves.toBeTruthy()
@@ -289,7 +289,7 @@ describe('deleteQuizQuestion()', () => {
 	test('If question is not found', async done => {
 		expect.assertions(2)
 		const quiz = await new Quiz()
-		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github') )
+		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2') )
 			.resolves.toBeTruthy()
 		await expect( quiz.deleteQuizQuestion('git', 'Not known', 'github') )
 			.rejects.toEqual( Error('"Not known" no match found') )
@@ -299,7 +299,7 @@ describe('deleteQuizQuestion()', () => {
 	test('If answer is not found', async done => {
 		expect.assertions(2)
 		const quiz = await new Quiz()
-		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github') )
+		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github', 'random1', 'random2') )
 			.resolves.toBeTruthy()
 		await expect( quiz.deleteQuizQuestion('git', 'What is git?', 'Not Known') )
 			.rejects.toEqual( Error('"What is git?" no match found') )
@@ -414,7 +414,7 @@ describe('getScore()', () => {
 		expect.assertions(3)
 		const quiz = await new Quiz()
 		const obj = {'How do you stage files for a commit?': 'git add'}
-		await expect(quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add') )
+		await expect(quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add', 'git addition', 'add git') )
 			.resolves.toBeTruthy()
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('10%')
@@ -426,10 +426,10 @@ describe('getScore()', () => {
 		expect.assertions(2)
 		const quiz = await new Quiz()
 		const obj = {'Stage files for a commit?': 'git add', 'What is git?': 'github', 'C1': 'C1', 'C2': 'C2'}
-		await quiz.setQuizQuestion('git', 'Stage files for a commit?', 'git add')
-		await quiz.setQuizQuestion('git', 'What is git?', 'github')
-		await quiz.setQuizQuestion('git', 'C1', 'C1')
-		await quiz.setQuizQuestion('git', 'C2', 'C2')
+		await quiz.setQuizQuestion('git', 'Stage files for a commit?', 'git add', 'git', 'git1')
+		await quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2')
+		await quiz.setQuizQuestion('git', 'C1', 'C1', 'C3', 'C4')
+		await quiz.setQuizQuestion('git', 'C2', 'C2', 'C3', 'C4')
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('40%')
 		expect(result.outcome).toEqual('Pass')
@@ -450,35 +450,16 @@ describe('setQuizResults()', () => {
 		done()
 	})
 
-	test('If user does not exist it should throw an error', async done => {
-		expect.assertions(2)
-		const accounts = await new Accounts()
-		const quiz = await new Quiz()
-		await expect(accounts.register('admin', 'admin', 'admin', 'admin') )
-			.resolves.toBeTruthy()
-		await expect(quiz.setQuizResult('hello','git','50%', 'Pass'))
-			.rejects.toEqual( Error('username "hello" not found') )
-		done()
-	})
-})
-
-describe('getQuizResults()', () => {
-
-	test('Unknown username should throw an error', async done => {
-		expect.assertions(1)
-		const quiz = await new Quiz()
-		await expect( quiz.setQuizResult('Hello') )
-			.rejects.toEqual( Error('username "Hello" not found') )
-		done()
-	})
-
 	test('If a parameter is not passed', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
-		await expect( quiz.getQuizResult() )
-			.rejects.toEqual( Error('username "undefined" not found') )
+		await expect( quiz.setQuizResult() )
+		  .rejects.toEqual( Error('Missing Value') )
 		done()
-	})
+	  })
+})
+
+describe('getQuizResults()', () => {
 
 	test('If user does exist it should return users past results', async done => {
 		expect.assertions(3)
@@ -492,4 +473,12 @@ describe('getQuizResults()', () => {
 			.resolves.toEqual([{'id': 1, 'outcome': 'Pass', 'score': '50%', 'topic': 'git', 'user': 'admin'}])
 		done()
 	})
+
+	test('If a parameter is not passed', async done => {
+		expect.assertions(1)
+		const quiz = await new Quiz()
+		await expect( quiz.getQuizResult() )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
 })
