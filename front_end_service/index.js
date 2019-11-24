@@ -106,7 +106,6 @@ router.post('/login', async ctx => {
 		return ctx.redirect('/homepage?msg=logged in')
 	} catch(err) {
 		ctx.redirect(`/login?msg=${err.message}`)
-		//await ctx.render('login', {message: err.message, page: '/login'})
 	}
 })
 
@@ -118,64 +117,92 @@ router.get('/logout', auth, async ctx => {
 })
 
 router.get('/homepage', auth, async ctx => {
-	const frontController = await new FrontEnd()
-	const userPass = await frontController.convertToString(ctx.cookies.get('authorization'))
-	const accounts = await new Accounts(accountsDB)
-	const data = await accounts.userDetails(userPass[0], userPass[1])
-	const quiz = await new Quiz(quizDB)
-	data.scores = await quiz.getQuizResult(userPass[0])
-	console.log(data)
-	await ctx.render('homepage', data)
+	try {
+		const frontController = await new FrontEnd()
+		const userPass = await frontController.convertToString(ctx.cookies.get('authorization'))
+		const accounts = await new Accounts(accountsDB)
+		const data = await accounts.userDetails(userPass[0], userPass[1])
+		const quiz = await new Quiz(quizDB)
+		data.scores = await quiz.getQuizResult(userPass[0])
+		await ctx.render('homepage', data)
+	} catch (err) {
+		await ctx.render('error', {message: err.message})
+	}
+
 })
 
-router.post('/content', async ctx => {
+router.post('/content', auth, async ctx => {
 	const body = ctx.request.body
-	console.log(body, '<<<<<<<<<<<')
 	const content = await new Content(contentDB)
 	const data = await content.getContent(body)
-	await ctx.render('git-topic', data)
+	await ctx.render('topic', data)
 })
 
 router.get('/adminpanel', auth, authorization, async ctx => {
-	console.log('Authentication Successful')
-	const data = {}
-	const content = await new Content(contentDB)
-	data.content = await content.getAllContent()
-	await ctx.render('adminpanel', data)
+	try {
+		const data = {}
+		const content = await new Content(contentDB)
+		data.content = await content.getAllContent()
+		await ctx.render('adminpanel', data)
+	} catch (err) {
+		await ctx.render('error', {message: err.message})
+	}
+
 })
 
-router.post('/edit', async ctx => {
-	const data = {}
-	const frontController = await new FrontEnd()
-	const body = await frontController.makeObj(ctx.request.body)
-	console.log(body, 'HEeffdf')
-	const content = await new Content(contentDB)
-	data.content = await content.viewContent(body)
-	await ctx.render('edit-panel', data)
+router.post('/edit', auth, authorization, async ctx => {
+	try {
+		const data = {}
+		const frontController = await new FrontEnd()
+		const body = await frontController.makeObj(ctx.request.body)
+		const content = await new Content(contentDB)
+		data.content = await content.viewContent(body)
+		await ctx.render('edit-panel', data)
+	} catch (err) {
+		await ctx.render('error', {message: err.message})
+	}
+
 })
 
-router.post('/updatecontent', async ctx => {
-	const body = ctx.request.body
-	const content = await new Content(contentDB)
-	console.log(koaBody)
-	await content.updateContent(body)
-	return ctx.redirect('/login?msg=updated sucessfulyl')
-})
-
-//router.get('/git-topic', async ctx => await ctx.render('git-topic', data))
-
-
-router.get('/git-topic2', async ctx => await ctx.render('git-topic2'))
-
-router.post('/quiz', async ctx => {
+router.post('/updatecontent', auth, async ctx => {
 	try {
 		const body = ctx.request.body
-		console.log(body)
+		const content = await new Content(contentDB)
+		await content.updateContent(body)
+		return ctx.redirect('/login?msg=updated sucessfulyl')
+	} catch (err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+router.post('/addpage', auth, async ctx => {
+	try {
+		const data = ctx.request.body
+		console.log(data)
+		await ctx.render('git-topic2', data)
+	} catch (err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+router.post('/submitaddpage', auth, async ctx => {
+	try {
+		const data = ctx.request.body
+		const content = await new Content(contentDB)
+		await content.setContent(data)
+		return ctx.redirect('/adminpanel')
+	} catch (err) {
+		await ctx.render('error', {message: err.message})
+	}
+})
+
+router.post('/quiz', auth, async ctx => {
+	try {
+		const body = ctx.request.body
 		const quiz = await new Quiz(quizDB)
 		const data = await quiz.getRandomQuiz(body.topic)
 		data.push({topic: `${body.topic}`})
-		console.log(data)
-		await ctx.render(`${body.topic}-quiz`, data)
+		await ctx.render('quiz', data)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -184,13 +211,13 @@ router.post('/quiz', async ctx => {
 router.post('/quizcomplete', async ctx => {
 	try {
 		const body = ctx.request.body
-		console.log(body)
 		const quiz = await new Quiz(quizDB)
 		const result = await quiz.getScore(body, body.topic)
 		const frontController = await new FrontEnd()
 		const user = await frontController.convertToString(ctx.cookies.get('authorization'))
 		await quiz.setQuizResult(user[0], body.topic, result.score, result.outcome)
-		return ctx.redirect(`/quiz-result?msg=${result.score} You have ${result.outcome}`)
+		await ctx.render('quiz-result', result)
+		//return ctx.redirect(`/quiz-result?msg=${result.score} You have ${result.outcome}`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -198,7 +225,6 @@ router.post('/quizcomplete', async ctx => {
 
 router.get('/quiz-result', async ctx => {
 	const data = {}
-	console.log(ctx.request.url)
 	if(ctx.query.msg) data.msg = ctx.query.msg
 	if(ctx.query.user) data.user = ctx.query.user
 	await ctx.render('quiz-result', data)

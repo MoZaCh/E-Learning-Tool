@@ -7,7 +7,6 @@ const accountsDB = '../user_service/user.db'
 module.exports = async(ctx, next) => {
 	try{
 		const userInfo = ctx.cookies.get('authorization')
-		console.log(userInfo)
 		if(ctx.cookies.get('authorization') === undefined | ctx.cookies.get('authorization') === 'Basic Og==') {
 			return ctx.redirect('/login?msg=you need to log in')
 		}

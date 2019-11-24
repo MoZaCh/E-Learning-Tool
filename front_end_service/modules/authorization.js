@@ -8,7 +8,6 @@ module.exports = async(ctx, next) => {
 	try{
 		const userInfo = ctx.cookies.get('authorization')
 		const userRole = ctx.cookies.get('type')
-		console.log(userRole)
 		if(userRole === undefined | userRole === '' | userRole === 'user') {
 			return ctx.redirect('/login?msg=you dont have permission')
 		}

@@ -1,77 +1,44 @@
-* {
-    box-sizing: border-box;
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
   }
   
-  body {
-    background-color: #f1f1f1;
+  li {
+    float: left;
   }
   
-  #quizForm {
-    background-color: #ffffff;
-    margin: 100px auto;
-    font-family: Raleway;
-    padding: 40px;
-    width: 70%;
-    min-width: 300px;
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
   }
   
-  h1 {
-    text-align: center;  
+  li a:hover:not(.notactive):not(.active) {
+    background-color: rgb(51,51,51);
   }
   
-  input {
-    padding: 10px;
-    width: 100%;
-    font-size: 17px;
-    font-family: Raleway;
-    border: 1px solid #aaaaaa;
-  }
-  
-  /* Mark input boxes that gets an error on validation: */
-  input.invalid {
-    background-color: #ffdddd;
-  }
-  
-  /* Hide all steps by default: */
-  .tab {
-    display: none;
-  }
-  
-  button {
+  .active {
     background-color: #4CAF50;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 17px;
-    font-family: Raleway;
-    cursor: pointer;
   }
   
-  button:hover {
-    opacity: 0.8;
+  .notactive {
+    background-color: rgb(203, 92, 85);
   }
   
-  #prevBtn {
-    background-color: #bbbbbb;
+  .topicbox {
+    border-radius: 25px;
+    background-color: rgb(235,235,235);
+    border: 10px solid rgb(51,51,51);
+    padding: 50px;
+    margin: 20px;
   }
-  
-  /* Make circles that indicate the steps of the form: */
-  .step {
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbbbbb;
-    border: none;  
-    border-radius: 50%;
-    display: inline-block;
-    opacity: 0.5;
-  }
-  
-  .step.active {
-    opacity: 1;
-  }
-  
-  /* Mark the steps that are finished and valid: */
-  .step.finish {
-    background-color: #4CAF50;
+
+  #selct {
+      width: 40%;
+      height: 30%;
   }

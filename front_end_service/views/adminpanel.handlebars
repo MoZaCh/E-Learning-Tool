@@ -1,52 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>340CT - E-Learning</title>
+
+  <title>E-Learning</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="layout.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-<style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover:not(.notactive):not(.active) {
-  background-color: rgb(51,51,51);
-}
-
-.active {
-  background-color: #4CAF50;
-}
-
-.notactive {
-  background-color: rgb(203, 92, 85);
-}
-
-#selct {
-	width: 40%;
-	height: 30%;
-}
-</style>
-
 
 </head>
 <body>
@@ -56,9 +18,9 @@ li a:hover:not(.notactive):not(.active) {
   <p>Edit & Add Content</p>
   <div>
 <ul>
-  <li><a class="active" href="">Home</a></li>
-  <li><a href="#news">Topics</a></li>
-  <li><a href="#contact">Quiz</a></li>
+  <li><a href="/homepage">Home</a></li>
+  <li><a href="">Topics</a></li>
+  <li><a class="active" href="">Admin Panel</a></li>
   <li style="float:right"><a class="notactive" href="/logout">Logout</a></li>
 </ul>
 </div>
@@ -67,12 +29,7 @@ li a:hover:not(.notactive):not(.active) {
 <div class="container">
   <div class="row">
     <div class="col-sm-4">
-      <h3>Past Result(s)</h3>
-      {{#each this.scores}}
-      <p>Topic: {{topic}}  Score: {{score}} Outcome: {{outcome}}</p>
-      {{/each}}
-      <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>-->
+      <h3>TODO List:</h3>
     </div>
 
     <div class="col-sm-4">
@@ -89,10 +46,16 @@ li a:hover:not(.notactive):not(.active) {
     </div>
 
     <div class="col-sm-4">
-      <h3>Add New Content</h3>        
-      <p>Learn about HTML5 beginners guide.</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-      <button type="button" class="btn btn-primary">Html5</button>
+      <h3>Add New Content</h3><br>  
+      <form action="/addpage" method="post">
+	  	  <select id="selct" name="topic">
+			    <option value="git">Git</option>
+          <option value="html">HTML5</option>
+          <option value="css">CSS</option>
+	  	  </select>
+          <input type="text" name="page" value="1" hidden>
+      	  <button type="submit" class="btn btn-primary">Add New Screen</button>
+      </form>
     </div><br>
 	<div class="col-sm-4">
       <!--<h3></h3>        

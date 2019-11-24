@@ -19,6 +19,9 @@ module.exports = class Content {
 			sql = `CREATE TABLE IF NOT EXISTS html (id INTEGER PRIMARY KEY AUTOINCREMENT,
 				topic TEXT, h1 TEXT, para1 TEXT, h2 TEXT, para2 TEXT, h3 TEXT, para3 TEXT, page TEXT);`
 			await this.db.run(sql)
+			sql = `CREATE TABLE IF NOT EXISTS css (id INTEGER PRIMARY KEY AUTOINCREMENT,
+				topic TEXT, h1 TEXT, para1 TEXT, h2 TEXT, para2 TEXT, h3 TEXT, para3 TEXT, page TEXT);`
+			await this.db.run(sql)
 			return this
 		})()
 	}
@@ -64,21 +67,31 @@ module.exports = class Content {
 		let data = await this.db.get(sql)
 		let sql2 = 'SELECT COUNT(id) as records FROM html;'
 		let data2 = await this.db.get(sql2)
-		if(data.records === 0 & data2.records === 0) throw new Error('No Content Available')
-		console.log("here")
+		let sql3 = 'SELECT COUNT(id) as records FROM css;'
+		let data3 = await this.db.get(sql3)
+		if(data.records === 0 & data2.records === 0 & data3.records === 0) throw new Error('No Content Available')
 		sql = 'SELECT * FROM git;'
 		data = await this.db.all(sql)
 		sql2 = 'SELECT * FROM html;'
 		data2 = await this.db.all(sql2)
+		sql3 = 'SELECT * FROM css;'
+		data3 = await this.db.all(sql3)
 		data = data.concat(data2)
-		console.log(data)
+		data = data.concat(data3)
 		return data
 	}
 
 	async setContent(ctn) {
-		await this.validateInput(ctn)
-		const sql = `INSERT INTO git(topic, h1, para1, h2, para2, h3, para3, page) VALUES("${ctn.topic}", 
-		"${ctn.h1}", "${ctn.para1}", "${ctn.h2}", "${ctn.para2}", "${ctn.h3}", "${ctn.para3}", "${ctn.page}");`
+		//await this.validateInput(ctn)
+		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic};`
+		const page = await this.db.get(sql)
+		page.records += 1
+		const num = String(page.records)
+		console.log(num)
+		ctn.page = num
+		console.log(ctn)
+		sql = `INSERT INTO ${ctn.topic}(topic, h1, para1, h2, para2, h3, para3, page) VALUES("${ctn.topic}", 
+		"${ctn.h1}", "${ctn.para1}", "${ctn.h2}", "${ctn.para2}", "${ctn.h3}", "${ctn.para3}", "${num}");`
 		await this.db.run(sql)
 		return true
 	}
@@ -93,7 +106,6 @@ module.exports = class Content {
 				ctn[i] = ''
 			}
 		}
-		console.log(ctn, 'inside the function')
 		const sql = `Update git SET h1="${ctn.h1}", para1="${ctn.para1}", h2="${ctn.h2}", para2="${ctn.para2}", 
 		h3="${ctn.h3}", para3="${ctn.para3}" WHERE id="${ctn.id}";`
 		await this.db.run(sql)
