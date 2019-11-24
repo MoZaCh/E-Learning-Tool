@@ -146,7 +146,9 @@ router.get('/adminpanel', auth, authorization, async ctx => {
 
 router.post('/edit', async ctx => {
 	const data = {}
-	const body = ctx.request.body
+	const frontController = await new FrontEnd()
+	const body = await frontController.makeObj(ctx.request.body)
+	console.log(body, 'HEeffdf')
 	const content = await new Content(contentDB)
 	data.content = await content.viewContent(body)
 	await ctx.render('edit-panel', data)

@@ -80,10 +80,10 @@ li a:hover:not(.notactive):not(.active) {
 	    <form action="/edit" method="post">
 	  	  <select id="selct" name="id">
           {{#each this.content}}
-			    <option  value="{{id}}">{{topic}} Page {{page}}</option>
+			    <option value="{{id}}:{{topic}}">{{topic}} Page {{page}}</option>
           {{/each}}
-          <input name="page" value="{{page}}" hidden>
 	  	  </select>
+          <input type="text" name="topic" value="{{topic}}" hidden>
       	  <button type="submit" class="btn btn-primary">Edit Content</button>
       </form>
     </div>

@@ -29,8 +29,11 @@ module.exports = class FrontEnd {
 		return utf8str
 	}
 
-	async decodeUri(message) {
-		const messageDecode = decodeURI(message)
-		return messageDecode
+	async makeObj(obj) {
+		const body = obj.id.split(':')
+		const data = {}
+		data.id = body[0]
+		data.topic = body[1]
+		return data
 	}
 }
