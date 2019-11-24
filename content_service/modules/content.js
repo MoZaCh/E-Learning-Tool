@@ -27,13 +27,20 @@ module.exports = class Content {
 		}
 	}
 
+	async isEmpty(record) {
+		if(record === 0) throw new Error('No Content Available')
+	}
+
 	async getContent(ctn) {
 		await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM content WHERE topic="${ctn.topic}";`
-		let data = await this.db.get(sql)
-		if(data.records === 0) throw new Error('No Content Available')
+		const num = await this.db.get(sql)
+		await this.isEmpty(num.records)
 		sql = `SELECT * FROM content WHERE topic="${ctn.topic}" AND page="${ctn.page}";`
-		data = await this.db.get(sql)
+		const data = await this.db.get(sql)
+		const page = Number(data.page)
+		if (page < num.records ) data.nxtP = page+1
+		if (page === num.records) data.finish = true
 		return data
 	}
 

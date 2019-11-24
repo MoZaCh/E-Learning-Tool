@@ -84,13 +84,17 @@ li a:hover:not(.notactive):not(.active) {
       <p>{{para3}}</p>
       <br>
       <p>Page {{page}}</p>
-      {{#if page }}
-        <form action ="/content" method="post">
-          <input type="Text" name="page" value="2" hidden>
-          <button type="submit" name="topic" value="{{topic}}" class="btn btn-success" style="float: right;">Next</button>
-          <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
-        </form>
 
+      <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
+
+      {{#if nxtP }}
+        <form action ="/content" method="post">
+          <input type="Text" name="page" value="{{nxtP}}" hidden>
+          <button type="submit" name="topic" value="{{topic}}" class="btn btn-success" style="float: right;">Next</button>
+        </form>
+      {{/if}}
+      
+      {{#if finish}}
         <div align="center">
           <form action="/quiz" method="post">
           <button type="submit" class="btn btn-warning" name="topic" value="{{topic}}">Test Your Understanding</button>
