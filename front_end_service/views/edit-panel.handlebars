@@ -22,6 +22,23 @@
   margin: 20px;
 }
 
+#btn_submit {
+	visibility: hidden;
+  float: right;
+}
+
+#h_edit {
+  resize: none;
+  height: 2em;
+  width: 87%;
+}
+
+#p_edit {
+  resize: none;
+  height: 20em;
+  width: 87%;
+}
+
 ul {
   list-style-type: none;
   margin: 0;
@@ -77,33 +94,32 @@ li a:hover:not(.notactive):not(.active) {
         <h1 style="text-transform:capitalize">{{content.topic}}</h1>
       {{#if content.page}}
         <p>Page {{content.page}}</p>
-        <input type="Text" name="id" value={{content.id}} hidden>
-        <input type="Text" name="page" value={{content.page}} hidden>
+        <input type="Text" name="id" value="{{content.id}}" hidden>
+        <input type="Text" name="page" value="{{content.page}}" hidden>
       {{/if}}
       {{#if content.h1}}
-        <textarea name="h1" value={{h1}} rows="1" cols="120">{{content.h1}}</textarea><br>
+        <textarea id="h_edit" name="h1" value="{{h1}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h1}}</textarea><br>
       {{/if}}
       {{#if content.para1}}
-        <textarea rows="10" name="para1" value={{content.para1}} cols="120">{{content.para1}}</textarea><br>
+        <textarea id="p_edit" value="{{content.para1}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para1}}</textarea><br>
       {{/if}}
       {{#if content.h2}}
-        <textarea rows="1" cols="120" name="h2" value={{conent.h2}}>{{content.h2}}</textarea><br>
+        <textarea id="h_edit" name="h2" value="{{conent.h2}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h2}}</textarea><br>
       {{/if}}
       {{#if content.para2}}
-        <textarea rows="10" cols="120" name="para2" value={{content.para2}}>{{content.para2}}</textarea><br>
+        <textarea id="p_edit" name="para2" value="{{content.para2}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para2}}</textarea><br>
       {{/if}}
       {{#if content.h3}}
-        <textarea rows="1" cols="120" name="h3" value={{content.h3}}>{{content.h3}}</textarea><br>
+        <textarea id="h_edit" name="h3" value="{{content.h3}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h3}}</textarea><br>
       {{/if}}
       {{#if content.para3}}
-        <textarea rows="10" cols="120" name="para3" value={{content.para3}}>{{content.para3}}</textarea><br>
+        <textarea id="p_edit" name="para3" value="{{content.para3}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para3}}</textarea><br>
       {{/if}}
       <br>
-          <button type="submit" name="topic" value="{{content.topic}}" class="btn btn-primary" style="float: right;">Save changes</button>
-      </form>
-
+          <button id="btn_submit" type="submit" name="topic" value="{{content.topic}}" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
-          <br>
+      </form>
+      <br>
     </div>
   </div><br>
 </div>
