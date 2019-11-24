@@ -202,7 +202,7 @@ describe('getRandomQuiz()', () => {
 		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
 		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
 		const result = await quiz.getRandomQuiz('git')
-		expect(result.length).toEqual(5)
+		expect(result.length).toEqual(10)
 		done()
 	})
 

@@ -91,9 +91,9 @@ li a:hover:not(.notactive):not(.active) {
           <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
         </form>
 
-              <div align="center">
-        <form action="/quiz" method="post">
-          <button type="submit" class="btn btn-warning" name="topic" value="Git">Test Your Understanding</button>
+        <div align="center">
+          <form action="/quiz" method="post">
+          <button type="submit" class="btn btn-warning" name="topic" value="{{topic}}">Test Your Understanding</button>
         </form>
       </div>
       {{/if}}

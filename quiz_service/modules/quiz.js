@@ -84,8 +84,8 @@ module.exports = class Quiz {
 	 */
 	async getRandomQuiz(topic) {
 		try {
-			const max = 10
-			const cycle = 5
+			const max = 20
+			const cycle = 10
 			const randomList = await this.getRandomInt(max,cycle)
 			const record = []
 			for(const i in randomList) {
@@ -182,11 +182,7 @@ module.exports = class Quiz {
 
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {
-			const setQuizObj = {
-				Username: user,
-				Topic: topic,
-				Score: score,
-				Outcome: outcome}
+			const setQuizObj = {Username: user, Topic: topic, Score: score, Outcome: outcome}
 			await this.checkParameters(setQuizObj)
 			const sql = `INSERT INTO quizResults(user, topic, score, outcome) 
 			VALUES("${user}", "${topic}", "${score}","${outcome}");`
