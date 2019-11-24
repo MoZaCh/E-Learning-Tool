@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>GIT</title>
+  <title>{{content.topic}}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -59,8 +59,7 @@ li a:hover:not(.notactive):not(.active) {
 <body>
 
 <div class="jumbotron text-center">
-  <h1>GIT</h1>
-  <p>Learn Git In Minutes</p>
+  <h1>Edit Content</h1>
   <div>
     <ul>
       <li><a href="/homepage">Home</a></li>
@@ -74,29 +73,37 @@ li a:hover:not(.notactive):not(.active) {
 <div class="container">
   <div class="topicbox">
     <div>
-      <h2>{{h1}}</h2>
-      <p>{{para1}}</p>
-
-      <h2>{{h2}}</h2>
-      <p>{{para2}}</p>
-
-      <h2>{{h3}}</h2>
-      <p>{{para3}}</p>
-      <br>
-      <p>Page {{page}}</p>
-      {{#if page }}
-        <form action ="/content" method="post">
-          <input type="Text" name="page" value="2" hidden>
-          <button type="submit" name="topic" value="{{topic}}" class="btn btn-success" style="float: right;">Next</button>
-          <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
-        </form>
-
-              <div align="center">
-        <form action="/quiz" method="post">
-          <button type="submit" class="btn btn-warning" name="topic" value="Git">Test Your Understanding</button>
-        </form>
-      </div>
+      <form action ="/updatecontent" method="post">
+        <h1 style="text-transform:capitalize">{{content.topic}}</h1>
+      {{#if content.page}}
+        <p>Page {{content.page}}</p>
+        <input type="Text" name="id" value={{content.id}} hidden>
+        <input type="Text" name="page" value={{content.page}} hidden>
       {{/if}}
+      {{#if content.h1}}
+        <textarea name="h1" value={{h1}} rows="1" cols="120">{{content.h1}}</textarea><br>
+      {{/if}}
+      {{#if content.para1}}
+        <textarea rows="10" name="para1" value={{content.para1}} cols="120">{{content.para1}}</textarea><br>
+      {{/if}}
+      {{#if content.h2}}
+        <textarea rows="1" cols="120" name="h2" value={{conent.h2}}>{{content.h2}}</textarea><br>
+      {{/if}}
+      {{#if content.para2}}
+        <textarea rows="10" cols="120" name="para2" value={{content.para2}}>{{content.para2}}</textarea><br>
+      {{/if}}
+      {{#if content.h3}}
+        <textarea rows="1" cols="120" name="h3" value={{content.h3}}>{{content.h3}}</textarea><br>
+      {{/if}}
+      {{#if content.para3}}
+        <textarea rows="10" cols="120" name="para3" value={{content.para3}}>{{content.para3}}</textarea><br>
+      {{/if}}
+      <br>
+          <button type="submit" name="topic" value="{{content.topic}}" class="btn btn-primary" style="float: right;">Save changes</button>
+      </form>
+
+          <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
+          <br>
     </div>
   </div><br>
 </div>

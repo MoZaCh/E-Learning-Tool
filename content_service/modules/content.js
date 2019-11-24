@@ -37,6 +37,26 @@ module.exports = class Content {
 		return data
 	}
 
+	async viewContent(ctn) {
+		//await this.validateInput(ctn)
+		let sql = `SELECT COUNT(id) as records FROM content WHERE id="${ctn.id}";`
+		let data = await this.db.get(sql)
+		if(data.records === 0) throw new Error('No Content Available')
+		sql = `SELECT * FROM content WHERE id="${ctn.id}";`
+		data = await this.db.get(sql)
+		return data
+	}
+
+	async getAllContent() {
+		//await this.validateInput()
+		let sql = 'SELECT COUNT(id) as records FROM content;'
+		let data = await this.db.get(sql)
+		if(data.records === 0) throw new Error('No Content Available')
+		sql = 'SELECT * FROM content;'
+		data = await this.db.all(sql)
+		return data
+	}
+
 	async setContent(ctn) {
 		await this.validateInput(ctn)
 		const sql = `INSERT INTO content(topic, h1, para1, h2, para2, h3, para3, page) VALUES("${ctn.topic}", 
@@ -49,9 +69,10 @@ module.exports = class Content {
 		// let sql = `SELECT COUNT(id) as records FROM content WHERE topic="${topic}";`
 		// let data = await this.db.get(sql)
 		//if(data.records === 0) throw new Error('No Content Available')
-		await this.validateInput(ctn)
-		const sql = `Update content SET para1="${ctn.para1}", para2="${ctn.para2}" 
-		WHERE topic="${ctn.topic}" AND page="${ctn.page}";`
+		//await this.validateInput(ctn)
+		console.log(ctn, 'inside the function')
+		const sql = `Update content SET h1="${ctn.h1}", para1="${ctn.para1}", h2="${ctn.h2}", para2="${ctn.para2}", 
+		h3="${ctn.h3}", para3="${ctn.para3}" WHERE id="${ctn.id}";`
 		await this.db.run(sql)
 		return true
 	}

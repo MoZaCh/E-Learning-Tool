@@ -19,6 +19,8 @@ const Accounts = require('../user_service/modules/user.js')
 const accountsDB = '../user_service/user.db'
 const Quiz = require('../quiz_service/modules/quiz.js')
 const quizDB = '../quiz_service/quiz.db'
+const Content = require('../content_service/modules/content.js')
+const contentDB = '../content_service/content.db'
 const FrontEnd = require('./modules/front_end')
 const auth = require('./modules/authentication')
 const authorization = require('./modules/authorization')
@@ -126,12 +128,40 @@ router.get('/homepage', auth, async ctx => {
 	await ctx.render('homepage', data)
 })
 
-router.get('/adminpanel', auth, authorization, async ctx => {
-	console.log('Authentication Successful')
-	await ctx.render('adminpanel')
+router.post('/content', async ctx => {
+	const body = ctx.request.body
+	console.log(body, "<<<<<<<>>>>>")
+	const content = await new Content(contentDB)
+	const data = await content.getContent(body)
+	await ctx.render('git-topic', data)
 })
 
-router.get('/git-topic', async ctx => await ctx.render('git-topic'))
+router.get('/adminpanel', auth, authorization, async ctx => {
+	console.log('Authentication Successful')
+	const data = {}
+	const content = await new Content(contentDB)
+	data.content = await content.getAllContent()
+	await ctx.render('adminpanel', data)
+})
+
+router.post('/edit', async ctx => {
+	const data = {}
+	const body = ctx.request.body
+	const content = await new Content(contentDB)
+	data.content = await content.viewContent(body)
+	await ctx.render('edit-panel', data)
+})
+
+router.post('/updatecontent', async ctx => {
+	const body = ctx.request.body
+	const content = await new Content(contentDB)
+	console.log(koaBody)
+	await content.updateContent(body)
+	return ctx.redirect('/login?msg=updated sucessfulyl')
+})
+
+//router.get('/git-topic', async ctx => await ctx.render('git-topic', data))
+
 
 router.get('/git-topic2', async ctx => await ctx.render('git-topic2'))
 

@@ -52,8 +52,8 @@ li a:hover:not(.notactive):not(.active) {
   <div>
 <ul>
   <li><a class="active" href="">Home</a></li>
-  <li><a href="#news">Topics</a></li>
-  <li><a href="#contact">Quiz</a></li>
+  <li><a href="#topic">Topics</a></li>
+  <li><a href="/adminpanel">Admin Panel</a></li>
   <li style="float:right"><a class="notactive" href="/logout">Logout</a></li>
 </ul>
 </div>
@@ -73,7 +73,10 @@ li a:hover:not(.notactive):not(.active) {
       <h3>Learn GIT</h3>
       <p>Learn about Git beginners guide.</p>
       <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-      <button type="button" onclick="location.href='/git-topic';" class="btn btn-primary">Git</button>
+      <form action="/content" method="post">
+        <input type="Text" name="page" value="1" hidden> </input>
+        <button type="submit" name="topic" value="git" class="btn btn-primary">Git</button>
+      </form>
     </div>
     <div class="col-sm-4">
       <h3>Learn HTML5</h3>        
