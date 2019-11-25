@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>E-Learning Homepage</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="layout.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Welcome {{firstName}}</h1>
+  <p>E-Learning Website</p>
+  <div>
+<ul>
+  <li><a class="active" href="">Home</a></li>
+  <li><a href="#topic">Topics</a></li>
+  {{#if this.isAdmin}}
+  <li><a href="/adminpanel">Admin Panel</a></li>
+  {{/if}}
+  <li style="float:right"><a class="notactive" href="/logout">Logout</a></li>
+</ul>
+</div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Past Result(s)</h3>
+      {{#each this.scores}}
+      <p>Topic: {{topic}}  Score: {{score}} Outcome: {{outcome}}</p>
+      {{/each}}
+      <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>-->
+    </div>
+    <div class="col-sm-4">
+      <h3>Learn GIT</h3>
+      <p>Learn about Git beginners guide.</p>
+      <p>Covering the idea behind Git, version control and basic git commands... </p>
+      <form action="/content" method="post">
+        <input type="Text" name="page" value="1" hidden> </input>
+        <button type="submit" name="topic" value="git" class="btn btn-primary">Git</button>
+      </form>
+    </div>
+    <div class="col-sm-4">
+      <h3>Learn HTML5</h3>        
+      <p>Learn about HTML5 beginners guide.</p>
+      <p>Covering the HTML definition, syntax and how it is used...</p>
+      <form action="/content" method="post">
+        <input type="Text" name="page" value="1" hidden> </input>
+        <button type="submit" name="topic" value="html" class="btn btn-primary">HTML5</button>
+      </form>
+    </div><br>
+	<div class="col-sm-4">
+      <!--<h3></h3>        
+      <p></p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>-->
+    </div>
+	<div class="col-sm-4">
+      <h3>Learn CSS</h3>        
+      <p>Learn about CSS beginners guide.</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <form action="/content" method="post">
+        <input type="Text" name="page" value="1" hidden> </input>
+        <button type="submit" name="topic" value="css" class="btn btn-primary">CSS</button>
+      </form>
+    </div><br>
+  </div><br>
+</div>
+
+</body>
+<footer>
+  <br>
+  <div class="jumbotron text-center">
+    <p>@E-Learning 2019</p>
+  </div>
+</footer>
+</html>

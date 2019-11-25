@@ -1,0 +1,48 @@
+
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Result</title>
+		<meta name="description" content="form to add new books">
+		<meta name="author" content="Mohammed">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="layout.css"> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+		<style>
+			.topicbox {
+				border-radius: 25px;
+				background-color: rgb(235,235,235);
+				border: 10px solid rgb(51,51,51);
+				padding: 50px;
+				margin: 20px;
+  				}
+			#fail {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<center>
+			<div class="container">
+  				<div class="topicbox">
+    				<div>
+						<h1>Quiz Result</h1>
+						{{#if msg}}
+							<p class="msg">{{msg}}</p>
+						{{/if}}
+						<h2>You scored: {{this.score}}</h2>
+						<h3>You {{this.outcome}}ed</h3>
+						<!--<img src="https://library.kissclipart.com/20180831/uke/kissclipart-sad-face-emoji-no-background-clipart-smiley-emotic-05795a4a374a3bbf.jpg">-->
+						<br>
+						<form action='/homepage' method='get'>
+						<button type="submit" href="/homepage" class="btn btn-secondary">Home</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</center>
+	</body>
+</html>

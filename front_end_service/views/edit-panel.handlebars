@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{content.topic}}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+<style>
+
+.topicbox {
+  border-radius: 25px;
+  background-color: rgb(235,235,235);
+  border: 10px solid rgb(51,51,51);
+  padding: 50px;
+  margin: 20px;
+}
+
+#btn_submit {
+	visibility: hidden;
+  float: right;
+}
+
+#h_edit {
+  resize: none;
+  height: 2em;
+  width: 87%;
+}
+
+#p_edit {
+  resize: none;
+  height: 20em;
+  width: 87%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.notactive):not(.active) {
+  background-color: rgb(51,51,51);
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+.notactive {
+  background-color: rgb(203, 92, 85);
+}
+</style>
+
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Edit Content</h1>
+  <div>
+    <ul>
+      <li><a href="/homepage">Home</a></li>
+      <li><a class="active" href="#news">Topics</a></li>
+      <li><a href="#contact">Quiz</a></li>
+      <li style="float:right"><a class="notactive" href="/logout">Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="topicbox">
+    <div>
+      <form action ="/updatecontent" method="post">
+        <h1 style="text-transform:capitalize">{{content.topic}}</h1>
+      {{#if content.page}}
+        <p>Page {{content.page}}</p>
+        <input type="Text" name="id" value="{{content.id}}" hidden>
+        <input type="Text" name="page" value="{{content.page}}" hidden>
+      {{/if}}
+      {{#if content.h1}}
+        <textarea id="h_edit" name="h1" value="{{h1}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h1}}</textarea><br>
+      {{/if}}
+      {{#if content.para1}}
+        <textarea id="p_edit" name="para1" value="{{content.para1}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para1}}</textarea><br>
+      {{/if}}
+      {{#if content.h2}}
+        <textarea id="h_edit" name="h2" value="{{conent.h2}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h2}}</textarea><br>
+      {{/if}}
+      {{#if content.para2}}
+        <textarea id="p_edit" name="para2" value="{{content.para2}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para2}}</textarea><br>
+      {{/if}}
+      {{#if content.h3}}
+        <textarea id="h_edit" name="h3" value="{{content.h3}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h3}}</textarea><br>
+      {{/if}}
+      {{#if content.para3}}
+        <textarea id="p_edit" name="para3" value="{{content.para3}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para3}}</textarea><br>
+      {{/if}}
+      <br>
+          <button id="btn_submit" type="submit" name="topic" value="{{content.topic}}" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
+      </form>
+      <br>
+    </div>
+  </div><br>
+</div>
+
+</body>
+
+<footer>
+  <br>
+  <div class="jumbotron text-center">
+    <p>@E-Learning 2019</p>
+  </div>
+</footer>
+</html>

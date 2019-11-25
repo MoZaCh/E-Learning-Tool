@@ -5,7 +5,7 @@
 'use strict'
 
 /* MODULE IMPORTS */
-const Koa = require('koa');
+const Koa = require('koa')
 const Router = require('koa-router')
 const views = require('koa-views')
 const staticDir = require('koa-static')
@@ -16,8 +16,7 @@ const session = require('koa-session')
 
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
-
-
+const auth = require('./modules/auth')
 
 const app = new Koa()
 const router = new Router()
@@ -30,8 +29,8 @@ app.use(session(app))
 app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handlebars: 'handlebars' }}))
 
 const defaultPort = 8080
-const port = process.env.PORT || defaultPort 
-const dbName = 'website.db'	
+const port = process.env.PORT || defaultPort
+const dbName = 'user.db'
 
 /**
  * The secure home page.
@@ -40,12 +39,19 @@ const dbName = 'website.db'
  * @route {GET} /
  * @authentication This route requires cookie-based authentication.
  */
-router.get('/', async ctx => {
+router.get('/', auth, async ctx => {
 	try {
-		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
+		//console.log(ctx.session)
+		//console.log(ctx.cookies.get('authorization'))
+		//ctx.cookies.set('authorization', 'Egg')
+		//console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+		//console.log(ctx.cookies)
+		//if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
 		const data = {}
 		if(ctx.query.msg) data.msg = ctx.query.msg
+		console.log('1')
 		await ctx.render('index')
+		console.log('2')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -68,11 +74,12 @@ router.get('/register', async ctx => await ctx.render('register'))
 router.post('/register', koaBody, async ctx => {
 	try {
 		// extract the data from the request
+		//console.log(ctx.cookies.get('name'))
 		const body = ctx.request.body
 		console.log(body)
 		// call the functions in the module
 		const user = await new User(dbName)
-		await user.register(body.user, body.pass)
+		await user.register(body.user, body.pass, body.firstName, body.surname)
 		// await user.uploadPicture(path, type)
 		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
@@ -88,11 +95,14 @@ router.get('/login', async ctx => {
 	await ctx.render('login', data)
 })
 
-router.post('/login', async ctx => {
+router.post('/login', auth, async ctx => {
 	try {
-		const body = ctx.request.body
-		const user = await new User(dbName)
-		await user.login(body.user, body.pass)
+		console.log('here')
+		console.log(ctx.status)
+		if (ctx.status === 401) {
+			console.log(ctx.status)
+			return ctx.redirect('/login?msg=you need to log in')
+		}
 		ctx.session.authorised = true
 		return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {

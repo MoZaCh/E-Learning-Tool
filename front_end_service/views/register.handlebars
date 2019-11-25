@@ -1,0 +1,28 @@
+
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Create an Account</title>
+		<meta name="description" content="form to add new books">
+		<meta name="author" content="Mohammed">
+		<link href="style.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+		<center>
+		<h1>Create an Account</h1>
+		{{#if msg}}
+ 			<p class="msg">{{msg}}</p>
+		{{/if}}
+		<form action="/register" enctype="multipart/form-data" method="post">
+			<p>First Name:<br /><input type="text" name="firstName" placeholder="firstname" value=""></p>
+			<p>Surname:<br /><input type="text" name="surname" placeholder="surname" value=""></p>
+			<p>Username:<br /><input type="text" name="user" placeholder="username" value=""></p>
+            <p>Password:<br /><input type="password" name="pass" placeholder="password" value=""></p>
+			<p>Profile Picture:<br /><input type="file" name="avatar"></p>
+			<p><input type="submit" value="Create"></p>
+		</form>
+		</center>
+	</body>
+</html>
