@@ -49,12 +49,25 @@ module.exports = class Content {
 		if(record === 0) throw new Error('No Content Available')
 	}
 
+	/**
+	 * Function to insert image paths to the database
+	 * @param {string} topic - Takes a string value topic which is used to insert into the table
+	 * @param {string} img1 - Takes string img1 which includes the path to the image
+	 * @param {string} img2 - Takes string img2 which includes the path to the image
+	 * @returns {boolean} - True, if succesfully inserted into the database
+	 */
 	async setImg(topic, img1, img2) {
 		const sql = `INSERT INTO img (topic, img1, img2) VALUES("${topic}", "${img1}", "${img2}");`
 		await this.db.run(sql)
 		return true
 	}
 
+	/**
+	 * Takes parameter topic which indicates the topic name
+	 * @param {string} topic - Takes a string value topic which is used to retrieve images for that specific table
+	 * @returns {Object} - Returns the data pulled from the database (image location)
+	 * @returns {boolean} - Retunrs false, if no records are in the databaes
+	 */
 	async getImg(topic) {
 		let sql = `SELECT COUNT(id) as records FROM img WHERE topic="${topic}";`
 		const num = await this.db.get(sql)
@@ -71,6 +84,10 @@ module.exports = class Content {
 		return false
 	}
 
+	/**
+	 * Function to get 
+	 * @param {*} ctn 
+	 */
 	async getContent(ctn) {
 		await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic} WHERE topic="${ctn.topic}";`
