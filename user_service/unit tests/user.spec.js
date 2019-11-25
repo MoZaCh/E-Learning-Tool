@@ -247,4 +247,24 @@ describe('updateDetails()', () => {
 			done()
 		})
 	})
+
+	describe('checkUser()', () => {
+		test('Should return true if user exists', async done => {
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
+			const user = await account.checkUser('Zahed96')
+			expect(user).toBe(true)
+			done()
+		})
+
+		test('Should throw an error if the username does not exist', async done => {
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
+			await expect(account.checkUser('Zahed968'))
+				.rejects.toEqual( Error('username "Zahed968" not found') )
+			done()
+		})
+	})
 })

@@ -39,6 +39,7 @@ module.exports = class Content {
 
 	async getContent(ctn) {
 		await this.validateInput(ctn)
+		console.log(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic} WHERE topic="${ctn.topic}";`
 		const num = await this.db.get(sql)
 		await this.isEmpty(num.records)
@@ -106,7 +107,8 @@ module.exports = class Content {
 				ctn[i] = ''
 			}
 		}
-		const sql = `Update git SET h1="${ctn.h1}", para1="${ctn.para1}", h2="${ctn.h2}", para2="${ctn.para2}", 
+		const sql = `Update ${ctn.topic} SET h1="${ctn.h1}", para1="${ctn.para1}",
+		h2="${ctn.h2}", para2="${ctn.para2}", 
 		h3="${ctn.h3}", para3="${ctn.para3}" WHERE id="${ctn.id}";`
 		await this.db.run(sql)
 		return true

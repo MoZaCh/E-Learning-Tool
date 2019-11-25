@@ -37,7 +37,6 @@ app.use(views(`${__dirname}/views`, { extension: 'handlebars' }, {map: { handleb
 
 const defaultPort = 8080
 const port = process.env.PORT || defaultPort
-//const dbName = 'user.db'
 
 /**
  * The secure home page.
@@ -69,17 +68,12 @@ router.get('/register', async ctx => {
  */
 router.post('/register', koaBody, async ctx => {
 	try {
-		// extract the data from the request
 		const body = ctx.request.body
-		// call the functions in the module
 		const accounts = await new Accounts(accountsDB)
 		await accounts.register(body.user, body.pass, body.firstName, body.surname)
-		// await user.uploadPicture(path, type)
-		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message, page: '/register'})
-		ctx.redirect(`/register?msg=${err.message}`)
 	}
 })
 
@@ -99,8 +93,7 @@ router.post('/login', async ctx => {
 		const frontController = await new FrontEnd()
 		const userBase64 = await frontController.convertToBase(body.user, body.pass)
 		if (result === true) {
-			await ctx.cookies.set('authorization', userBase64)
-			await ctx.cookies.set('type', role.type)
+			await ctx.cookies.set('authorization', userBase64), await ctx.cookies.set('type', role.type)
 			ctx.session.authorised = true
 		}
 		return ctx.redirect('/homepage?msg=logged in')
@@ -110,9 +103,7 @@ router.post('/login', async ctx => {
 })
 
 router.get('/logout', auth, async ctx => {
-	ctx.session.authorised = null
-	ctx.cookies.set('authorization','')
-	ctx.cookies.set('type', '')
+	ctx.session.authorised = null, ctx.cookies.set('authorization',''), ctx.cookies.set('type', '')
 	ctx.redirect('/?msg=you are now logged out')
 })
 
@@ -128,7 +119,6 @@ router.get('/homepage', auth, async ctx => {
 	} catch (err) {
 		await ctx.render('error', {message: err.message})
 	}
-
 })
 
 router.post('/content', auth, async ctx => {
@@ -147,7 +137,6 @@ router.get('/adminpanel', auth, authorization, async ctx => {
 	} catch (err) {
 		await ctx.render('error', {message: err.message})
 	}
-
 })
 
 router.post('/edit', auth, authorization, async ctx => {
@@ -161,7 +150,6 @@ router.post('/edit', auth, authorization, async ctx => {
 	} catch (err) {
 		await ctx.render('error', {message: err.message})
 	}
-
 })
 
 router.post('/updatecontent', auth, async ctx => {
