@@ -28,7 +28,11 @@ module.exports = class Content {
 			return this
 		})()
 	}
-
+	/**
+	 * Checks that the key-value pairs in the object passed are not empty or undefined
+	 * @param {Object} strObj - Takes an object with key value pairs
+	 * @throws {Error} - Missing parameters, if parameter passed is empty or undefined
+	 */
 	async validateInput(strObj) {
 		if (Object.getOwnPropertyNames(strObj).length === 0) throw new Error('Empty Object')
 		for (const each in strObj) {
@@ -36,6 +40,11 @@ module.exports = class Content {
 		}
 	}
 
+	/**
+	 * Checks the number passed is not empty
+	 * @param {number} record - A number which is passed in as a parameter
+	 * @throws {Error} - No Content Available, if number passed is 0 the database is empty
+	 */
 	async isEmpty(record) {
 		if(record === 0) throw new Error('No Content Available')
 	}
