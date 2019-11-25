@@ -54,6 +54,7 @@ module.exports = class Content {
 			}
 			return data
 		}
+		return false
 	}
 
 	async getContent(ctn) {
@@ -67,8 +68,10 @@ module.exports = class Content {
 		const page = Number(data.page)
 		if (page < num.records ) data.nxtP = page+1
 		if (page === num.records) data.finish = true
-		data.img1 = dataImg.img1
-		data.img2 = dataImg.img2
+		if (dataImg !== false) {
+			data.img1 = dataImg.img1
+			data.img2 = dataImg.img2
+		}
 		return data
 	}
 
@@ -101,6 +104,7 @@ module.exports = class Content {
 	}
 
 	async setContent(ctn) {
+		await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic};`
 		const page = await this.db.get(sql)
 		page.records += 1

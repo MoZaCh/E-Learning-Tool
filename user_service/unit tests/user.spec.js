@@ -177,6 +177,17 @@ describe('userDetails()', () => {
 			.rejects.toEqual( Error('"undefined" does not exist') )
 		done()
 	})
+
+	test('Shou', async done => {
+		expect.assertions(2)
+		const ctn = {user: 'test', pass: 'testpass', firstName: 'test', surname: 'testsurname'}
+		const account = await new Accounts()
+		await expect( account.createAdmin(ctn) )
+			.resolves.toBeTruthy()
+		const data = await account.userDetails('test')
+		expect(data.type).toEqual('admin')
+		done()
+	})
 })
 
 describe('updateDetails()', () => {

@@ -30,8 +30,9 @@ describe('getContent()', () => {
 
 	test('Should throw an error if no content is available', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', page: '1'}
 		const content = await new Content()
-		await expect(content.getContent('git') )
+		await expect(content.getContent(data) )
 			.rejects.toEqual( Error('No Content Available') )
 		done()
 	})

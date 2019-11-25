@@ -138,4 +138,11 @@ module.exports = class User {
 		if(!records.count) throw new Error(`username "${user}" not found`)
 		return true
 	}
+
+	async createAdmin(ctn) {
+		const sql = `INSERT INTO users(user, pass, firstName, surname, type) 
+		VALUES("${ctn.user}", "${ctn.pass}", "${ctn.firstName}", "${ctn.surname}", "admin");`
+		await this.db.run(sql)
+		return true
+	}
 }
