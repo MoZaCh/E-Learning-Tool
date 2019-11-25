@@ -177,6 +177,18 @@ describe('userDetails()', () => {
 			.rejects.toEqual( Error('"undefined" does not exist') )
 		done()
 	})
+
+	test('Should return t', async done => {
+		expect.assertions(3)
+		const ctn = {user: 'test', pass: 'testpass', firstName: 'test', surname: 'testsurname'}
+		const account = await new Accounts()
+		await expect( account.createAdmin(ctn) )
+			.resolves.toBeTruthy()
+		const data = await account.userDetails('test')
+		expect(data.type).toEqual('admin')
+		expect(data.isAdmin).toBe(true)
+		done()
+	})
 })
 
 describe('updateDetails()', () => {
@@ -244,6 +256,26 @@ describe('updateDetails()', () => {
 			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
 			await expect(account.deleteUser('Zahed968'))
 				.rejects.toEqual( Error('"Zahed968" does not exist') )
+			done()
+		})
+	})
+
+	describe('checkUser()', () => {
+		test('Should return true if user exists', async done => {
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
+			const user = await account.checkUser('Zahed96')
+			expect(user).toBe(true)
+			done()
+		})
+
+		test('Should throw an error if the username does not exist', async done => {
+			expect.assertions(1)
+			const account = await new Accounts()
+			await account.register('Zahed96', 'password', 'Zahed', 'Choudhury')
+			await expect(account.checkUser('Zahed968'))
+				.rejects.toEqual( Error('username "Zahed968" not found') )
 			done()
 		})
 	})

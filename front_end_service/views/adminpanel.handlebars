@@ -1,21 +1,81 @@
-
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Home Page</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="style.css" type="text/css" rel="stylesheet" />
-	</head>
-	<body>
-		<h1>Admin Panel</h1>
-		<p>This is a secure page. Users need to have a valid account and be logged in to see it.</p>
-		<center>
-		<button name="logout" type="button" onclick="location.href='/logout';" value="logout"> Logout </button><br>
-		<br>
-		</center>
-		<p><a href=""> View Profile</a></p>
-		<p><a href="/logout">Log Out</a></p>
+<head>
+
+  <title>E-Learning</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="layout.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Admin Panel</h1>
+  <p>Edit & Add Content</p>
+  <div>
+<ul>
+  <li><a href="/homepage">Home</a></li>
+  <li><a href="">Topics</a></li>
+  <li><a class="active" href="">Admin Panel</a></li>
+  <li style="float:right"><a class="notactive" href="/logout">Logout</a></li>
+</ul>
+</div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>TODO List:</h3>
+    </div>
+
+    <div class="col-sm-4">
+    <h3>Editing Existing Content</h3><br>
+	    <form action="/edit" method="post">
+	  	  <select id="selct" name="id">
+          {{#each this.content}}
+			    <option value="{{id}}:{{topic}}">{{topic}} Page {{page}}</option>
+          {{/each}}
+	  	  </select>
+          <input type="text" name="topic" value="{{topic}}" hidden>
+      	  <button type="submit" class="btn btn-primary">Edit Content</button>
+      </form>
+    </div>
+
+    <div class="col-sm-4">
+      <h3>Add New Content</h3><br>  
+      <form action="/addpage" method="post">
+	  	  <select id="selct" name="topic">
+			    <option value="git">Git</option>
+          <option value="html">HTML5</option>
+          <option value="css">CSS</option>
+	  	  </select>
+          <input type="text" name="page" value="1" hidden>
+      	  <button type="submit" class="btn btn-primary">Add New Screen</button>
+      </form>
+    </div><br>
+	<div class="col-sm-4">
+      <!--<h3></h3>        
+      <p></p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>-->
+    </div>
+	<div class="col-sm-4">
+      <h3>Learn CSS</h3>        
+      <p>Learn CSS beginners guide.</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <button type="button" class="btn btn-primary">Css</button>
+    </div><br>
+  </div><br>
+</div>
+
+</body>
+<footer>
+  <br>
+  <div class="jumbotron text-center">
+    <p>@E-Learning 2019</p>
+  </div>
+</footer>
 </html>

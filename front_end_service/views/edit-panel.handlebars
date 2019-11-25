@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Add Screen</title>
+  <title>{{content.topic}}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="layout.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script>
@@ -13,7 +12,6 @@
       window.history.back();
     }
   </script>
-
 <style>
 
 .topicbox {
@@ -78,8 +76,7 @@ li a:hover:not(.notactive):not(.active) {
 <body>
 
 <div class="jumbotron text-center">
-  <h1>Add Screen</h1>
-  <p>Adding Screens Made Easy</p>
+  <h1>Edit Content</h1>
   <div>
     <ul>
       <li><a href="/homepage">Home</a></li>
@@ -93,25 +90,33 @@ li a:hover:not(.notactive):not(.active) {
 <div class="container">
   <div class="topicbox">
     <div>
-      <form action ="/submitaddpage" method="post">
-        <h1 style="text-transform:capitalize">{{this.topic}}</h1>
-        <p>Page {{this.page}}</p>
-        <input type="Text" name="page" value="{{this.page}}" hidden>
-
-        <textarea id="h_edit" name="h1" value="" onClick='document.getElementById("btn_submit").style.visibility = "visible"'></textarea><br>
-
-        <textarea id="p_edit" name="para1" value="" onClick='document.getElementById("btn_submit").style.visibility = "visible"'></textarea><br>
- 
-        <textarea id="h_edit" name="h2" value="" onClick='document.getElementById("btn_submit").style.visibility = "visible"'></textarea><br>
-
-        <textarea id="p_edit" name="para2" value="" onClick='document.getElementById("btn_submit").style.visibility = "visible"'></textarea><br>
-
-        <textarea id="h_edit" name="h3" value="" onClick='document.getElementById("btn_submit").style.visibility = "visible"'></textarea><br>
-
-        <textarea id="p_edit" name="para3" value="" onClick='document.getElementById("btn_submit").style.visibility = "visible"'></textarea><br>
-
+      <form action ="/updatecontent" method="post">
+        <h1 style="text-transform:capitalize">{{content.topic}}</h1>
+      {{#if content.page}}
+        <p>Page {{content.page}}</p>
+        <input type="Text" name="id" value="{{content.id}}" hidden>
+        <input type="Text" name="page" value="{{content.page}}" hidden>
+      {{/if}}
+      {{#if content.h1}}
+        <textarea id="h_edit" name="h1" value="{{h1}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h1}}</textarea><br>
+      {{/if}}
+      {{#if content.para1}}
+        <textarea id="p_edit" name="para1" value="{{content.para1}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para1}}</textarea><br>
+      {{/if}}
+      {{#if content.h2}}
+        <textarea id="h_edit" name="h2" value="{{conent.h2}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h2}}</textarea><br>
+      {{/if}}
+      {{#if content.para2}}
+        <textarea id="p_edit" name="para2" value="{{content.para2}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para2}}</textarea><br>
+      {{/if}}
+      {{#if content.h3}}
+        <textarea id="h_edit" name="h3" value="{{content.h3}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.h3}}</textarea><br>
+      {{/if}}
+      {{#if content.para3}}
+        <textarea id="p_edit" name="para3" value="{{content.para3}}" onClick='document.getElementById("btn_submit").style.visibility = "visible"'>{{content.para3}}</textarea><br>
+      {{/if}}
       <br>
-          <button id="btn_submit" type="submit" name="topic" value="{{this.topic}}" style="float: right" class="btn btn-primary">Add page</button>
+          <button id="btn_submit" type="submit" name="topic" value="{{content.topic}}" class="btn btn-primary">Save changes</button>
           <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
       </form>
       <br>

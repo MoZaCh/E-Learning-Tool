@@ -8,9 +8,8 @@ module.exports = async(ctx, next) => {
 	try{
 		const userInfo = ctx.cookies.get('authorization')
 		const userRole = ctx.cookies.get('type')
-		console.log(userRole)
 		if(userRole === undefined | userRole === '' | userRole === 'user') {
-			return ctx.redirect('/login?msg=you dont have permission')
+			return ctx.redirect('/homepage?msg=you dont have permission')
 		}
 		const b64array = userInfo.split(' ')
 		const utf8str = Buffer.from(b64array[1], 'base64').toString().split(':')

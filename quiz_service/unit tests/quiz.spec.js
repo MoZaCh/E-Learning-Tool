@@ -163,24 +163,24 @@ describe('viewQuiz()', () => {
 
 	test('Should return a list size of 1 from the database', async done => {
 		expect.assertions(1)
-		const topic = 'git'
+		const data = {topic: 'git', question: 'What is git?', rand1: 'git1', rand2: 'git2', rand3: 'git3'}
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2')
-		const result = await quiz.viewQuiz(topic)
+		await quiz.setQuizQuestion(data)
+		const result = await quiz.viewQuiz('git')
 		expect(result.length).toEqual(1)
 		done()
 	})
 
 	test('Should return a list size of 5 from the database', async done => {
 		expect.assertions(1)
-		const topic = 'git'
+		const data = {topic: 'git', question: 'What is git?', rand1: 'git1', rand2: 'git2', rand3: 'git3'}
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1', 'git1', 'git2')
-		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
-		const result = await quiz.viewQuiz(topic)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		const result = await quiz.viewQuiz('git')
 		expect(result.length).toEqual(5)
 		done()
 	})
@@ -190,19 +190,20 @@ describe('getRandomQuiz()', () => {
 
 	test('Should get a randomly generated quiz', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', rand1: 'git1', rand2: 'git2', rand3: 'git3'}
 		const quiz = await new Quiz()
-		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 1?', 'github 1', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 2?', 'github 2', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 3?', 'github 3', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 4?', 'github 4', 'git2', 'git3')
-		await quiz.setQuizQuestion('git', 'What is git 5?', 'github 5', 'git2', 'git3')
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
+		await quiz.setQuizQuestion(data)
 		const result = await quiz.getRandomQuiz('git')
-		expect(result.length).toEqual(5)
+		expect(result.length).toEqual(11)
 		done()
 	})
 
@@ -219,56 +220,125 @@ describe('setQuizQuestion()', () => {
 
 	test('Add a quiz question successfully', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		const setQuestion = await quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2')
+		const setQuestion = await quiz.setQuizQuestion(data)
 		expect(setQuestion).toBe(true)
 		done()
 	})
 
-	test('if paremeter topic is missing should throw an error', async done => {
+	test('if topic name is missing should throw an error', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
 		await expect( quiz.setQuizQuestion('', 'What is git?', 'github') )
+			.rejects.toThrow( new Error('SQLITE_ERROR: no such table: undefined') )
+		done()
+	})
+
+	test('if topic parameter is missing should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: '', question: 'What is git?', answer: 'ans', rand1: 'git1', rand2: 'git2', rand3: 'git3'}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('if parameter question is missing should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: '', answer: 'ans', rand1: 'git1', rand2: 'git2', rand3: 'git3'}
 		const quiz = await new Quiz()
-		await expect( quiz.setQuizQuestion('git', '', 'github') )
+		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('If parameter answer is missing should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: '', rand1: 'git1', rand2: 'git2', rand3: 'git3'}
 		const quiz = await new Quiz()
-		await expect( quiz.setQuizQuestion('git', 'What is git?', '') )
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter random1 is missing should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans', rand1: '', rand2: 'git2', rand3: 'git3'}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter random2 is missing should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans', rand1: 'git1', rand2: '', rand3: 'git3'}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter random3 is missing should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans', rand1: 'git1', rand2: 'git2', rand3: ''}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('if paremeter topic is undefined should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: undefined, question: 'What is git?', answer: 'ans', rand1: '', rand2: 'g1', rand3: 'gi3'}
 		const quiz = await new Quiz()
-		await expect( quiz.setQuizQuestion(undefined, 'What is git?', 'github') )
+		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('if parameter question is undefined should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: undefined, answer: 'ans', rand1: '', rand2: 'git2', rand3: 'git3'}
 		const quiz = await new Quiz()
-		await expect( quiz.setQuizQuestion('git', undefined, 'github') )
+		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('If parameter answer is undefined should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: undefined, rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.setQuizQuestion('git', 'What is git?', undefined) )
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter random1 is undefined should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans1', rand: undefined, rand2: 'g2', rand3: 'g3'}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter random2 is undefined should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: undefined, rand3: 'g3'}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameter random3 is undefined should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: undefined}
+		const quiz = await new Quiz()
+		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
@@ -278,87 +348,116 @@ describe('deleteQuizQuestion()', () => {
 
 	test('Delete a quiz question successfully', async done => {
 		expect.assertions(2)
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github', 'random1', 'random2') )
+		await expect(quiz.setQuizQuestion(data) )
 			.resolves.toBeTruthy()
-		await expect(quiz.deleteQuizQuestion('git', 'What is git?', 'github'))
+		await expect(quiz.deleteQuizQuestion(data))
 			.resolves.toBeTruthy()
 		done()
 	})
 
 	test('If question is not found', async done => {
 		expect.assertions(2)
+		let data = {topic: 'git', question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2') )
+		await expect(quiz.setQuizQuestion(data) )
 			.resolves.toBeTruthy()
-		await expect( quiz.deleteQuizQuestion('git', 'Not known', 'github') )
+		data = {topic: 'git', question: 'Not known', answer: 'hello'}
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('"Not known" no match found') )
 		done()
 	})
 
 	test('If answer is not found', async done => {
 		expect.assertions(2)
+		let data = {topic: 'git', question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect(quiz.setQuizQuestion('git', 'What is git?', 'github', 'random1', 'random2') )
+		await expect(quiz.setQuizQuestion(data) )
 			.resolves.toBeTruthy()
-		await expect( quiz.deleteQuizQuestion('git', 'What is git?', 'Not Known') )
+		data = {topic: 'git', question: 'What is git?', answer: 'hello'}
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('"What is git?" no match found') )
 		done()
 	})
 
 	test('if topic string does not exist it should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: '', question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.deleteQuizQuestion('', 'What is git?', 'github') )
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('if question string is missing should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: '', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.deleteQuizQuestion('git', '', 'github') )
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('If answer string is missing should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: '', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.deleteQuizQuestion('git', 'What is git?', '') )
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('if topic string is undefined should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: undefined, question: 'What is git?', answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.deleteQuizQuestion(undefined, 'What is git?', 'github') )
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('if question string is undefined should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: undefined, answer: 'ans1', rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.deleteQuizQuestion('git', undefined, 'github') )
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
 	test('If answer string is undefined should throw an error', async done => {
 		expect.assertions(1)
+		const data = {topic: 'git', question: 'What is git?', answer: undefined, rand: 'g1', rand2: 'g2', rand3: 'g3'}
 		const quiz = await new Quiz()
-		await expect( quiz.deleteQuizQuestion('git', 'What is git?', undefined) )
+		await expect( quiz.deleteQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
 		done()
 	})
 
-	test('If parameters are empty', async done => {
+	test('If object are empty it should throw an error', async done => {
+		expect.assertions(1)
+		const data = {}
+		const quiz = await new Quiz()
+		await expect( quiz.deleteQuizQuestion(data) )
+			.rejects.toEqual( Error('Empty Object') )
+		done()
+	})
+
+	test('If parameters are empty it should throw an error', async done => {
+		expect.assertions(1)
+		const data = {topic: '', question: '', answer: ''}
+		const quiz = await new Quiz()
+		await expect( quiz.deleteQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If no object is passed it should throw an error ', async done => {
 		expect.assertions(1)
 		const quiz = await new Quiz()
 		await expect( quiz.deleteQuizQuestion() )
-			.rejects.toEqual( Error('Missing Value') )
+			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
 		done()
 	})
 })
@@ -413,8 +512,9 @@ describe('getScore()', () => {
 	test('Should return 10% and fail', async done => {
 		expect.assertions(3)
 		const quiz = await new Quiz()
-		const obj = {'How do you stage files for a commit?': 'git add'}
-		await expect(quiz.setQuizQuestion('git', 'How do you stage files for a commit?', 'git add', 'git addition', 'add git') )
+		const obj = {'What is git?': 'ans'}
+		const data = {topic: 'git', question: 'What is git?', answer: 'ans', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await expect(quiz.setQuizQuestion(data) )
 			.resolves.toBeTruthy()
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('10%')
@@ -425,11 +525,15 @@ describe('getScore()', () => {
 	test('Should return 40% and pass', async done => {
 		expect.assertions(2)
 		const quiz = await new Quiz()
-		const obj = {'Stage files for a commit?': 'git add', 'What is git?': 'github', 'C1': 'C1', 'C2': 'C2'}
-		await quiz.setQuizQuestion('git', 'Stage files for a commit?', 'git add', 'git', 'git1')
-		await quiz.setQuizQuestion('git', 'What is git?', 'github', 'git1', 'git2')
-		await quiz.setQuizQuestion('git', 'C1', 'C1', 'C3', 'C4')
-		await quiz.setQuizQuestion('git', 'C2', 'C2', 'C3', 'C4')
+		const obj ={'q1?': 'a1', 'q2?': 'a2', 'q3?': 'a3', 'q4?': 'a4'}
+		let data = {topic: 'git', question: 'q1?', answer: 'a1', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
+		data = {topic: 'git', question: 'q2?', answer: 'a2', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
+		data = {topic: 'git', question: 'q3?', answer: 'a3', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
+		data = {topic: 'git', question: 'q4?', answer: 'a4', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('40%')
 		expect(result.outcome).toEqual('Pass')
