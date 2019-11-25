@@ -3,7 +3,7 @@
 
 const bcrypt = require('bcrypt-promise')
 // const fs = require('fs-extra')
-const mime = require('mime-types')
+//const mime = require('mime-types')
 const sqlite = require('sqlite-async')
 const saltRounds = 10
 
@@ -99,9 +99,8 @@ module.exports = class User {
 			if(!records.count) throw new Error(`"${username}" does not exist`)
 			sql = `SELECT * FROM users WHERE user ="${username}";`
 			const record = await this.db.get(sql)
+			if(record.type === 'admin') record.isAdmin = true
 			return record
-			// if(record === false) throw new Error(`"${username}" does not exist!`)
-			// return true
 		} catch(err) {
 			throw err
 		}

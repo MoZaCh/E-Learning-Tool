@@ -24,6 +24,7 @@ const contentDB = '../content_service/content.db'
 const FrontEnd = require('./modules/front_end')
 const auth = require('./modules/authentication')
 const authorization = require('./modules/authorization')
+const quizRouter = require('./routes/quiz.js')
 
 const app = new Koa()
 const router = new Router()
@@ -152,7 +153,7 @@ router.post('/edit', auth, authorization, async ctx => {
 	}
 })
 
-router.post('/updatecontent', auth, async ctx => {
+router.post('/updatecontent', auth, authorization, async ctx => {
 	try {
 		const body = ctx.request.body
 		const content = await new Content(contentDB)
@@ -163,17 +164,16 @@ router.post('/updatecontent', auth, async ctx => {
 	}
 })
 
-router.post('/addpage', auth, async ctx => {
+router.post('/addpage', auth, authorization, async ctx => {
 	try {
 		const data = ctx.request.body
-		console.log(data)
 		await ctx.render('git-topic2', data)
 	} catch (err) {
 		await ctx.render('error', {message: err.message})
 	}
 })
 
-router.post('/submitaddpage', auth, async ctx => {
+router.post('/submitaddpage', auth, authorization, async ctx => {
 	try {
 		const data = ctx.request.body
 		const content = await new Content(contentDB)
@@ -184,39 +184,7 @@ router.post('/submitaddpage', auth, async ctx => {
 	}
 })
 
-router.post('/quiz', auth, async ctx => {
-	try {
-		const body = ctx.request.body
-		const quiz = await new Quiz(quizDB)
-		const data = await quiz.getRandomQuiz(body.topic)
-		data.push({topic: `${body.topic}`})
-		await ctx.render('quiz', data)
-	} catch(err) {
-		await ctx.render('error', {message: err.message})
-	}
-})
-
-router.post('/quizcomplete', async ctx => {
-	try {
-		const body = ctx.request.body
-		const quiz = await new Quiz(quizDB)
-		const result = await quiz.getScore(body, body.topic)
-		const frontController = await new FrontEnd()
-		const user = await frontController.convertToString(ctx.cookies.get('authorization'))
-		await quiz.setQuizResult(user[0], body.topic, result.score, result.outcome)
-		await ctx.render('quiz-result', result)
-		//return ctx.redirect(`/quiz-result?msg=${result.score} You have ${result.outcome}`)
-	} catch(err) {
-		await ctx.render('error', {message: err.message})
-	}
-})
-
-router.get('/quiz-result', async ctx => {
-	const data = {}
-	if(ctx.query.msg) data.msg = ctx.query.msg
-	if(ctx.query.user) data.user = ctx.query.user
-	await ctx.render('quiz-result', data)
-})
-
 app.use(router.routes())
+app.use(quizRouter.routes())
+app.use(quizRouter.allowedMethods())
 module.exports = app.listen(port, async() => console.log(`listening on port ${port}`))

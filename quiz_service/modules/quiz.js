@@ -94,6 +94,8 @@ module.exports = class Quiz {
 				const eachRow = await this.db.get(sql)
 				record.push(eachRow)
 			}
+			record.push({topic: `${topic}`})
+
 
 			return record
 		} catch(err) {

@@ -53,7 +53,6 @@ module.exports = class Content {
 
 	async viewContent(ctn) {
 		//await this.validateInput(ctn)
-		console.log(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic} WHERE id="${ctn.id}";`
 		let data = await this.db.get(sql)
 		if(data.records === 0) throw new Error('No Content Available')
@@ -63,7 +62,6 @@ module.exports = class Content {
 	}
 
 	async getAllContent() {
-		//await this.validateInput()
 		let sql = 'SELECT COUNT(id) as records FROM git;'
 		let data = await this.db.get(sql)
 		let sql2 = 'SELECT COUNT(id) as records FROM html;'
@@ -83,14 +81,11 @@ module.exports = class Content {
 	}
 
 	async setContent(ctn) {
-		//await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic};`
 		const page = await this.db.get(sql)
 		page.records += 1
 		const num = String(page.records)
-		console.log(num)
 		ctn.page = num
-		console.log(ctn)
 		sql = `INSERT INTO ${ctn.topic}(topic, h1, para1, h2, para2, h3, para3, page) VALUES("${ctn.topic}", 
 		"${ctn.h1}", "${ctn.para1}", "${ctn.h2}", "${ctn.para2}", "${ctn.h3}", "${ctn.para3}", "${num}");`
 		await this.db.run(sql)
@@ -98,10 +93,6 @@ module.exports = class Content {
 	}
 
 	async updateContent(ctn) {
-		// let sql = `SELECT COUNT(id) as records FROM git WHERE topic="${topic}";`
-		// let data = await this.db.get(sql)
-		//if(data.records === 0) throw new Error('No Content Available')
-		//await this.validateInput(ctn)
 		for(const i in ctn) {
 			if (typeof ctn[i] === 'undefined' | ctn[i] === '') {
 				ctn[i] = ''
