@@ -22,6 +22,9 @@ module.exports = class Content {
 			sql = `CREATE TABLE IF NOT EXISTS css (id INTEGER PRIMARY KEY AUTOINCREMENT,
 				topic TEXT, h1 TEXT, para1 TEXT, h2 TEXT, para2 TEXT, h3 TEXT, para3 TEXT, page TEXT);`
 			await this.db.run(sql)
+			sql = `CREATE TABLE IF NOT EXISTS img (id INTEGER PRIMARY KEY AUTOINCREMENT,
+				topic TEXT, img1 TEXT, img2 TEXT);`
+			await this.db.run(sql)
 			return this
 		})()
 	}
@@ -37,22 +40,39 @@ module.exports = class Content {
 		if(record === 0) throw new Error('No Content Available')
 	}
 
+	async getImg(topic) {
+		let sql = `SELECT COUNT(id) as records FROM img WHERE topic="${topic}";`
+		const num = await this.db.get(sql)
+		console.log(num)
+		if (num.records > 0) {
+			sql = `SELECT img1, img2 FROM img WHERE topic="${topic}";`
+			const data = await this.db.get(sql)
+			for (const i in data) {
+				if (data[i] === null | data[i] === '') {
+					data[i] = false
+				}
+			}
+			return data
+		}
+	}
+
 	async getContent(ctn) {
 		await this.validateInput(ctn)
-		console.log(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic} WHERE topic="${ctn.topic}";`
 		const num = await this.db.get(sql)
 		await this.isEmpty(num.records)
+		const dataImg = await this.getImg(ctn.topic)
 		sql = `SELECT * FROM ${ctn.topic} WHERE topic="${ctn.topic}" AND page="${ctn.page}";`
 		const data = await this.db.get(sql)
 		const page = Number(data.page)
 		if (page < num.records ) data.nxtP = page+1
 		if (page === num.records) data.finish = true
+		data.img1 = dataImg.img1
+		data.img2 = dataImg.img2
 		return data
 	}
 
 	async viewContent(ctn) {
-		//await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic} WHERE id="${ctn.id}";`
 		let data = await this.db.get(sql)
 		if(data.records === 0) throw new Error('No Content Available')

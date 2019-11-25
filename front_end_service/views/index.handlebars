@@ -7,20 +7,39 @@
 		<title>Home Page</title>
 		<meta name="description" content="form to add new books">
 		<meta name="author" content="Mark Tyers">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  		<link rel="stylesheet" type="text/css" href="layout.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 		<link href="style.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
-		<h1>Home</h1>
-		<p>This is the Index Page</p>
-		<input type="button" onclick="location.href='http://google.com';" value="Google" /><br>
+
+	<div class="jumbotron text-center">
+  		<h1>Home</h1>
+  		<p>E-Learning: Learn HTML5, GIT, CSS</p>
+  	<div>
+	<ul>
+  		<li><a class=""></a></li>
+	</ul>
+	</div>
+	</div>
 		<center>
-		<img src="./images/html.png" alt="HTML" width="50%" height="50%">
+		<img src="./images/html.png" alt="HTML" width="35%" height="35%">
 		</center>
 		<center>
-		<button name="login" type="button" onclick="location.href='/login';" value="login"> Login </button><br>
+		<button type="button" class="btn btn-success" onclick="location.href='/login';" value="login">Login</button>
+		<!--<button name="login" type="button" onclick="location.href='/login';" value="login"> Login </button><br>-->
 		<br>
-		<button name="register" type="button" onclick="location.href='/register';" value="register"> Register </button>
+		<br>
+		<button type="button" class="btn btn-info" onclick="location.href='/register';" value="register">Register</button>
+		<!--<button name="register" type="button" onclick="location.href='/register';" value="register"> Register </button>-->
 		</center>
-		<p><a href=""> View Profile</a></p>
-		<p><a href="/register">Log Out</a></p>
+	</body>
+	<footer>
+  		<br>
+  		<div class="jumbotron text-center">
+    		<p>@E-Learning 2019</p>
+  		</div>
+	</footer>
 </html>

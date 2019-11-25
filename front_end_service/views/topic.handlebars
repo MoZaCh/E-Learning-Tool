@@ -43,6 +43,15 @@
       <h2>{{h3}}</h2>
       <p>{{para3}}</p>
       <br>
+      {{#if nxtP}}
+        <img src="{{img1}}" alt="Git Branch" width="15%" height="15%">
+      {{/if}}
+      
+      {{#if finish}}
+        <img src="{{img2}}" alt="Git Logo" width="20%" height="20%">
+      {{/if}}
+      <br>
+      <br>
       <p>Page {{page}}</p>
 
       <button type="button" class="btn btn-danger" onclick="goBack()" style="float: left;">Previous</button>
@@ -61,6 +70,7 @@
         </form>
       </div>
       {{/if}}
+      <br>
     </div>
   </div><br>
 </div>
