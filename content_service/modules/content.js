@@ -1,11 +1,7 @@
 
 'use strict'
 
-//const bcrypt = require('bcrypt-promise')
-// const fs = require('fs-extra')
-//const mime = require('mime-types')
 const sqlite = require('sqlite-async')
-//const saltRounds = 10
 
 module.exports = class Content {
 
@@ -28,6 +24,7 @@ module.exports = class Content {
 			return this
 		})()
 	}
+
 	/**
 	 * Checks that the key-value pairs in the object passed are not empty or undefined
 	 * @param {Object} strObj - Takes an object with key value pairs
@@ -85,8 +82,9 @@ module.exports = class Content {
 	}
 
 	/**
-	 * Function to get 
-	 * @param {*} ctn 
+	 * Function to get all the content from the database
+	 * @param {Object} ctn - Contains topic, and page which specifies the topic and table
+	 * @returns {Object} - Returns the topic content from the database in an object
 	 */
 	async getContent(ctn) {
 		await this.validateInput(ctn)
@@ -106,6 +104,12 @@ module.exports = class Content {
 		return data
 	}
 
+	/**
+	 * Function which returns all the content from the database by id
+	 * @param {Object} ctn - An object which contains topic and id
+	 * @throws {Error} - "No Content Available", if it does not exist in the database
+	 * @returns {Object} - Returns the content in an object format
+	 */
 	async viewContent(ctn) {
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic} WHERE id="${ctn.id}";`
 		let data = await this.db.get(sql)
@@ -115,6 +119,11 @@ module.exports = class Content {
 		return data
 	}
 
+	/**
+	 * Function which gets all the content from all 3 databases to display to the user
+	 * @throws {Error} - "No Content Available", if all 3 databases are empty
+	 * @returns {Object} - Containing all the data from the 3 databases merged
+	 */
 	async getAllContent() {
 		let sql = 'SELECT COUNT(id) as records FROM git;'
 		let data = await this.db.get(sql)
@@ -134,6 +143,11 @@ module.exports = class Content {
 		return data
 	}
 
+	/**
+	 * Function which takes object and adds the data to the database as a new record
+	 * @param {Object} ctn - Object which contains the whole new screen information
+	 * @returns {boolean} - Returns true, if content is added to the database successfully
+	 */
 	async setContent(ctn) {
 		await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic};`
@@ -147,6 +161,11 @@ module.exports = class Content {
 		return true
 	}
 
+	/**
+	 * Function which takes object as parameter and updates an existing record in the database
+	 * @param {*} ctn - Object which contains all the information about the updated screen/topic
+	 * @returns {boolean} - Returns true, if record in the database successfully updated
+	 */
 	async updateContent(ctn) {
 		for(const i in ctn) {
 			if (typeof ctn[i] === 'undefined' | ctn[i] === '') {
