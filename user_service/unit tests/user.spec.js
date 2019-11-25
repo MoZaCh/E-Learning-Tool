@@ -178,14 +178,15 @@ describe('userDetails()', () => {
 		done()
 	})
 
-	test('Shou', async done => {
-		expect.assertions(2)
+	test('Should return t', async done => {
+		expect.assertions(3)
 		const ctn = {user: 'test', pass: 'testpass', firstName: 'test', surname: 'testsurname'}
 		const account = await new Accounts()
 		await expect( account.createAdmin(ctn) )
 			.resolves.toBeTruthy()
 		const data = await account.userDetails('test')
 		expect(data.type).toEqual('admin')
+		expect(data.isAdmin).toBe(true)
 		done()
 	})
 })

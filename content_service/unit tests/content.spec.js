@@ -170,3 +170,261 @@ describe('setContent()', () => {
 		done()
 	})
 })
+
+describe('updateContent()', () => {
+
+	test('Should update content successfully and return true', async done => {
+		expect.assertions(1)
+		const content = await new Content()
+		const data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.updateContent(data) )
+			.resolves.toBeTruthy()
+		done()
+	})
+
+	test('Should check the object before updating the database', async done => {
+		expect.assertions(1)
+		const content = await new Content()
+		const data = {
+			topic: 'git',
+			h1: '',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.updateContent(data) )
+			.resolves.toBeTruthy()
+		done()
+	})
+})
+
+describe('viewContent()', () => {
+
+	test('Should retreive the correct record based on id and topic', async done => {
+		expect.assertions(2)
+		const content = await new Content()
+		let data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'git',
+			id: '1'
+		}
+		await expect(content.viewContent(data) )
+			.resolves.toBeTruthy()
+		done()
+	})
+
+	test('Should throw an error if no content exists', async done => {
+		expect.assertions(1)
+		const content = await new Content()
+		const data = {
+			topic: 'git',
+			id: '1'
+		}
+		await expect(content.viewContent(data) )
+			.rejects.toEqual( Error('No Content Available'))
+		done()
+	})
+})
+
+describe('getAllContent()', () => {
+
+	test('Should return all the content form all 3 databases', async done => {
+		expect.assertions(6)
+		const content = await new Content()
+		let data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'css',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'html',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		const result = await content.getAllContent()
+		await expect(result[0].topic).toEqual('git')
+		await expect(result[1].topic).toEqual('html')
+		await expect(result[2].topic).toEqual('css')
+		done()
+	})
+
+	test('Should throw an error if the tables are empty', async done => {
+		expect.assertions(1)
+		const content = await new Content()
+		await expect(content.getAllContent() )
+			.rejects.toEqual( Error('No Content Available') )
+		done()
+	})
+})
+
+describe('getContent()', () => {
+
+	test('Should return content for a specific topic and page', async done => {
+		expect.assertions(7)
+		const content = await new Content()
+		let data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '2'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'css',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'html',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		await expect(content.setImg('git', 'img1', 'img2'))
+			.resolves.toBeTruthy()
+		data = {topic: 'git', page: '1'}
+		const result = await content.getContent(data)
+		await expect(result.topic).toEqual('git')
+		await expect(result.page).toEqual('1')
+		done()
+	})
+
+	test('Should return content for a specific topic and page without any images', async done => {
+		expect.assertions(7)
+		const content = await new Content()
+		let data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'git',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '2'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'css',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		data = {
+			topic: 'html',
+			h1: 'heading1',
+			para1: 'paragraph1',
+			h2: 'heading2',
+			para2: 'paragraph2',
+			h3: 'heading 3',
+			para3: 'paragraph3',
+			page: '1'
+		}
+		await expect(content.setContent(data) )
+			.resolves.toBeTruthy()
+		await expect(content.setImg('git', 'img1', ''))
+			.resolves.toBeTruthy()
+		data = {topic: 'git', page: '1'}
+		const result = await content.getContent(data)
+		await expect(result.topic).toEqual('git')
+		await expect(result.page).toEqual('1')
+		done()
+	})
+})

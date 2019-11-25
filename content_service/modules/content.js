@@ -40,10 +40,15 @@ module.exports = class Content {
 		if(record === 0) throw new Error('No Content Available')
 	}
 
+	async setImg(topic, img1, img2) {
+		const sql = `INSERT INTO img (topic, img1, img2) VALUES("${topic}", "${img1}", "${img2}");`
+		await this.db.run(sql)
+		return true
+	}
+
 	async getImg(topic) {
 		let sql = `SELECT COUNT(id) as records FROM img WHERE topic="${topic}";`
 		const num = await this.db.get(sql)
-		console.log(num)
 		if (num.records > 0) {
 			sql = `SELECT img1, img2 FROM img WHERE topic="${topic}";`
 			const data = await this.db.get(sql)

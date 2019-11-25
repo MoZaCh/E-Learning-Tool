@@ -44,11 +44,15 @@
       <p>{{para3}}</p>
       <br>
       {{#if nxtP}}
-        <img src="{{img1}}" alt="Git Branch" width="15%" height="15%">
+        {{#if img1}}
+          <img src="{{img1}}" alt="img" width="15%" height="15%">
+        {{/if}}
       {{/if}}
       
       {{#if finish}}
-        <img src="{{img2}}" alt="Git Logo" width="20%" height="20%">
+        {{#if img2}}
+        <img src="{{img2}}" alt="img" width="20%" height="20%">
+        {{/if}}
       {{/if}}
       <br>
       <br>
@@ -63,13 +67,11 @@
         </form>
       {{/if}}
       
-      {{#if finish}}
         <div align="center">
           <form action="/quiz" method="post">
           <button type="submit" class="btn btn-warning" name="topic" value="{{topic}}">Test Your Understanding</button>
         </form>
       </div>
-      {{/if}}
       <br>
     </div>
   </div><br>
