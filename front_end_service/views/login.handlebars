@@ -13,7 +13,7 @@
 		<center>
 		<h1>Log In</h1>
 		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
+ 			<p id="message" class="msg">{{msg}}</p>
 		{{/if}}
 		<form action="/login" method="post">
 			<p>Username:<br /><input type="text" name="user" placeholder="Your username" value="{{user}}" autofocus></p>
