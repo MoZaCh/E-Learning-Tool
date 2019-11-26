@@ -171,7 +171,7 @@ describe('setContent()', () => {
 		const data = {}
 		//Act & Assert
 		await expect(content.setContent(data) )
-			.rejects.toEqual( Error('Empty Object') )
+			.rejects.toThrow(new Error('SQLITE_ERROR: no such table: undefined') )
 		done()
 	})
 
@@ -182,7 +182,7 @@ describe('setContent()', () => {
 		const data = {undefined}
 		//Act & Assert
 		await expect(content.setContent(data) )
-			.rejects.toEqual( Error('Missing parameters') )
+			.rejects.toThrow(new Error('SQLITE_ERROR: no such table: undefined') )
 		done()
 	})
 
@@ -193,7 +193,8 @@ describe('setContent()', () => {
 		const data = {'': ''}
 		//Act & Assert
 		await expect(content.setContent(data) )
-			.rejects.toEqual( Error('Missing parameters') )
+			.rejects.toThrow(new Error('SQLITE_ERROR: no such table: undefined') )
+
 		done()
 	})
 })
