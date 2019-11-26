@@ -44,3 +44,18 @@ describe('convertToString()', () => {
 		done()
 	})
 })
+
+describe('makeObj()', () => {
+
+	test('Should return an empty object', async done => {
+		expect.assertions(1)
+		//Arrange
+		const frontend = await new FrontEnd()
+		const data = {id: 'hello:bye'}
+		//Act & Assert
+		await frontend.makeObj(data)
+		expect(data[0]).toEqual()
+		done()
+	})
+})
+
