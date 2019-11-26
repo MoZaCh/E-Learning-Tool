@@ -38,7 +38,7 @@
   }
   
   button {
-    background-color: #4CAF50;
+    background-color: rgb(67, 123, 178);
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -52,7 +52,7 @@
   }
   
   #prevBtn {
-    background-color: #bbbbbb;
+    background-color: rgb(191, 98, 90);
   }
   
   /* Make circles that indicate the steps of the form: */

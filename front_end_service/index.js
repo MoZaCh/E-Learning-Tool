@@ -72,7 +72,7 @@ router.post('/register', koaBody, async ctx => {
 		const body = ctx.request.body
 		const accounts = await new Accounts(accountsDB)
 		await accounts.register(body.user, body.pass, body.firstName, body.surname)
-		ctx.redirect(`/?msg=new user "${body.name}" added`)
+		ctx.redirect(`/login?msg=new user ${body.firstName} added`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message, page: '/register'})
 	}
@@ -158,7 +158,7 @@ router.post('/updatecontent', auth, authorization, async ctx => {
 		const body = ctx.request.body
 		const content = await new Content(contentDB)
 		await content.updateContent(body)
-		return ctx.redirect('/login?msg=updated sucessfulyl')
+		return ctx.redirect('/adminpanel?msg=updated sucessfulyl')
 	} catch (err) {
 		await ctx.render('error', {message: err.message})
 	}

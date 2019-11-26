@@ -6,6 +6,7 @@ const accountsDB = '../user_service/user.db'
 
 module.exports = async(ctx, next) => {
 	try{
+		//Retrieving user information and type from the cookie, if nothing exists it will redirect the user
 		const userInfo = ctx.cookies.get('authorization')
 		const userRole = ctx.cookies.get('type')
 		if(userRole === undefined | userRole === '' | userRole === 'user') {
