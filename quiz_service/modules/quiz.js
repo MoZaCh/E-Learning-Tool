@@ -3,8 +3,8 @@
 
 const sqlite = require('sqlite-async')
 
-const Accounts = require('../../user_service/modules/user.js')
-const accountsDB = '../../user_service/user.db'
+//const Accounts = require('../../user_service/modules/user.js')
+//const accountsDB = '../../user_service/user.db'
 
 module.exports = class Quiz {
 
@@ -19,6 +19,9 @@ module.exports = class Quiz {
 				user TEXT, topic TEXT, score TEXT, outcome TEXT);`
 			await this.db.run(sql)
 			sql = `CREATE TABLE IF NOT EXISTS html (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT,
+				answer TEXT, random1 TEXT, random2 TEXT, random3 TEXT);`
+			await this.db.run(sql)
+			sql = `CREATE TABLE IF NOT EXISTS css (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT,
 				answer TEXT, random1 TEXT, random2 TEXT, random3 TEXT);`
 			await this.db.run(sql)
 			return this
@@ -183,7 +186,7 @@ module.exports = class Quiz {
 			throw err
 		}
 	  }
-  
+
 	  /**
 	   * Function which takes parameters user, topic, score and outcome and sets the quiz result in the database
 	   * @param {string} user - Takes parameter user string which specifies the user
@@ -212,8 +215,7 @@ module.exports = class Quiz {
 	   */
 	  async getQuizResult(user) {
 		  try {
-			const getQuizObj = {
-				Username: user}
+			const getQuizObj = {Username: user}
 			await this.checkParameters(getQuizObj)
 			const sql = `SELECT * FROM quizResults WHERE user="${user}";`
 			const records = await this.db.all(sql)
