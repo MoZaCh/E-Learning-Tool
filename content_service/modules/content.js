@@ -149,7 +149,7 @@ module.exports = class Content {
 	 * @returns {boolean} - Returns true, if content is added to the database successfully
 	 */
 	async setContent(ctn) {
-		await this.validateInput(ctn)
+		//await this.validateInput(ctn)
 		let sql = `SELECT COUNT(id) as records FROM ${ctn.topic};`
 		const page = await this.db.get(sql)
 		page.records += 1

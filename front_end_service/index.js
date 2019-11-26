@@ -158,7 +158,7 @@ router.post('/updatecontent', auth, authorization, async ctx => {
 		const body = ctx.request.body
 		const content = await new Content(contentDB)
 		await content.updateContent(body)
-		return ctx.redirect('/login?msg=updated sucessfulyl')
+		return ctx.redirect('/adminpanel?msg=updated sucessfulyl')
 	} catch (err) {
 		await ctx.render('error', {message: err.message})
 	}
