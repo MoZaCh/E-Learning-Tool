@@ -76,7 +76,7 @@ describe('Registering', () => {
 		done()
 	}, 16000)
 
-	test('Should throw an error "Missing Password", if password field is left blank', async done => {
+	test('Should throw an error "Missing Password", if the password field is left blank', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
 		//Act
@@ -93,7 +93,7 @@ describe('Registering', () => {
 		done()
 	}, 16000)
 
-	test('Should throw an error "Missing Firstname", if all firstname field is left blank', async done => {
+	test('Should throw an error "Missing Firstname", if the firstname field is left blank', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
 		//Act
@@ -106,6 +106,25 @@ describe('Registering', () => {
 			.toBe('Missing FirstName')
 
 		const image = await page.screenshot()
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Should throw an error "Missing Surname", if all surname field is left blank', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'admin')
+		await page.type('input[name=pass]', 'admin')
+		await page.type('input[name=firstName]', 'admin')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h2')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
+			.toBe('Missing Surname')
+
+		const image = await page.screenshot() 
 		expect(image).toMatchImageSnapshot()
 
 		done()
