@@ -25,6 +25,7 @@ router.post('/quizcomplete', async ctx => {
 	try {
 		const body = ctx.request.body
 		console.log(body)
+		console.log(body.topic)
 		const quiz = await new Quiz(quizDB)
 		const result = await quiz.getScore(body, body.topic)
 		const frontController = await new FrontEnd()

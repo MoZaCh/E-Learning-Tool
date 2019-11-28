@@ -49,8 +49,8 @@ module.exports = class Quiz {
 	 * @returns {Array} - Returns an array 'num' with unique numbers
 	 */
 	async getRandomInt(max, cycle) {
-		if (isNaN(max) | typeof max === 'undefined') throw new Error('Missing max')
-		if (isNaN(cycle) | typeof cycle === 'undefined') throw new Error('Missing cycle')
+		if (isNaN(max) | typeof max === 'undefined' | max === '') throw new Error('Missing max')
+		if (isNaN(cycle) | typeof cycle === 'undefined' | cycle === '') throw new Error('Missing cycle')
 		const num = []
 		let i = 0
 		while (i < cycle) {
@@ -180,7 +180,7 @@ module.exports = class Quiz {
 				const eachRow = await this.db.get(sql)
 				if (eachRow.count === 1) score++
 			}
-			const result = this.checkIfFail(score)
+			const result = await this.checkIfFail(score)
 			return result
 		} catch(err) {
 			throw err
@@ -197,6 +197,7 @@ module.exports = class Quiz {
 	   */
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {
+			console.log(user, topic, score, outcome )
 			const setQuizObj = {Username: user, Topic: topic, Score: score, Outcome: outcome}
 			await this.checkParameters(setQuizObj)
 			const sql = `INSERT INTO quizResults(user, topic, score, outcome) 

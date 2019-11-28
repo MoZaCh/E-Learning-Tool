@@ -42,3 +42,20 @@ ul {
       width: 40%;
       height: 30%;
   }
+
+  #btn_submit {
+    visibility: hidden;
+    float: right;
+  }
+  
+  #h_edit {
+    resize: none;
+    height: 2em;
+    width: 87%;
+  }
+  
+  #p_edit {
+    resize: none;
+    height: 20em;
+    width: 87%;
+  }

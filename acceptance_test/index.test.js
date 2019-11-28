@@ -2,6 +2,7 @@
 
 const puppeteer = require('puppeteer')
 const { configureToMatchImageSnapshot } = require('jest-image-snapshot')
+const shell = require('shelljs')
 //const PuppeteerHar = require('puppeteer-har')
 
 const width = 800
@@ -23,9 +24,14 @@ beforeAll( async() => {
 	page = await browser.newPage()
 	//har = new PuppeteerHar(page)
 	await page.setViewport({ width, height})
+	await shell.exec('acceptance_test/beforeAll.sh')
+
 })
 
-afterAll( () => browser.close() )
+afterAll( async() => {
+	browser.close()
+	await shell.exec('acceptance_test/afterAll.sh')
+})
 
 describe('Registering', () => {
 
@@ -124,7 +130,7 @@ describe('Registering', () => {
 		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
 			.toBe('Missing Surname')
 
-		const image = await page.screenshot() 
+		const image = await page.screenshot()
 		expect(image).toMatchImageSnapshot()
 
 		done()
@@ -171,9 +177,9 @@ describe('Registering', () => {
 		await page.type('input[name=pass]', 'new')
 		await page.click('input[type=submit')
 
-		await page.waitForSelector('p[id=message]')
-		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
-			.toBe('new user new added')
+		await page.waitForSelector('h2')
+		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
+			.toBe('username "new" already in use')
 
 		const image = await page.screenshot()
 
@@ -220,21 +226,21 @@ describe('Login', () => {
 		//Arrange
 		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
 		//Act
-		await page.type('input[name=user]', 'test')
-		await page.type('input[name=pass]', 'test')
+		await page.type('input[name=user]', 'newUser')
+		await page.type('input[name=pass]', 'newUser')
 		await page.click('input[type=submit')
 
 		await page.waitForSelector('p[id=message]')
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
-			.toBe('username "test" not found')
+			.toBe('username "newUser" not found')
 
 		const image = await page.screenshot()
 
-		expect(image).toMatchImageSnapshot()
+		expect(image).toMatchImageSnapshot() 
 
 		//await page.tracing.stop()
 		//await har.stop()
-		done() 
+		done()
 	}, 16000)
 })
