@@ -215,4 +215,26 @@ describe('Login', () => {
 		//await har.stop()
 		done()
 	}, 16000)
+
+	test('It should throw an error if the username does not exist', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'test')
+		await page.type('input[name=pass]', 'test')
+		await page.click('input[type=submit')
+
+		await page.waitForSelector('p[id=message]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
+			.toBe('username "test" not found')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		//await page.tracing.stop()
+		//await har.stop()
+		done() 
+	}, 16000)
 })
