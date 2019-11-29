@@ -197,7 +197,6 @@ module.exports = class Quiz {
 	   */
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {
-			console.log(user, topic, score, outcome )
 			const setQuizObj = {Username: user, Topic: topic, Score: score, Outcome: outcome}
 			await this.checkParameters(setQuizObj)
 			const sql = `INSERT INTO quizResults(user, topic, score, outcome) 

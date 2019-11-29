@@ -7,7 +7,7 @@ const shell = require('shelljs')
 
 const width = 800
 const height = 600
-const delayMS = 5
+const delayMS = 45
 
 let browser
 let page
