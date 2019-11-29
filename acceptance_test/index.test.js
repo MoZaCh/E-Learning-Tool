@@ -85,6 +85,7 @@ describe('Registering', () => {
 	test('Should throw an error "Missing Username", if the username field is left blank', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
+
 		//Act
 		await page.type('input[name=pass]', 'test')
 		await page.type('input[name=firstName]', 'test')
@@ -148,6 +149,26 @@ describe('Registering', () => {
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
 			.toBe('Missing Surname')
+
+		const image = await page.screenshot()
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Check that the goback button operates as it should', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'admin')
+		await page.type('input[name=pass]', 'admin')
+		await page.type('input[name=firstName]', 'admin')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		await page.click('button[name=goback]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Create an Account')
 
 		const image = await page.screenshot()
 		expect(image).toMatchImageSnapshot()
