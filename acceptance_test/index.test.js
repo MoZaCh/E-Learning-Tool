@@ -332,4 +332,71 @@ describe('Login', () => {
 
 		done()
 	}, 16000)
+
+	test('It should throw an error if a number is entered', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', '0')
+		await page.type('input[name=pass]', '')
+		await page.click('input[type=submit')
+
+		await page.waitForSelector('p[id=message]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
+			.toBe('username "0" not found')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+})
+
+describe('Homepage', () => {
+
+	test('After a user has logged in the tile of the page should be E-Learning Homepage', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'Hello')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		await expect(page.title()).resolves.toMatch('E-Learning Homepage')
+
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('After a user has logged in they should see Git as one of the topics', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'Hello')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		expect( await page.evaluate( () => document.querySelector('h3[id=git]').innerText ) )
+			.toBe('Learn GIT')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
 })
