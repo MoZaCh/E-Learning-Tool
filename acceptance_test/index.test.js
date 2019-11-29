@@ -455,11 +455,8 @@ describe('Homepage', () => {
 
 	test('After a user has logged in they should see CSS as one of the topics', async done => {
 		//Arrange
-		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
 		//Act
-		await page.type('input[name=user]', 'Zahed')
-		await page.type('input[name=pass]', 'Hello')
-		await page.click('input[type=submit')
 		await page.waitForSelector('h1')
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
