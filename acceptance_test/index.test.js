@@ -7,7 +7,7 @@ const shell = require('shelljs')
 
 const width = 800
 const height = 600
-const delayMS = 55
+const delayMS = 5
 
 let browser
 let page
@@ -404,7 +404,7 @@ describe('Homepage', () => {
 		await page.waitForSelector('h1')
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
-			.toBe('git')
+			.toBe('Git')
 
 		await expect(page.title()).resolves.toMatch('git')
 
@@ -442,7 +442,7 @@ describe('Homepage', () => {
 		await page.waitForSelector('h1')
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
-			.toBe('html')
+			.toBe('Html')
 
 		await expect(page.title()).resolves.toMatch('html')
 
@@ -480,9 +480,399 @@ describe('Homepage', () => {
 		await page.waitForSelector('h1')
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
-			.toBe('css')
+			.toBe('Css')
 
 		await expect(page.title()).resolves.toMatch('css')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+})
+
+describe('GIT Page', () => {
+
+	test('Git Content page 1 should be displayed with heading 1', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.click('button[id=git')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Git')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading1]').innerText ) )
+			.toBe('What’s a version control system?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Git Content page 1 should be displayed with heading 2', async done => {
+		//Act
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Git')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+			.toBe('What’s a distributed version control system?')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('Why Git?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Git Content page 1 should be displayed with heading 3', async done => {
+		//Act
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Git')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('Why Git?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	// test('Git Content page 1 should be displayed to the user', async done => {
+	// 	//Arrange
+	// 	await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+	// 	//Act
+	// 	await page.click('button[id=git')
+	// 	await page.waitForSelector('h1')
+	// 	//Assert
+	// 	expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+	// 		.toBe('Git')
+
+	// 	expect( await page.evaluate( () => document.querySelector('h2[id=heading1]').innerText ) )
+	// 		.toBe('What’s a version control system?')
+
+	// 	expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+	// 		.toBe('What’s a distributed version control system?')
+
+	// 	expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+	// 		.toBe('Why Git?')
+
+	// 	const image = await page.screenshot()
+
+	// 	expect(image).toMatchImageSnapshot()
+
+	// 	done()
+	// }, 16000)
+
+	test('Git Content page 2 should be displayed with heading 1 when the next button is clicked', async done => {
+		//Act
+		await page.click('button[id=btnNext')
+		await page.waitForSelector('h2[id=heading1]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading1]').innerText ) )
+			.toBe('Basic Git commands')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Git Content page 2 should be displayed with heading 2', async done => {
+		//Act
+		await page.waitForSelector('h2[id=heading2]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+			.toBe('Git init, Git clone & Git add')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('Git commit, git status & git branch')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Git Content page 2 should be displayed with heading 3', async done => {
+		//Act
+		await page.waitForSelector('h2[id=heading3]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('Git commit, git status & git branch')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('User should be able to click on the test my understanding link to take part in a quiz', async done => {
+		//Act
+		await page.click('button[id=quiz')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Quiz')
+
+		//Act
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.waitForSelector('h1')
+
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Quiz Result')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+})
+
+describe('HTML Page', () => {
+
+	test('Html Content page 1 should be displayed with heading 1', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.click('button[id=html')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Html')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading1]').innerText ) )
+			.toBe('What is HTML?')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+			.toBe('The History of HTML')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('What are Tags and Attributes?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Html Content page 1 should be displayed with heading 2', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.click('button[id=html')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Html')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+			.toBe('The History of HTML')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Html Content page 1 should be displayed with heading 3', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.click('button[id=html')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Html')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('What are Tags and Attributes?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Html Content page 2 should be displayed with heading 1', async done => {
+		//Act
+		await page.click('button[id=btnNext')
+		await page.waitForSelector('h2[id=heading1]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading1]').innerText ) )
+			.toBe('What Are HTML Tags?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Html Content page 2 should be displayed with heading 2', async done => {
+		//Act
+		await page.waitForSelector('h2[id=heading2]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+			.toBe('What are HTML Attributes?')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Html Content page 2 should be displayed with heading 3', async done => {
+		//Act
+		await page.waitForSelector('h2[id=heading3]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('Golden Rules To Remember')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('User should be able to click on the test my understanding link to take part in the html quiz', async done => {
+		//Act
+		await page.click('button[id=quiz')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Quiz')
+
+		//Act
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.waitForSelector('h1')
+
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Quiz Result')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+})
+
+describe('CSS Page', () => {
+
+	test('Css Content page 1 should be displayed with heading 1', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.click('button[id=css')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Css')
+
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading1]').innerText ) )
+			.toBe('Cascading Style Sheets')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Css Content page 1 should be displayed with heading 2', async done => {
+		//Act
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading2]').innerText ) )
+			.toBe('Syntax')
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Css Content page 1 should be displayed with heading 3', async done => {
+		//Act
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2[id=heading3]').innerText ) )
+			.toBe('Declaration block')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('User should be able to click on the test my understanding link to take part in the', async done => {
+		//Act
+		await page.click('button[id=quiz')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Quiz')
+
+		//Act
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.click('button[id=nxtBtn]')
+		await page.waitForSelector('h1')
+
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Quiz Result')
 
 		const image = await page.screenshot()
 
