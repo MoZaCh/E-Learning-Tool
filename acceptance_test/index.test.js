@@ -379,6 +379,81 @@ describe('Homepage', () => {
 	}, 16000)
 
 	test('After a user has logged in they should see Git as one of the topics', async done => {
+
+		//Act
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		expect( await page.evaluate( () => document.querySelector('h3[id=git]').innerText ) )
+			.toBe('Learn GIT')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('User should be able to navigate to the git page by clicking on the button', async done => {
+		//Arrange
+		// await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		// //Act
+		await page.click('button[id=git]')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('git')
+
+		await expect(page.title()).resolves.toMatch('git')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('After a user has logged in they should see HTML as one of the topics', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/homepage', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		expect( await page.evaluate( () => document.querySelector('h3[id=html]').innerText ) )
+			.toBe('Learn HTML5')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('User should be able to navigate to the html page by clicking on the button', async done => {
+		//Arrange
+		// await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		// //Act
+		await page.click('button[id=html]')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('html')
+
+		await expect(page.title()).resolves.toMatch('html')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('After a user has logged in they should see CSS as one of the topics', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
 		//Act
@@ -390,8 +465,8 @@ describe('Homepage', () => {
 		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
 			.toBe('Welcome Zahed')
 
-		expect( await page.evaluate( () => document.querySelector('h3[id=git]').innerText ) )
-			.toBe('Learn GIT')
+		expect( await page.evaluate( () => document.querySelector('h3[id=css]').innerText ) )
+			.toBe('Learn CSS')
 
 		const image = await page.screenshot()
 
