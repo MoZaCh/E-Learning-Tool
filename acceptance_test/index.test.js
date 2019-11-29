@@ -7,7 +7,7 @@ const shell = require('shelljs')
 
 const width = 800
 const height = 600
-const delayMS = 30
+const delayMS = 55
 
 let browser
 let page
@@ -467,6 +467,25 @@ describe('Homepage', () => {
 
 		expect( await page.evaluate( () => document.querySelector('h3[id=css]').innerText ) )
 			.toBe('Learn CSS')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('User should be able to navigate to the css page by clicking on the button', async done => {
+		//Arrange
+		// await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		// //Act
+		await page.click('button[id=css]')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('css')
+
+		await expect(page.title()).resolves.toMatch('css')
 
 		const image = await page.screenshot()
 
