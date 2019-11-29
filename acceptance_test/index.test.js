@@ -82,6 +82,25 @@ describe('Registering', () => {
 		done()
 	}, 16000)
 
+	test('Should throw an error "Missing Username", if the username field is left blank', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=pass]', 'test')
+		await page.type('input[name=firstName]', 'test')
+		await page.type('input[name=surname]', 'test')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h2')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
+			.toBe('Missing Username')
+
+		const image = await page.screenshot()
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
 	test('Should throw an error "Missing Password", if the password field is left blank', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
@@ -136,9 +155,7 @@ describe('Registering', () => {
 		done()
 	}, 16000)
 
-	test('Should throw an error is username already exists', async done => {
-		//await page.tracing.start({path: 'trace/registering_user_har.json',screenshots: true})
-		//await har.start({path: 'trace/registering_user_trace.har' })
+	test('Should succesfully register new user', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
 		//Act
@@ -148,13 +165,32 @@ describe('Registering', () => {
 		await page.type('input[name=pass]', 'admin')
 		await page.click('input[type=submit')
 
-		// await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load' })
-		// await page.type('input[name=user]', 'Zahed')
-		// await page.type('input[name=pass]', 'Hello')
-		// await page.click('input[type=submit')
-
-		await page.waitForSelector('h2')
+		await page.waitForSelector('p[id=message]')
 		//Assert
+		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
+			.toBe('new user admin added')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Should throw an error if username already exists', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=firstName]', 'admin')
+		await page.type('input[name=surname]', 'admin')
+		await page.type('input[name=user]', 'admin')
+		await page.type('input[name=pass]', 'admin')
+		await page.click('input[type=submit')
+
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('An Error Has Occurred')
 		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
 			.toBe('username "admin" already in use')
 
@@ -162,12 +198,10 @@ describe('Registering', () => {
 
 		expect(image).toMatchImageSnapshot()
 
-		//await page.tracing.stop()
-		//await har.stop()
 		done()
 	}, 16000)
 
-	test('Register a user and login', async done => {
+	test('Register a user and allow user to login', async done => {
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
 		//Act
@@ -177,9 +211,9 @@ describe('Registering', () => {
 		await page.type('input[name=pass]', 'new')
 		await page.click('input[type=submit')
 
-		await page.waitForSelector('h2')
-		expect( await page.evaluate( () => document.querySelector('h2').innerText ) )
-			.toBe('username "new" already in use')
+		await page.waitForSelector('p[id=message]')
+		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
+			.toBe('new user new added')
 
 		const image = await page.screenshot()
 
@@ -192,8 +226,6 @@ describe('Registering', () => {
 describe('Login', () => {
 
 	test('A registered user should be able to login', async done => {
-		//await page.tracing.start({path: 'trace/registering_user_har.json',screenshots: true})
-		//await har.start({path: 'trace/registering_user_trace.har' })
 		//Arrange
 		await page.goto('http://localhost:8080/register', { timeout: 30000, waitUntil: 'load'})
 		//Act
@@ -217,8 +249,6 @@ describe('Login', () => {
 
 		expect(image).toMatchImageSnapshot()
 
-		//await page.tracing.stop()
-		//await har.stop()
 		done()
 	}, 16000)
 
@@ -237,10 +267,48 @@ describe('Login', () => {
 
 		const image = await page.screenshot()
 
-		expect(image).toMatchImageSnapshot() 
+		expect(image).toMatchImageSnapshot()
 
-		//await page.tracing.stop()
-		//await har.stop()
+		done()
+	}, 16000)
+
+	test('It should throw an error if incorrect password is used', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'wrongpassword')
+		await page.click('input[type=submit')
+
+		await page.waitForSelector('p[id=message]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
+			.toBe('invalid password for account "Zahed"')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('It should throw an error if nothing is entered', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', '')
+		await page.type('input[name=pass]', '')
+		await page.click('input[type=submit')
+
+		await page.waitForSelector('p[id=message]')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('p[id=message]').innerText ) )
+			.toBe('username "" not found')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
 		done()
 	}, 16000)
 })

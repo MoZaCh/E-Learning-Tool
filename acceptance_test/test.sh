@@ -2,7 +2,7 @@
 
 set -e
 echo hello
-mkdir -p screenshots
+mkdir -p __image_snapshots__
 # [ ! -d "node_modules" ] && echo "INSTALLING MODULES" && npm install
 cd ../front_end_service/
 node index.js&
