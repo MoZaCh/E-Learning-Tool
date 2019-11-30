@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <!-- Circles that indicate which question and how the total number of questions -->
+  <!-- Circles at the bottom of each screen that indicate which question and the total number of questions -->
   <div style="text-align:center;margin-top:40px;">
     <span class="step"></span>
     <span class="step"></span>
@@ -56,8 +56,8 @@ displayQuestionTab(currentQuestion); // Display the current tab
 
 function displayQuestionTab(curQuestionTab) {
   //Function will present the specific question currently on
-  var x = document.getElementsByClassName("tab");
-  x[curQuestionTab].style.display = "block";
+  var currentScreen = document.getElementsByClassName("tab");
+  currentScreen[curQuestionTab].style.display = "block";
   //Block of if/else statements to display the correct buttons next/back depending on the question
   if (curQuestionTab == 0) {
     document.getElementById("backBtn").style.display = "none"; 
@@ -65,7 +65,7 @@ function displayQuestionTab(curQuestionTab) {
   else {
     document.getElementById("backBtn").style.display = "inline";
   }
-  if (curQuestionTab == (x.length - 1)) {
+  if (curQuestionTab == (currentScreen.length - 1)) {
     document.getElementById("nxtBtn").innerHTML = "Submit";
   } 
   else {
@@ -76,15 +76,15 @@ function displayQuestionTab(curQuestionTab) {
 
 function nextPrev(curQuestionTab) {
   //Function that works out the question to display
-  var x = document.getElementsByClassName("tab");
+  var currentScreen = document.getElementsByClassName("tab");
   //If any question is left blank then it will exit the function
   if (curQuestionTab == 1 && !quizValidate()) return false;
   //The current question is hidden
-  x[currentQuestion].style.display = "none";
+  currentScreen[currentQuestion].style.display = "none";
   //Add or minue the current question by 1:
   currentQuestion = currentQuestion + curQuestionTab;
   //If end of the quiz then show the submit button
-  if (currentQuestion >= x.length) {
+  if (currentQuestion >= currentScreen.length) {
     //Allows for the quiz to be submitted
     document.getElementById("quizForm").submit();
     return false;
@@ -103,12 +103,12 @@ function quizValidate() {
 
 function showQuestionNum(curQuestionTab) {
   // This function removes the "active" class of all steps...
-  var i, x = document.getElementsByClassName("step");
-  for (i = 0; i < x.length; i++) {
-    x[i].className = x[i].className.replace(" active", "");
+  var i, currentScreen = document.getElementsByClassName("step");
+  for (i = 0; i < currentScreen.length; i++) {
+    currentScreen[i].className = currentScreen[i].className.replace(" active", "");
   }
   // Changes the current tab to an active class
-  x[curQuestionTab].className += " active";
+  currentScreen[curQuestionTab].className += " active";
 }
 </script>
 
