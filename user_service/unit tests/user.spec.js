@@ -399,6 +399,17 @@ describe('userDetails()', () => {
 		//Assert
 		done()
 	})
+
+	test('Should throw an error if 0.0 is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.userDetails(0.0) )
+			.rejects.toEqual( Error('"0" does not exist') )
+		//Assert
+		done()
+	})
 })
 
 describe('updateDetails()', () => {
@@ -513,6 +524,16 @@ describe('updateDetails()', () => {
 			.rejects.toEqual( Error('"-1" does not exist') )
 		done()
 	})
+
+	test('Should throw an error if 0.0 is passed as a parameter', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect(account.updateDetails(0.0))
+			.rejects.toEqual( Error('"0" does not exist') )
+		done()
+	})
 })
 
 describe('deleteUser()', () => {
@@ -590,6 +611,16 @@ describe('deleteUser()', () => {
 			.rejects.toEqual( Error('"-1" does not exist') )
 		done()
 	})
+
+	test('Should throw an error if 0.0 is passed ', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect(account.deleteUser(0.0))
+			.rejects.toEqual( Error('"0" does not exist') )
+		done()
+	})
 })
 
 describe('checkUser()', () => {
@@ -653,6 +684,16 @@ describe('checkUser()', () => {
 		//Arrange & Assert
 		await expect(account.checkUser(-1))
 			.rejects.toEqual( Error('username "-1" not found') )
+		done()
+	})
+
+	test('Should throw an error if 0.0 is passed as username', async done => {
+		expect.assertions(1)
+		//Act
+		const account = await new Accounts()
+		//Arrange & Assert
+		await expect(account.checkUser(0.0))
+			.rejects.toEqual( Error('username "0" not found') )
 		done()
 	})
 })

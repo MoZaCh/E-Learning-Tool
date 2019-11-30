@@ -253,6 +253,16 @@ describe('viewQuiz()', () => {
 		done()
 	})
 
+	test('Should throw an error if input is 0.0', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.viewQuiz(0.0) )
+			.rejects.toEqual( Error('Invalid input') )
+		done()
+	})
+
 	test('Should throw an error if input is an integer -1', async done => {
 		expect.assertions(1)
 		//Arrange
