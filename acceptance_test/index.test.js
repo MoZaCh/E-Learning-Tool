@@ -7,7 +7,7 @@ const shell = require('shelljs')
 
 const width = 800
 const height = 600
-const delayMS = 45
+const delayMS = 5
 
 let browser
 let page
@@ -873,6 +873,114 @@ describe('CSS Page', () => {
 		//Assert
 		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
 			.toBe('Quiz Result')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+})
+
+describe('Logout', () => {
+
+	test('Should be able to logout from the homepage', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'Hello')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		await page.click('a[class=notactive]')
+		await page.waitForSelector('h1')
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Home')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Should be able to logout from the git page', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'Hello')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		await page.waitForSelector('h1')
+		await page.click('button[id=git]')
+
+		await page.click('a[class=notactive]')
+		await page.waitForSelector('h1')
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Home')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Should be able to logout from the html page', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'Hello')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		await page.waitForSelector('h1')
+		await page.click('button[id=html]')
+
+		await page.click('a[class=notactive]')
+		await page.waitForSelector('h1')
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Home')
+
+		const image = await page.screenshot()
+
+		expect(image).toMatchImageSnapshot()
+
+		done()
+	}, 16000)
+
+	test('Should be able to logout from the css page', async done => {
+		//Arrange
+		await page.goto('http://localhost:8080/login', { timeout: 30000, waitUntil: 'load'})
+		//Act
+		await page.type('input[name=user]', 'Zahed')
+		await page.type('input[name=pass]', 'Hello')
+		await page.click('input[type=submit')
+		await page.waitForSelector('h1')
+		//Assert
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Welcome Zahed')
+
+		await page.waitForSelector('h1')
+		await page.click('button[id=css]')
+
+		await page.click('a[class=notactive]')
+		await page.waitForSelector('h1')
+		expect( await page.evaluate( () => document.querySelector('h1').innerText ) )
+			.toBe('Home')
 
 		const image = await page.screenshot()
 
