@@ -48,6 +48,39 @@ describe('checkParameters()', () => {
 			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
 		done()
 	})
+
+	test('It should throw an error if the second key-value contains undefined', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {question1: 'Ans', question2: undefined}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.checkParameters(data) )
+			.rejects.toEqual( Error('Missing Value'))
+		done()
+	})
+
+	test('It should throw an error if the second key-value contains empty string', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {question1: 'Ans', question2: ''}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.checkParameters(data) )
+			.rejects.toEqual( Error('Missing Value'))
+		done()
+	})
+
+	test('It should not return if successfully iterated through object', async done => {
+		expect.assertions(0)
+		//Arrange
+		const data = {question1: 'Ans', question2: 'ans2'}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.checkParameters(data) )
+			.resolves
+		done()
+	})
 })
 
 describe('getRandomInt()', () => {
@@ -71,6 +104,17 @@ describe('getRandomInt()', () => {
 		const data = await quiz.getRandomInt(10, 6)
 		//Assert
 		expect(data.length).toEqual(6)
+		done()
+	})
+
+	test('Should return a set number of unique integers matching cycle 1', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act
+		const data = await quiz.getRandomInt(10, 1)
+		//Assert
+		expect(data.length).toEqual(1)
 		done()
 	})
 
@@ -135,6 +179,36 @@ describe('getRandomInt()', () => {
 			.rejects.toEqual( Error('Missing cycle') )
 		done()
 	})
+
+	test('if cycle is an empty string it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getRandomInt(5,'') )
+			.rejects.toEqual( Error('Missing cycle') )
+		done()
+	})
+
+	test('if max is an empty string it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getRandomInt('',5) )
+			.rejects.toEqual( Error('Missing max') )
+		done()
+	})
+
+	test('if both parameters are empty strings it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getRandomInt('','') )
+			.rejects.toEqual( Error('Missing max') )
+		done()
+	})
 })
 
 describe('viewQuiz()', () => {
@@ -159,12 +233,32 @@ describe('viewQuiz()', () => {
 		done()
 	})
 
-	test('Should throw an error if input is a integer', async done => {
+	test('Should throw an error if input is an integer 1', async done => {
 		expect.assertions(1)
 		//Arrange
 		const quiz = await new Quiz()
 		//Act & Assert
 		await expect( quiz.viewQuiz(1) )
+			.rejects.toEqual( Error('Invalid input') )
+		done()
+	})
+
+	test('Should throw an error if input is an integer 0', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.viewQuiz(0) )
+			.rejects.toEqual( Error('Invalid input') )
+		done()
+	})
+
+	test('Should throw an error if input is an integer -1', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.viewQuiz(-1) )
 			.rejects.toEqual( Error('Invalid input') )
 		done()
 	})
@@ -556,6 +650,28 @@ describe('deleteQuizQuestion()', () => {
 		done()
 	})
 
+	test('It should throw an error if the second value of the object is an empty string', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {topic: 'git', question: ''}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.deleteQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('It should throw an error if the second value of the object is undefined', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {topic: 'git', question: undefined}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.deleteQuizQuestion(data) )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
 	test('If no object is passed it should throw an error ', async done => {
 		expect.assertions(1)
 		//Arrange
@@ -590,11 +706,22 @@ describe('getScore()', () => {
 		done()
 	})
 
-	test('If object contains missing value', async done => {
+	test('If object contains missing value should throw an error', async done => {
 		expect.assertions(1)
 		//Arrange
 		const quiz = await new Quiz()
 		const obj = {first: ''}
+		//Act & Assert
+		await expect( quiz.getScore(obj, 'git') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('It should throw an error if the second key/value in the object contains an empty string', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		const obj = {first: 'user', surname: ''}
 		//Act & Assert
 		await expect( quiz.getScore(obj, 'git') )
 			.rejects.toEqual( Error('Missing Value') )
@@ -606,6 +733,17 @@ describe('getScore()', () => {
 		//Arrange
 		const quiz = await new Quiz()
 		const obj = {first: undefined}
+		//Act & Assert
+		await expect( quiz.getScore(obj, 'git') )
+			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('It should throw an error if the second key/value in the object contains undefined', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		const obj = {first: 'user', surname: undefined}
 		//Act & Assert
 		await expect( quiz.getScore(obj, 'git') )
 			.rejects.toEqual( Error('Missing Value') )
@@ -636,6 +774,26 @@ describe('getScore()', () => {
 			.resolves.toBeTruthy()
 		const result = await quiz.getScore(obj, 'git')
 		expect(result.score).toBe('10%')
+		expect(result.outcome).toBe('Fail')
+		done()
+	})
+
+	test('Should return 20% and fail as percentage below 40% pass mark', async done => {
+		expect.assertions(3)
+		//Arrange
+		const quiz = await new Quiz()
+		const obj ={'q1?': 'a1', 'q2?': 'a2', 'q3?': 'a3', 'q4?': 'a4'}
+		//Act & Assert
+		let data = {topic: 'git', question: 'q1?', answer: 'a1', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
+		data = {topic: 'git', question: 'q2?', answer: 'a2', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
+		data = {topic: 'git', question: 'q3?', answer: 'a3', rand1: 'g1', rand2: 'g2', rand3: 'g3'}
+		await quiz.setQuizQuestion(data)
+		await expect(quiz.setQuizQuestion(data) )
+			.resolves.toBeTruthy()
+		const result = await quiz.getScore(obj, 'git')
+		expect(result.score).toBe('20%')
 		expect(result.outcome).toBe('Fail')
 		done()
 	})
@@ -685,6 +843,86 @@ describe('setQuizResults()', () => {
 		  .rejects.toEqual( Error('Missing Value') )
 		done()
 	  })
+
+	  test('If the first parameter contains an empty stirng it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('','a','b','c') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the second parameter contains an empty stirng it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('a','','b','c') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the third parameter contains an empty stirng it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('a','b','','c') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the fourth parameter contains an empty stirng it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('a','b','c','') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the first parameter contains undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult(undefined,'b','c','d') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the second parameter contains undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('a',undefined,'c','d') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the third parameter contains undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('a','b',undefined,'d') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If the fourth parameter contains undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizResult('a','b','c',undefined) )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
 })
 
 describe('getQuizResults()', () => {
@@ -704,12 +942,47 @@ describe('getQuizResults()', () => {
 		done()
 	})
 
+	test('If the user does exist it should pull users score', async done => {
+		expect.assertions(3)
+		//Arrange
+		const accounts = await new Accounts()
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect(accounts.register('user', 'user', 'user', 'user') )
+			.resolves.toBeTruthy()
+		await expect(quiz.setQuizResult('user','git','30%', 'Fail'))
+			.resolves.toBeTruthy()
+		await expect( quiz.getQuizResult('user') )
+			.resolves.toEqual([{'id': 1, 'outcome': 'Fail', 'score': '30%', 'topic': 'git', 'user': 'user'}])
+		done()
+	})
+
 	test('If a parameter is not passed it should throw error', async done => {
 		expect.assertions(1)
 		//Arrange
 		const quiz = await new Quiz()
 		//Act & Assert
 		await expect( quiz.getQuizResult() )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If a parameter passed is an empty string it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getQuizResult('') )
+		  .rejects.toEqual( Error('Missing Value') )
+		done()
+	  })
+
+	  test('If a parameter passed contains undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getQuizResult('') )
 		  .rejects.toEqual( Error('Missing Value') )
 		done()
 	  })

@@ -13,7 +13,7 @@
 		<center>
 		<h1>Create an Account</h1>
 		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
+ 			<p id="msg" class="msg">{{msg}}</p>
 		{{/if}}
 		<form action="/register" enctype="multipart/form-data" method="post">
 			<p>First Name:<br /><input id="firstName" type="text" name="firstName" placeholder="firstname" value=""></p>

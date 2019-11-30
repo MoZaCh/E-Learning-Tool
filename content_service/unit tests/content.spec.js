@@ -3,6 +3,74 @@
 
 const Content = require('../modules/content.js' )
 
+describe('validateInput()', () => {
+
+	test('If empty object is passed it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {}
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Empty Object') )
+		done()
+	})
+
+	test('If an object contains an empty value it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {name: ''}
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Missing parameters') )
+		done()
+	})
+
+	test('If an object contains an undefined value it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {name: undefined}
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Missing parameters') )
+		done()
+	})
+
+	test('If the second key in the object contains an undefined value it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {name: 'hello', surname: undefined }
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Missing parameters') )
+		done()
+	})
+
+	test('if object is undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		//Act & Asserts
+		await expect( content.validateInput() )
+			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
+		done()
+	})
+
+	test('Should do nothing if object sucessfully passed', async done => {
+		expect.assertions(0)
+		//Arrange
+		const data = {name: 'test', surname: 'surname'}
+		const content = await new Content()
+		//Act & Asserts
+		await expect( content.validateInput(data) )
+			.resolves
+		done()
+	})
+})
+
 describe('getContent()', () => {
 
 	test('Should retrieve content from the database successfully', async done => {
