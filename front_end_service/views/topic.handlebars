@@ -19,8 +19,8 @@
 <body>
 
 <div class="jumbotron text-center">
-  <h1>GIT</h1>
-  <p>Learn Git In Minutes</p>
+  <h1 style="text-transform:capitalize">{{topic}}</h1>
+  <p>Learn {{topic}} In Minutes</p>
   <div>
     <ul>
       <li><a href="/homepage">Home</a></li>
@@ -34,14 +34,14 @@
 <div class="container">
   <div class="topicbox">
     <div>
-      <h2>{{h1}}</h2>
-      <p>{{para1}}</p>
+      <h2 id="heading1">{{h1}}</h2>
+      <p id="paragraph1">{{para1}}</p>
 
-      <h2>{{h2}}</h2>
-      <p>{{para2}}</p>
+      <h2 id="heading2">{{h2}}</h2>
+      <p id="paragraph2">{{para2}}</p>
 
-      <h2>{{h3}}</h2>
-      <p>{{para3}}</p>
+      <h2 id="heading3">{{h3}}</h2>
+      <p id="paragraph3">{{para3}}</p>
       <br>
       {{#if nxtP}}
         {{#if img1}}
@@ -63,13 +63,13 @@
       {{#if nxtP }}
         <form action ="/content" method="post">
           <input type="Text" name="page" value="{{nxtP}}" hidden>
-          <button type="submit" name="topic" value="{{topic}}" class="btn btn-success" style="float: right;">Next</button>
+          <button id="btnNext" type="submit" name="topic" value="{{topic}}" class="btn btn-success" style="float: right;">Next</button>
         </form>
       {{/if}}
       
         <div align="center">
           <form action="/quiz" method="post">
-          <button type="submit" class="btn btn-warning" name="topic" value="{{topic}}">Test Your Understanding</button>
+          <button id="quiz" type="submit" class="btn btn-warning" name="topic" value="{{topic}}">Test Your Understanding</button>
         </form>
       </div>
       <br>

@@ -13,14 +13,13 @@
 		<center>
 		<h1>Create an Account</h1>
 		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
+ 			<p id="msg" class="msg">{{msg}}</p>
 		{{/if}}
 		<form action="/register" enctype="multipart/form-data" method="post">
-			<p>First Name:<br /><input type="text" name="firstName" placeholder="firstname" value=""></p>
-			<p>Surname:<br /><input type="text" name="surname" placeholder="surname" value=""></p>
-			<p>Username:<br /><input type="text" name="user" placeholder="username" value=""></p>
-            <p>Password:<br /><input type="password" name="pass" placeholder="password" value=""></p>
-			<p>Profile Picture:<br /><input type="file" name="avatar"></p>
+			<p>First Name:<br /><input id="firstName" type="text" name="firstName" placeholder="firstname" value=""></p>
+			<p>Surname:<br /><input id="surname" type="text" name="surname" placeholder="surname" value=""></p>
+			<p>Username:<br /><input id="username" type="text" name="user" placeholder="username" value=""></p>
+            <p>Password:<br /><input id="password" type="password" name="pass" placeholder="password" value=""></p>
 			<p><input type="submit" value="Create"></p>
 		</form>
 		</center>

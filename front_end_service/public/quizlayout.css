@@ -3,11 +3,13 @@
   }
   
   body {
-    background-color: #f1f1f1;
+    background-color: rgb(255,255,255);
   }
   
   #quizForm {
-    background-color: #ffffff;
+    background-color: rgb(235,235,235);
+    border-radius: 25px;
+    border: 10px solid rgb(51,51,51);
     margin: 100px auto;
     font-family: Raleway;
     padding: 40px;
@@ -38,7 +40,7 @@
   }
   
   button {
-    background-color: #4CAF50;
+    background-color: rgb(67, 123, 178);
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -52,7 +54,7 @@
   }
   
   #prevBtn {
-    background-color: #bbbbbb;
+    background-color: rgb(191, 98, 90);
   }
   
   /* Make circles that indicate the steps of the form: */

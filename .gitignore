@@ -4,3 +4,4 @@ node_modules/
 coverage/
 screenshots/*
 docs/
+__image_snapshots__

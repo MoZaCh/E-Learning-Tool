@@ -62,13 +62,6 @@ module.exports = class User {
 		}
 	}
 
-	// async uploadPicture(path, mimeType) {
-	// 	const extension = mime.extension(mimeType)
-	// 	console.log(`path: ${path}`)
-	// 	console.log(`extension: ${extension}`)
-	// 	//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
-	// }
-
 	/**
 	 * Takes username and password and checks that both match a record in the database
 	 * @param {string} username - The username of a specific username
@@ -92,6 +85,12 @@ module.exports = class User {
 		}
 	}
 
+	/**
+	 * Takes username as parameter and returns the user information if the user exists
+	 * @param {string} username - Takes a string username
+	 * @throws {Error} - "Username" does not exist, if the username does not match a record in the database
+	 * @returns {Object} - Returns an object containing key-value pairs of user information
+	 */
 	async userDetails(username) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
@@ -106,6 +105,13 @@ module.exports = class User {
 		}
 	}
 
+	/**
+	 * Takes parameters username, firstname and surname to update user details and returns true if successful
+	 * @param {string} username - Username a string which is used to find the user in the database
+	 * @param {string} firstName - Firstname a string which is used to update the user's first name
+	 * @param {string} surname - Surname a string which is passed so that the user's surname can be updated
+	 * @throws {Error} - "Username" does not exist, if the user does not exist in the database
+	 */
 	async updateDetails(username, firstName, surname) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
@@ -119,6 +125,12 @@ module.exports = class User {
 		}
 	}
 
+	/**
+	 * Function which takes a username and deletes that specific user
+	 * @param {string} username - Takes parameter user string
+	 * @throws {Error} - "Username" does not exist, if username does not exist
+	 * @returns {boolean} - If username provided has been succesfully deleted
+	 */
 	async deleteUser(username) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
@@ -132,6 +144,12 @@ module.exports = class User {
 		}
 	}
 
+	/**
+	 * Function which takes parameter user and checks that it exists in the database
+	 * @param {string} user - Takes parameter user string
+	 * @throws {Error} - 'Username not found', if user does not exist in the database
+	 * @returns {boolean} - If user does exist in the database, it returns true
+	 */
 	async checkUser(user) {
 		const sql = `SELECT count(*) AS count FROM users WHERE user="${user}";`
 		const records = await this.db.get(sql)
@@ -139,6 +157,11 @@ module.exports = class User {
 		return true
 	}
 
+	/**
+	 * Function which takes an object and adds an admin to the database
+	 * @param {Object} ctn - Takes an object which includes admin information
+	 * @returns {boolean} - True, if user made succesfully
+	 */
 	async createAdmin(ctn) {
 		const sql = `INSERT INTO users(user, pass, firstName, surname, type) 
 		VALUES("${ctn.user}", "${ctn.pass}", "${ctn.firstName}", "${ctn.surname}", "admin");`

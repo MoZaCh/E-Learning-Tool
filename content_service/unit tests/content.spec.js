@@ -3,10 +3,79 @@
 
 const Content = require('../modules/content.js' )
 
+describe('validateInput()', () => {
+
+	test('If empty object is passed it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {}
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Empty Object') )
+		done()
+	})
+
+	test('If an object contains an empty value it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {name: ''}
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Missing parameters') )
+		done()
+	})
+
+	test('If an object contains an undefined value it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {name: undefined}
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Missing parameters') )
+		done()
+	})
+
+	test('If the second key in the object contains an undefined value it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		const obj = {name: 'hello', surname: undefined }
+		//Act & Assert
+		await expect( content.validateInput(obj) )
+			.rejects.toEqual( Error('Missing parameters') )
+		done()
+	})
+
+	test('if object is undefined it should throw an error', async done => {
+		expect.assertions(1)
+		//Arrange
+		const content = await new Content()
+		//Act & Asserts
+		await expect( content.validateInput() )
+			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
+		done()
+	})
+
+	test('Should do nothing if object sucessfully passed', async done => {
+		expect.assertions(0)
+		//Arrange
+		const data = {name: 'test', surname: 'surname'}
+		const content = await new Content()
+		//Act & Asserts
+		await expect( content.validateInput(data) )
+			.resolves
+		done()
+	})
+})
+
 describe('getContent()', () => {
 
 	test('Should retrieve content from the database successfully', async done => {
 		expect.assertions(3)
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -18,10 +87,12 @@ describe('getContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act
 		await content.setContent(data)
 		data = {topic: 'git',
 			page: '1'}
 		const result = await content.getContent(data)
+		//Assert
 		expect(result.h1).toEqual('heading1')
 		expect(result.h2).toEqual('heading2')
 		expect(result.page).toEqual('1')
@@ -30,8 +101,10 @@ describe('getContent()', () => {
 
 	test('Should throw an error if no content is available', async done => {
 		expect.assertions(1)
+		//Arrange
 		const data = {topic: 'git', page: '1'}
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getContent(data) )
 			.rejects.toEqual( Error('No Content Available') )
 		done()
@@ -39,8 +112,10 @@ describe('getContent()', () => {
 
 	test('Should throw an error if no object is empty', async done => {
 		expect.assertions(1)
+		//Arrange
 		const data = {}
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getContent(data) )
 			.rejects.toEqual( Error('Empty Object') )
 		done()
@@ -48,8 +123,10 @@ describe('getContent()', () => {
 
 	test('Should throw an error if object contains an empty string value', async done => {
 		expect.assertions(1)
+		//Arrange
 		const data = {topic: ''}
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getContent(data) )
 			.rejects.toEqual( Error('Missing parameters') )
 		done()
@@ -57,8 +134,10 @@ describe('getContent()', () => {
 
 	test('Should throw an error if object contains a undefined value', async done => {
 		expect.assertions(1)
+		//Arrange
 		const data = {topic: undefined}
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getContent(data) )
 			.rejects.toEqual( Error('Missing parameters') )
 		done()
@@ -66,7 +145,9 @@ describe('getContent()', () => {
 
 	test('Should throw an error if undefined is passed instead of an object', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getContent(undefined) )
 			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
 		done()
@@ -74,7 +155,9 @@ describe('getContent()', () => {
 
 	test('Should throw an error if null value is passed instead of object', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getContent(null) )
 			.rejects.toEqual( Error('Cannot convert undefined or null to object') )
 		done()
@@ -85,6 +168,7 @@ describe('setContent()', () => {
 
 	test('Should return true if database successfully updated', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {
 			topic: 'git',
@@ -96,6 +180,7 @@ describe('setContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		done()
@@ -103,6 +188,7 @@ describe('setContent()', () => {
 
 	test('Should add content to the database successfully', async done => {
 		expect.assertions()
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -114,6 +200,7 @@ describe('setContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {topic: 'git', page: '1'}
@@ -124,6 +211,7 @@ describe('setContent()', () => {
 
 	test('Should succesfully get the paragraph newly set', async done => {
 		expect.assertions(2)
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -135,6 +223,7 @@ describe('setContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {topic: 'git', page: '1'}
@@ -145,28 +234,35 @@ describe('setContent()', () => {
 
 	test('Should throw an error if object is empty', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {}
+		//Act & Assert
 		await expect(content.setContent(data) )
-			.rejects.toEqual( Error('Empty Object') )
+			.rejects.toThrow(new Error('SQLITE_ERROR: no such table: undefined') )
 		done()
 	})
 
 	test('Should throw an error if object is undefined', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {undefined}
+		//Act & Assert
 		await expect(content.setContent(data) )
-			.rejects.toEqual( Error('Missing parameters') )
+			.rejects.toThrow(new Error('SQLITE_ERROR: no such table: undefined') )
 		done()
 	})
 
 	test('Should throw an error if object is an empty string', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {'': ''}
+		//Act & Assert
 		await expect(content.setContent(data) )
-			.rejects.toEqual( Error('Missing parameters') )
+			.rejects.toThrow(new Error('SQLITE_ERROR: no such table: undefined') )
+
 		done()
 	})
 })
@@ -175,6 +271,7 @@ describe('updateContent()', () => {
 
 	test('Should update content successfully and return true', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {
 			topic: 'git',
@@ -186,6 +283,7 @@ describe('updateContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.updateContent(data) )
 			.resolves.toBeTruthy()
 		done()
@@ -193,6 +291,7 @@ describe('updateContent()', () => {
 
 	test('Should check the object before updating the database', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {
 			topic: 'git',
@@ -204,6 +303,7 @@ describe('updateContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.updateContent(data) )
 			.resolves.toBeTruthy()
 		done()
@@ -214,6 +314,7 @@ describe('viewContent()', () => {
 
 	test('Should retreive the correct record based on id and topic', async done => {
 		expect.assertions(2)
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -225,6 +326,7 @@ describe('viewContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {
@@ -238,11 +340,13 @@ describe('viewContent()', () => {
 
 	test('Should throw an error if no content exists', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
 		const data = {
 			topic: 'git',
 			id: '1'
 		}
+		//Act & Assert
 		await expect(content.viewContent(data) )
 			.rejects.toEqual( Error('No Content Available'))
 		done()
@@ -253,6 +357,7 @@ describe('getAllContent()', () => {
 
 	test('Should return all the content form all 3 databases', async done => {
 		expect.assertions(6)
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -264,6 +369,7 @@ describe('getAllContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {
@@ -299,7 +405,9 @@ describe('getAllContent()', () => {
 
 	test('Should throw an error if the tables are empty', async done => {
 		expect.assertions(1)
+		//Arrange
 		const content = await new Content()
+		//Act & Assert
 		await expect(content.getAllContent() )
 			.rejects.toEqual( Error('No Content Available') )
 		done()
@@ -310,6 +418,7 @@ describe('getContent()', () => {
 
 	test('Should return content for a specific topic and page', async done => {
 		expect.assertions(7)
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -321,6 +430,7 @@ describe('getContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {
@@ -333,6 +443,7 @@ describe('getContent()', () => {
 			para3: 'paragraph3',
 			page: '2'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {
@@ -345,6 +456,7 @@ describe('getContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {
@@ -370,6 +482,7 @@ describe('getContent()', () => {
 
 	test('Should return content for a specific topic and page without any images', async done => {
 		expect.assertions(7)
+		//Arrange
 		const content = await new Content()
 		let data = {
 			topic: 'git',
@@ -381,6 +494,7 @@ describe('getContent()', () => {
 			para3: 'paragraph3',
 			page: '1'
 		}
+		//Act & Assert
 		await expect(content.setContent(data) )
 			.resolves.toBeTruthy()
 		data = {

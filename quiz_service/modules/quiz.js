@@ -3,8 +3,8 @@
 
 const sqlite = require('sqlite-async')
 
-const Accounts = require('../../user_service/modules/user.js')
-const accountsDB = '../../user_service/user.db'
+//const Accounts = require('../../user_service/modules/user.js')
+//const accountsDB = '../../user_service/user.db'
 
 module.exports = class Quiz {
 
@@ -19,6 +19,9 @@ module.exports = class Quiz {
 				user TEXT, topic TEXT, score TEXT, outcome TEXT);`
 			await this.db.run(sql)
 			sql = `CREATE TABLE IF NOT EXISTS html (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT,
+				answer TEXT, random1 TEXT, random2 TEXT, random3 TEXT);`
+			await this.db.run(sql)
+			sql = `CREATE TABLE IF NOT EXISTS css (id INTEGER PRIMARY KEY AUTOINCREMENT,question TEXT,
 				answer TEXT, random1 TEXT, random2 TEXT, random3 TEXT);`
 			await this.db.run(sql)
 			return this
@@ -46,8 +49,8 @@ module.exports = class Quiz {
 	 * @returns {Array} - Returns an array 'num' with unique numbers
 	 */
 	async getRandomInt(max, cycle) {
-		if (isNaN(max) | typeof max === 'undefined') throw new Error('Missing max')
-		if (isNaN(cycle) | typeof cycle === 'undefined') throw new Error('Missing cycle')
+		if (isNaN(max) | typeof max === 'undefined' | max === '') throw new Error('Missing max')
+		if (isNaN(cycle) | typeof cycle === 'undefined' | cycle === '') throw new Error('Missing cycle')
 		const num = []
 		let i = 0
 		while (i < cycle) {
@@ -63,7 +66,8 @@ module.exports = class Quiz {
 	/**
 	 * Gets all the records from the database
 	 * @param {string} topic - Takes a string specifies the table to get the data from
-	 * @returns {Array} -  Returns an array of objects
+	 * @throws {Error} - "Invalid input", if topic is an empty string or undefined
+	 * @returns {Array} -  Returns an array of objects - questions and answers
 	 */
 	async viewQuiz(topic) {
 		if (!isNaN(topic) | topic === '' | typeof topic === 'undefined') throw new Error('Invalid input')
@@ -105,9 +109,8 @@ module.exports = class Quiz {
 
 	/**
 	 * Adds a new question and answer to the topic table
-	 * @param {string} topic - Takes a string which specifies the table
-	 * @param {string} question - Takes a string which contains the question to be seted
-	 * @param {string} answer - Takes a string which contains the answer
+	 * @param {Object} ctn - Takes an object containing topic, question and answers
+	 * @returns {boolean} - Returns true, if succsefully added to database
 	 */
 	async setQuizQuestion(ctn) {
 		try {
@@ -162,8 +165,10 @@ module.exports = class Quiz {
 
 	/**
 	 * Takes input object and table name and returns the score
-	 * @param {Object} quizObj -
-	 * @param {string} topic -
+	 * @param {Object} quizObj - Contains the questions and answers that the user attempted
+	 * @param {string} topic - Contains the topic name
+	 * @throws {Error} - 'Invalid data provided, if object is empty
+	 * @returns {Object} - Containing the score and the outcome, whether is it a pass or fail
 	 */
 	async getScore(quizObj, topic) {
 		try {
@@ -175,13 +180,21 @@ module.exports = class Quiz {
 				const eachRow = await this.db.get(sql)
 				if (eachRow.count === 1) score++
 			}
-			const result = this.checkIfFail(score)
+			const result = await this.checkIfFail(score)
 			return result
 		} catch(err) {
 			throw err
 		}
 	  }
 
+	  /**
+	   * Function which takes parameters user, topic, score and outcome and sets the quiz result in the database
+	   * @param {string} user - Takes parameter user string which specifies the user
+	   * @param {string} topic - Takes parameter topic string which specifies the table & topic
+	   * @param {string} score - Takes parameter score string which indicates the quiz score
+	   * @param {string} outcome - Takes parameter outcome string which indicates whether use has passed or failed
+	   * @returns {boolean} - True, if succesffully added to the database
+	   */
 	  async setQuizResult(user, topic, score, outcome) {
 		  try {
 			const setQuizObj = {Username: user, Topic: topic, Score: score, Outcome: outcome}
@@ -195,10 +208,14 @@ module.exports = class Quiz {
 		  }
 	  }
 
+	  /**
+	   * Function which takes parameter user and gets all the quiz results related to that specific user
+	   * @param {string} user - Takes parameter user string which specifies the user
+	   * @returns {Object} - Returns key-value pairs of quiz result, if user exists in the database
+	   */
 	  async getQuizResult(user) {
 		  try {
-			const getQuizObj = {
-				Username: user}
+			const getQuizObj = {Username: user}
 			await this.checkParameters(getQuizObj)
 			const sql = `SELECT * FROM quizResults WHERE user="${user}";`
 			const records = await this.db.all(sql)
