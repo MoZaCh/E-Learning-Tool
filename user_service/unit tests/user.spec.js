@@ -69,6 +69,28 @@ describe('checkCredentials()', () => {
 			.resolves
 		done()
 	})
+
+	test('Should not return null if object is empty', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {}
+		const account = await new Accounts()
+		//Act & Asserts
+		await expect( account.checkCredentials(data) )
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('Should not return undefined if object is empty', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {}
+		const account = await new Accounts()
+		//Act & Asserts
+		await expect( account.checkCredentials(data) )
+			.rejects.not.toBe(undefined)
+		done()
+	})
 })
 
 describe('register()', () => {
@@ -267,6 +289,46 @@ describe('login()', () => {
 			.rejects.toEqual( Error('data and hash arguments required') )
 		done()
 	})
+
+	test('Should not return null if empty usernmae is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.login('', 'password') )
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('Should not return undefined if empty username is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.login('', 'password') )
+			.rejects.not.toBe(undefined)
+		done()
+	})
+
+	test('Should not return null if empty password is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.login('doej', '') )
+			.rejects.not.toBe(undefined)
+		done()
+	})
+
+	test('Should not return undefined if empty password is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.login('doej', '') )
+			.rejects.not.toBe(undefined)
+		done()
+	})
 })
 
 describe('userDetails()', () => {
@@ -399,6 +461,39 @@ describe('userDetails()', () => {
 		//Assert
 		done()
 	})
+
+	test('Should throw an error if 0.0 is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.userDetails(0.0) )
+			.rejects.toEqual( Error('"0" does not exist') )
+		//Assert
+		done()
+	})
+
+	test('Should not return null if something is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.userDetails('doej') )
+			.rejects.not.toBe(null)
+		//Assert
+		done()
+	})
+
+	test('Should not return undefined if something is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect( account.userDetails('doej') )
+			.rejects.not.toBe(undefined)
+		//Assert
+		done()
+	})
 })
 
 describe('updateDetails()', () => {
@@ -513,6 +608,36 @@ describe('updateDetails()', () => {
 			.rejects.toEqual( Error('"-1" does not exist') )
 		done()
 	})
+
+	test('Should throw an error if 0.0 is passed as a parameter', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect(account.updateDetails(0.0))
+			.rejects.toEqual( Error('"0" does not exist') )
+		done()
+	})
+
+	test('Should not return null if something does not exist', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect(account.updateDetails('doej'))
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('Should not return undefined if something does not exist', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect(account.updateDetails('doej'))
+			.rejects.not.toBe(undefined)
+		done()
+	})
 })
 
 describe('deleteUser()', () => {
@@ -590,6 +715,16 @@ describe('deleteUser()', () => {
 			.rejects.toEqual( Error('"-1" does not exist') )
 		done()
 	})
+
+	test('Should throw an error if 0.0 is passed ', async done => {
+		expect.assertions(1)
+		//Arrange
+		const account = await new Accounts()
+		//Act & Assert
+		await expect(account.deleteUser(0.0))
+			.rejects.toEqual( Error('"0" does not exist') )
+		done()
+	})
 })
 
 describe('checkUser()', () => {
@@ -653,6 +788,36 @@ describe('checkUser()', () => {
 		//Arrange & Assert
 		await expect(account.checkUser(-1))
 			.rejects.toEqual( Error('username "-1" not found') )
+		done()
+	})
+
+	test('Should throw an error if 0.0 is passed as username', async done => {
+		expect.assertions(1)
+		//Act
+		const account = await new Accounts()
+		//Arrange & Assert
+		await expect(account.checkUser(0.0))
+			.rejects.toEqual( Error('username "0" not found') )
+		done()
+	})
+
+	test('Should not return null if a parameter is passed', async done => {
+		expect.assertions(1)
+		//Act
+		const account = await new Accounts()
+		//Arrange & Assert
+		await expect(account.checkUser('doej'))
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('Should not return undefined if a parameter is passed', async done => {
+		expect.assertions(1)
+		//Act
+		const account = await new Accounts()
+		//Arrange & Assert
+		await expect(account.checkUser('doej'))
+			.rejects.not.toBe(undefined)
 		done()
 	})
 })
