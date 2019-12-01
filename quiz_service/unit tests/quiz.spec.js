@@ -81,6 +81,28 @@ describe('checkParameters()', () => {
 			.resolves
 		done()
 	})
+
+	test('It should not return null if invalid object is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.checkParameters(data) )
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('It should not return undefined if invalid object is passed', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.checkParameters(data) )
+			.rejects.not.toBe(undefined)
+		done()
+	})
 })
 
 describe('getRandomInt()', () => {
@@ -209,6 +231,26 @@ describe('getRandomInt()', () => {
 			.rejects.toEqual( Error('Missing max') )
 		done()
 	})
+
+	test('if both parameters are empty strings it should not return null', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getRandomInt('','') )
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('if both parameters are empty strings it should not return undefined', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.getRandomInt('','') )
+			.rejects.not.toBe(undefined)
+		done()
+	})
 })
 
 describe('viewQuiz()', () => {
@@ -280,6 +322,26 @@ describe('viewQuiz()', () => {
 		//Act & Assert
 		await expect( quiz.viewQuiz('1') )
 			.rejects.toEqual( Error('Invalid input') )
+		done()
+	})
+
+	test('Should not return null if invalid parameter', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.viewQuiz('1') )
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('Should not return undefined if invalid parameter', async done => {
+		expect.assertions(1)
+		//Arrange
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.viewQuiz('1') )
+			.rejects.not.toBe(undefined)
 		done()
 	})
 
@@ -525,6 +587,28 @@ describe('setQuizQuestion()', () => {
 		//Act & Assert
 		await expect( quiz.setQuizQuestion(data) )
 			.rejects.toEqual( Error('Missing Value') )
+		done()
+	})
+
+	test('If parameters are empty it should not return null', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.not.toBe(null)
+		done()
+	})
+
+	test('If parameters are empty it should not return undefined', async done => {
+		expect.assertions(1)
+		//Arrange
+		const data = {}
+		const quiz = await new Quiz()
+		//Act & Assert
+		await expect( quiz.setQuizQuestion(data) )
+			.rejects.not.toBe(undefined)
 		done()
 	})
 })
