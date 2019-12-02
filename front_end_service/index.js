@@ -40,11 +40,10 @@ const defaultPort = 8080
 const port = process.env.PORT || defaultPort
 
 /**
- * The secure home page.
+ * The website index page
  *
  * @name Home Page
- * @route {GET} /
- * @authentication This route requires cookie-based authentication.
+ * @route {GET} / - Renders the index page
  */
 router.get('/', async ctx => await ctx.render('index'))
 
@@ -52,7 +51,7 @@ router.get('/', async ctx => await ctx.render('index'))
  * The user registration page.
  *
  * @name Register Page
- * @route {GET} /register
+ * @route {GET} /register - Renders the register page
  */
 router.get('/register', async ctx => {
 	const data = {}
@@ -65,7 +64,7 @@ router.get('/register', async ctx => {
  * The script to process new user registrations.
  *
  * @name Register Script
- * @route {POST} /register
+ * @route {POST} /register - Registers a new user and redirects the user
  */
 router.post('/register', koaBody, async ctx => {
 	try {
@@ -78,6 +77,11 @@ router.post('/register', koaBody, async ctx => {
 	}
 })
 
+/**
+ * The user login page
+ * @name Login page
+ * @route {GET} - Render the login page
+ */
 router.get('/login', async ctx => {
 	const data = {}
 	if(ctx.query.msg) data.msg = ctx.query.msg
@@ -85,6 +89,11 @@ router.get('/login', async ctx => {
 	await ctx.render('login', data)
 })
 
+/**
+ * The script to process login
+ * @name Login script
+ * @route {POST} /login - Logs the user in
+ */
 router.post('/login', async ctx => {
 	try {
 		const body = ctx.request.body
@@ -103,11 +112,21 @@ router.post('/login', async ctx => {
 	}
 })
 
+/**
+ * User logout page
+ * @name Logout page
+ * @route {GET} - Redirects the user to the index page after logout / Protected route
+ */
 router.get('/logout', auth, async ctx => {
 	ctx.session.authorised = null, ctx.cookies.set('authorization',''), ctx.cookies.set('type', '')
 	ctx.redirect('/?msg=you are now logged out')
 })
 
+/**
+ * User Home page
+ * @name Homa page
+ * @route {GET} - Renders the homepage / Protected route
+ */
 router.get('/homepage', auth, async ctx => {
 	try {
 		const frontController = await new FrontEnd()
@@ -122,6 +141,11 @@ router.get('/homepage', auth, async ctx => {
 	}
 })
 
+/**
+ * The script to process view content
+ * @name Content page
+ * @route {POST} /content - Script that gets the content / renders the content page / Protected route
+ */
 router.post('/content', auth, async ctx => {
 	const body = ctx.request.body
 	const content = await new Content(contentDB)
@@ -129,6 +153,11 @@ router.post('/content', auth, async ctx => {
 	await ctx.render('topic', data)
 })
 
+/**
+ * Admin panel page
+ * @name Adminpanel page
+ * @route {GET} - Renders the adminpanel / Protected route
+ */
 router.get('/adminpanel', auth, authorization, async ctx => {
 	try {
 		const data = {}
@@ -140,6 +169,11 @@ router.get('/adminpanel', auth, authorization, async ctx => {
 	}
 })
 
+/**
+ * The script to process content changes
+ * @name Edit page
+ * @route {POST} /edit - Renders the edit-panel page
+ */
 router.post('/edit', auth, authorization, async ctx => {
 	try {
 		const data = {}
@@ -153,6 +187,11 @@ router.post('/edit', auth, authorization, async ctx => {
 	}
 })
 
+/**
+ * The script to process updatecontent
+ * @name Updatecontent page
+ * @route {POST} /updatecontent - Redirects the user to the adminpanel
+ */
 router.post('/updatecontent', auth, authorization, async ctx => {
 	try {
 		const body = ctx.request.body
@@ -164,6 +203,11 @@ router.post('/updatecontent', auth, authorization, async ctx => {
 	}
 })
 
+/**
+ * The script to process adding a screen
+ * @name addpage
+ * @route {POST} /addpage - Renders the git-topic2 page
+ */
 router.post('/addpage', auth, authorization, async ctx => {
 	try {
 		const data = ctx.request.body
@@ -173,6 +217,11 @@ router.post('/addpage', auth, authorization, async ctx => {
 	}
 })
 
+/**
+ * The script to process submitting a new page
+ * @name submitaddpage
+ * @route {POST} /submitaddpage - Redirects the user to the adminpanel
+ */
 router.post('/submitaddpage', auth, authorization, async ctx => {
 	try {
 		const data = ctx.request.body
